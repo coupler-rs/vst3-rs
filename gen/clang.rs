@@ -1,5 +1,7 @@
+use std::any::Any;
 use std::ffi::{c_char, c_int, c_void, CStr, CString};
 use std::mem::MaybeUninit;
+use std::panic::{catch_unwind, resume_unwind};
 
 use clang_sys::*;
 
@@ -66,9 +68,12 @@ impl TranslationUnit {
             _parent: CXCursor,
             client_data: CXClientData,
         ) -> CXChildVisitResult {
-            unsafe {
-                let data = &mut *(client_data as *mut Data);
+            let data = unsafe { &*(client_data as *mut Data) };
+            if data.panic.is_some() {
+                return CXChildVisit_Break;
+            }
 
+            let result = catch_unwind(|| unsafe {
                 let kind = clang_getCursorKind(cursor);
 
                 let location = clang_getCursorLocation(cursor);
@@ -79,6 +84,7 @@ impl TranslationUnit {
                         let name = clang_getCursorSpelling(cursor);
                         let name_str = clang_getCString(name);
 
+                        let data = &mut *(client_data as *mut Data);
                         (data.callback)(CStr::from_ptr(name_str).to_str().unwrap());
 
                         clang_disposeString(name);
@@ -90,19 +96,35 @@ impl TranslationUnit {
                 }
 
                 CXChildVisit_Continue
+            });
+
+            match result {
+                Ok(res) => res,
+                Err(err) => {
+                    let data = unsafe { &mut *(client_data as *mut Data) };
+                    data.panic = Some(err);
+
+                    CXChildVisit_Break
+                }
             }
         }
 
         struct Data<'c> {
             callback: &'c mut dyn FnMut(&str),
+            panic: Option<Box<dyn Any + Send + 'static>>,
         }
         let mut data = Data {
             callback: &mut callback,
+            panic: None,
         };
 
         unsafe {
             let cursor = clang_getTranslationUnitCursor(self.unit);
             clang_visitChildren(cursor, visitor, &mut data as *mut Data as *mut c_void);
+        }
+
+        if let Some(panic) = data.panic {
+            resume_unwind(panic);
         }
     }
 }
