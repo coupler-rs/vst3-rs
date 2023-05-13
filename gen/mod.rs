@@ -8,7 +8,7 @@ use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::{fs, io};
 
-use clang::TranslationUnit;
+use clang::*;
 
 fn find_headers<P: AsRef<Path>>(dir: P) -> io::Result<Vec<PathBuf>> {
     fn find_headers_inner<P: AsRef<Path>>(dir: P, headers: &mut Vec<PathBuf>) -> io::Result<()> {
@@ -35,6 +35,30 @@ fn find_headers<P: AsRef<Path>>(dir: P) -> io::Result<Vec<PathBuf>> {
     Ok(headers)
 }
 
+pub fn visit(cursor: &Cursor, w: &mut impl Write, skip_list: &HashSet<&str>) {
+    if cursor.is_in_system_header() {
+        return;
+    }
+
+    match cursor.kind() {
+        Kind::Namespace => {
+            cursor.visit_children(|cursor| {
+                visit(cursor, w, skip_list);
+            });
+        }
+        Kind::ClassDecl => {
+            if cursor.is_definition() {
+                let name = cursor.name();
+                let name_str = name.to_str().unwrap();
+                if !skip_list.contains(name_str) {
+                    writeln!(w, "pub struct {};", name_str).unwrap();
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
 pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
     let pluginterfaces_path = Path::new(&sdk_dir).join("pluginterfaces");
     let headers = find_headers(&pluginterfaces_path).expect("error scanning directory");
@@ -54,12 +78,8 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
 
     let skip_list = HashSet::from(["ConstStringTable", "FUID", "FVariant", "UString"]);
 
-    unit.visit(|name| {
-        if skip_list.contains(name) {
-            return;
-        }
-
-        writeln!(w, "pub struct {};", name).unwrap();
+    unit.cursor().visit_children(|cursor| {
+        visit(cursor, &mut w, &skip_list);
     });
 
     Ok(())

@@ -1,6 +1,8 @@
 use std::any::Any;
 use std::ffi::{c_char, c_int, c_void, CStr, CString};
+use std::marker::PhantomData;
 use std::mem::MaybeUninit;
+use std::ops::Deref;
 use std::panic::{catch_unwind, resume_unwind};
 
 use clang_sys::*;
@@ -59,9 +61,70 @@ impl TranslationUnit {
         }
     }
 
-    pub fn visit<F>(&self, mut callback: F)
+    pub fn cursor(&self) -> Cursor {
+        unsafe { Cursor::from_raw(clang_getTranslationUnitCursor(self.unit)) }
+    }
+}
+
+impl Drop for TranslationUnit {
+    fn drop(&mut self) {
+        unsafe {
+            clang_disposeTranslationUnit(self.unit);
+            clang_disposeIndex(self.index);
+        }
+    }
+}
+
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub enum Kind {
+    ClassDecl,
+    Namespace,
+    Other,
+}
+
+pub struct Cursor<'a> {
+    cursor: CXCursor,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> Cursor<'a> {
+    unsafe fn from_raw(cursor: CXCursor) -> Cursor<'a> {
+        Cursor {
+            cursor,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn kind(&self) -> Kind {
+        #[allow(non_upper_case_globals)]
+        match unsafe { clang_getCursorKind(self.cursor) } {
+            CXCursor_ClassDecl => Kind::ClassDecl,
+            CXCursor_Namespace => Kind::Namespace,
+            _ => Kind::Other,
+        }
+    }
+
+    pub fn name(&self) -> StringRef {
+        StringRef {
+            string: unsafe { clang_getCursorSpelling(self.cursor) },
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn is_in_system_header(&self) -> bool {
+        unsafe {
+            let location = clang_getCursorLocation(self.cursor);
+            clang_Location_isInSystemHeader(location) != 0
+        }
+    }
+
+    pub fn is_definition(&self) -> bool {
+        unsafe { clang_equalCursors(self.cursor, clang_getCursorDefinition(self.cursor)) != 0 }
+    }
+
+    pub fn visit_children<F>(&self, mut callback: F)
     where
-        F: FnMut(&str),
+        F: FnMut(&Cursor),
     {
         extern "C" fn visitor(
             cursor: CXCursor,
@@ -74,26 +137,8 @@ impl TranslationUnit {
             }
 
             let result = catch_unwind(|| unsafe {
-                let kind = clang_getCursorKind(cursor);
-
-                let location = clang_getCursorLocation(cursor);
-                if clang_Location_isInSystemHeader(location) == 0 {
-                    let is_definition =
-                        clang_equalCursors(cursor, clang_getCursorDefinition(cursor)) != 0;
-                    if kind == CXCursor_ClassDecl && is_definition {
-                        let name = clang_getCursorSpelling(cursor);
-                        let name_str = clang_getCString(name);
-
-                        let data = &mut *(client_data as *mut Data);
-                        (data.callback)(CStr::from_ptr(name_str).to_str().unwrap());
-
-                        clang_disposeString(name);
-                    }
-
-                    if kind == CXCursor_Namespace {
-                        clang_visitChildren(cursor, visitor, client_data);
-                    }
-                }
+                let data = &mut *(client_data as *mut Data);
+                (data.callback)(&Cursor::from_raw(cursor));
 
                 CXChildVisit_Continue
             });
@@ -110,7 +155,7 @@ impl TranslationUnit {
         }
 
         struct Data<'c> {
-            callback: &'c mut dyn FnMut(&str),
+            callback: &'c mut dyn FnMut(&Cursor),
             panic: Option<Box<dyn Any + Send + 'static>>,
         }
         let mut data = Data {
@@ -119,8 +164,7 @@ impl TranslationUnit {
         };
 
         unsafe {
-            let cursor = clang_getTranslationUnitCursor(self.unit);
-            clang_visitChildren(cursor, visitor, &mut data as *mut Data as *mut c_void);
+            clang_visitChildren(self.cursor, visitor, &mut data as *mut Data as *mut c_void);
         }
 
         if let Some(panic) = data.panic {
@@ -129,11 +173,23 @@ impl TranslationUnit {
     }
 }
 
-impl Drop for TranslationUnit {
+pub struct StringRef<'a> {
+    string: CXString,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> Deref for StringRef<'a> {
+    type Target = CStr;
+
+    fn deref(&self) -> &CStr {
+        unsafe { CStr::from_ptr(clang_getCString(self.string)) }
+    }
+}
+
+impl<'a> Drop for StringRef<'a> {
     fn drop(&mut self) {
         unsafe {
-            clang_disposeTranslationUnit(self.unit);
-            clang_disposeIndex(self.index);
+            clang_disposeString(self.string);
         }
     }
 }
