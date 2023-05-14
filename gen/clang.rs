@@ -75,7 +75,7 @@ impl Drop for TranslationUnit {
     }
 }
 
-#[derive(Copy, Clone, Eq, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum CursorKind {
     Namespace,
     TypedefDecl,
