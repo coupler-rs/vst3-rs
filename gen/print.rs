@@ -73,12 +73,12 @@ impl<W: Write> RustPrinter<W> {
             Type::LongLong => write!(self.sink, "std::ffi::c_longlong")?,
             Type::Float => write!(self.sink, "f32")?,
             Type::Double => write!(self.sink, "f64")?,
-            Type::Pointer(pointee) => {
-                write!(self.sink, "*mut ")?;
-                self.print_type(pointee)?;
-            }
-            Type::Reference(pointee) => {
-                write!(self.sink, "*mut ")?;
+            Type::Pointer { is_const, pointee } | Type::Reference { is_const, pointee } => {
+                if *is_const {
+                    write!(self.sink, "*const ")?;
+                } else {
+                    write!(self.sink, "*mut ")?;
+                }
                 self.print_type(pointee)?;
             }
             Type::Typedef(name) => write!(self.sink, "{}", name)?,

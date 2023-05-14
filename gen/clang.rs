@@ -269,6 +269,10 @@ impl<'a> Type<'a> {
         }
     }
 
+    pub fn is_const(&self) -> bool {
+        unsafe { clang_isConstQualifiedType(self.type_) != 0 }
+    }
+
     pub fn name(&self) -> StringRef<'a> {
         unsafe { StringRef::from_raw(clang_getTypeSpelling(self.type_)) }
     }

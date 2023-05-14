@@ -147,8 +147,8 @@ pub enum Type {
     LongLong,
     Float,
     Double,
-    Pointer(Box<Type>),
-    Reference(Box<Type>),
+    Pointer { is_const: bool, pointee: Box<Type> },
+    Reference { is_const: bool, pointee: Box<Type> },
     Typedef(String),
     Array(usize, Box<Type>),
 }
@@ -173,12 +173,18 @@ impl Type {
             TypeKind::Float => Some(Type::Float),
             TypeKind::Double => Some(Type::Double),
             TypeKind::Pointer => {
-                let pointee = Type::parse(type_.pointee().unwrap())?;
-                Some(Type::Pointer(Box::new(pointee)))
+                let pointee = type_.pointee().unwrap();
+                Some(Type::Pointer {
+                    is_const: pointee.is_const(),
+                    pointee: Box::new(Type::parse(pointee)?),
+                })
             }
             TypeKind::LValueReference => {
-                let pointee = Type::parse(type_.pointee().unwrap())?;
-                Some(Type::Reference(Box::new(pointee)))
+                let pointee = type_.pointee().unwrap();
+                Some(Type::Reference {
+                    is_const: pointee.is_const(),
+                    pointee: Box::new(Type::parse(pointee)?),
+                })
             }
             // TypeKind::Record,
             // TypeKind::Enum,
