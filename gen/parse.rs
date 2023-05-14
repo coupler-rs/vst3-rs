@@ -99,6 +99,32 @@ pub struct Namespace {
     pub classes: Vec<Class>,
 }
 
+impl Namespace {
+    pub fn new() -> Namespace {
+        Namespace {
+            children: HashMap::new(),
+            typedefs: Vec::new(),
+            classes: Vec::new(),
+        }
+    }
+
+    pub fn parse(cursor: &Cursor, skip_list: &[&str]) -> Namespace {
+        let mut parser = Parser::new(skip_list);
+
+        cursor.visit_children(|cursor| {
+            parser.visit(cursor);
+        });
+
+        parser.namespace
+    }
+}
+
+#[derive(Debug)]
+pub struct Typedef {
+    pub name: String,
+    pub type_: Type,
+}
+
 #[derive(Debug)]
 pub struct Class {
     pub name: String,
@@ -174,31 +200,5 @@ impl Type {
             }
             _ => None,
         }
-    }
-}
-
-#[derive(Debug)]
-pub struct Typedef {
-    pub name: String,
-    pub type_: Type,
-}
-
-impl Namespace {
-    pub fn new() -> Namespace {
-        Namespace {
-            children: HashMap::new(),
-            typedefs: Vec::new(),
-            classes: Vec::new(),
-        }
-    }
-
-    pub fn parse(cursor: &Cursor, skip_list: &[&str]) -> Namespace {
-        let mut parser = Parser::new(skip_list);
-
-        cursor.visit_children(|cursor| {
-            parser.visit(cursor);
-        });
-
-        parser.namespace
     }
 }
