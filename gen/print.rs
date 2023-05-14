@@ -86,6 +86,7 @@ impl<W: Write> RustPrinter<W> {
                 }
                 self.print_type(pointee)?;
             }
+            Type::Record(name) => write!(self.sink, "{}", name)?,
             Type::Typedef(name) => write!(self.sink, "{}", name)?,
             Type::Array(size, elem) => {
                 write!(self.sink, "[")?;

@@ -164,6 +164,7 @@ pub enum Type {
     Double,
     Pointer { is_const: bool, pointee: Box<Type> },
     Reference { is_const: bool, pointee: Box<Type> },
+    Record(String),
     Typedef(String),
     Array(usize, Box<Type>),
 }
@@ -201,7 +202,10 @@ impl Type {
                     pointee: Box::new(Type::parse(pointee)?),
                 })
             }
-            // TypeKind::Record,
+            TypeKind::Record => {
+                let decl = type_.declaration();
+                Some(Type::Record(decl.name().to_str().unwrap().to_string()))
+            }
             // TypeKind::Enum,
             TypeKind::Typedef => {
                 // Skip typedef declarations that are found in system headers
