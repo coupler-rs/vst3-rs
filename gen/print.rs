@@ -31,6 +31,11 @@ impl<W: Write> RustPrinter<W> {
             writeln!(self.sink, ";")?;
         }
 
+        for struct_ in &namespace.structs {
+            self.indent()?;
+            writeln!(self.sink, "pub struct {};", struct_.name)?;
+        }
+
         for class in &namespace.classes {
             self.indent()?;
             writeln!(self.sink, "pub struct {};", &class.name)?;

@@ -80,6 +80,7 @@ pub enum CursorKind {
     Namespace,
     TypedefDecl,
     TypeAliasDecl,
+    StructDecl,
     ClassDecl,
     Other,
 }
@@ -103,6 +104,7 @@ impl<'a> Cursor<'a> {
             CXCursor_Namespace => CursorKind::Namespace,
             CXCursor_TypedefDecl => CursorKind::TypedefDecl,
             CXCursor_TypeAliasDecl => CursorKind::TypeAliasDecl,
+            CXCursor_StructDecl => CursorKind::StructDecl,
             CXCursor_ClassDecl => CursorKind::ClassDecl,
             _ => CursorKind::Other,
         }

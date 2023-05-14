@@ -76,6 +76,14 @@ impl Parser {
                     type_: type_.unwrap(),
                 });
             }
+            CursorKind::StructDecl => {
+                if cursor.is_definition() {
+                    let name = cursor.name();
+                    self.current_namespace().structs.push(Struct {
+                        name: name.to_str().unwrap().to_string(),
+                    });
+                }
+            }
             CursorKind::ClassDecl => {
                 if cursor.is_definition() {
                     let name = cursor.name();
@@ -96,6 +104,7 @@ impl Parser {
 pub struct Namespace {
     pub children: HashMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
+    pub structs: Vec<Struct>,
     pub classes: Vec<Class>,
 }
 
@@ -104,6 +113,7 @@ impl Namespace {
         Namespace {
             children: HashMap::new(),
             typedefs: Vec::new(),
+            structs: Vec::new(),
             classes: Vec::new(),
         }
     }
@@ -123,6 +133,11 @@ impl Namespace {
 pub struct Typedef {
     pub name: String,
     pub type_: Type,
+}
+
+#[derive(Debug)]
+pub struct Struct {
+    pub name: String,
 }
 
 #[derive(Debug)]
