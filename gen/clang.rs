@@ -76,9 +76,10 @@ impl Drop for TranslationUnit {
 }
 
 #[derive(Copy, Clone, Eq, PartialEq)]
-pub enum Kind {
-    ClassDecl,
+pub enum CursorKind {
     Namespace,
+    TypedefDecl,
+    ClassDecl,
     Other,
 }
 
@@ -95,12 +96,13 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    pub fn kind(&self) -> Kind {
+    pub fn kind(&self) -> CursorKind {
         #[allow(non_upper_case_globals)]
         match unsafe { clang_getCursorKind(self.cursor) } {
-            CXCursor_ClassDecl => Kind::ClassDecl,
-            CXCursor_Namespace => Kind::Namespace,
-            _ => Kind::Other,
+            CXCursor_Namespace => CursorKind::Namespace,
+            CXCursor_TypedefDecl => CursorKind::TypedefDecl,
+            CXCursor_ClassDecl => CursorKind::ClassDecl,
+            _ => CursorKind::Other,
         }
     }
 

@@ -24,6 +24,11 @@ impl<W: Write> RustPrinter<W> {
     }
 
     pub fn print_namespace(&mut self, namespace: &Namespace) -> Result<()> {
+        for typedef in &namespace.typedefs {
+            self.indent()?;
+            writeln!(self.sink, "pub type {} = ();", typedef.name)?;
+        }
+
         for class in &namespace.classes {
             self.indent()?;
             writeln!(self.sink, "pub struct {};", &class.name)?;

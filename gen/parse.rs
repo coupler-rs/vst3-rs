@@ -39,7 +39,7 @@ impl Parser {
         }
 
         match cursor.kind() {
-            Kind::Namespace => {
+            CursorKind::Namespace => {
                 let name = cursor.name();
                 let name_str = name.to_str().unwrap();
 
@@ -56,7 +56,13 @@ impl Parser {
 
                 self.namespace_stack.pop();
             }
-            Kind::ClassDecl => {
+            CursorKind::TypedefDecl => {
+                self.current_namespace().typedefs.push(Typedef {
+                    name: cursor.name().to_str().unwrap().to_string(),
+                    type_: Type {},
+                });
+            }
+            CursorKind::ClassDecl => {
                 if cursor.is_definition() {
                     let name = cursor.name();
                     let name_str = name.to_str().unwrap();
@@ -75,6 +81,7 @@ impl Parser {
 #[derive(Debug)]
 pub struct Namespace {
     pub children: HashMap<String, Namespace>,
+    pub typedefs: Vec<Typedef>,
     pub classes: Vec<Class>,
 }
 
@@ -83,10 +90,20 @@ pub struct Class {
     pub name: String,
 }
 
+#[derive(Debug)]
+pub struct Type {}
+
+#[derive(Debug)]
+pub struct Typedef {
+    pub name: String,
+    pub type_: Type,
+}
+
 impl Namespace {
     pub fn new() -> Namespace {
         Namespace {
             children: HashMap::new(),
+            typedefs: Vec::new(),
             classes: Vec::new(),
         }
     }
