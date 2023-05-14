@@ -1,6 +1,6 @@
 use std::io::{Result, Write};
 
-use super::parse::Namespace;
+use super::parse::{Namespace, Type};
 
 pub struct RustPrinter<W> {
     sink: W,
@@ -26,7 +26,9 @@ impl<W: Write> RustPrinter<W> {
     pub fn print_namespace(&mut self, namespace: &Namespace) -> Result<()> {
         for typedef in &namespace.typedefs {
             self.indent()?;
-            writeln!(self.sink, "pub type {} = ();", typedef.name)?;
+            write!(self.sink, "pub type {} = ", typedef.name)?;
+            self.print_type(&typedef.type_)?;
+            writeln!(self.sink, ";")?;
         }
 
         for class in &namespace.classes {
@@ -39,11 +41,52 @@ impl<W: Write> RustPrinter<W> {
             writeln!(self.sink, "pub mod {} {{", name)?;
 
             self.indent_level += 1;
+
+            self.indent()?;
+            writeln!(self.sink, "use super::*;")?;
+
             self.print_namespace(child)?;
+
             self.indent_level -= 1;
 
             self.indent()?;
             writeln!(self.sink, "}}")?;
+        }
+
+        Ok(())
+    }
+
+    fn print_type(&mut self, type_: &Type) -> Result<()> {
+        match type_ {
+            Type::Void => write!(self.sink, "std::ffi::c_void")?,
+            Type::Bool => write!(self.sink, "bool")?,
+            Type::Char => write!(self.sink, "std::ffi::c_char")?,
+            Type::UChar => write!(self.sink, "std::ffi::c_uchar")?,
+            Type::UShort => write!(self.sink, "std::ffi::c_ushort")?,
+            Type::UInt => write!(self.sink, "std::ffi::c_uint")?,
+            Type::ULong => write!(self.sink, "std::ffi::c_ulong")?,
+            Type::ULongLong => write!(self.sink, "std::ffi::c_ulonglong")?,
+            Type::SChar => write!(self.sink, "std::ffi::c_schar")?,
+            Type::Short => write!(self.sink, "std::ffi::c_short")?,
+            Type::Int => write!(self.sink, "std::ffi::c_int")?,
+            Type::Long => write!(self.sink, "std::ffi::c_long")?,
+            Type::LongLong => write!(self.sink, "std::ffi::c_longlong")?,
+            Type::Float => write!(self.sink, "f32")?,
+            Type::Double => write!(self.sink, "f64")?,
+            Type::Pointer(pointee) => {
+                write!(self.sink, "*mut ")?;
+                self.print_type(pointee)?;
+            }
+            Type::Reference(pointee) => {
+                write!(self.sink, "*mut ")?;
+                self.print_type(pointee)?;
+            }
+            Type::Typedef(name) => write!(self.sink, "{}", name)?,
+            Type::Array(size, elem) => {
+                write!(self.sink, "[")?;
+                self.print_type(elem)?;
+                write!(self.sink, "; {size}]")?
+            }
         }
 
         Ok(())

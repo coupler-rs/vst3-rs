@@ -2,6 +2,7 @@ mod clang;
 mod parse;
 mod print;
 
+use std::collections::HashSet;
 use std::error::Error;
 use std::fs::File;
 use std::io::BufWriter;
@@ -41,9 +42,15 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
     let pluginterfaces_path = Path::new(&sdk_dir).join("pluginterfaces");
     let headers = find_headers(&pluginterfaces_path).expect("error scanning directory");
 
+    let skip_headers = HashSet::from(["pluginterfaces/base/ustring.h"]);
+
     let mut source = String::new();
     for header in &headers {
         let name = header.strip_prefix(&sdk_dir).unwrap().to_str().unwrap();
+
+        if skip_headers.contains(name) {
+            continue;
+        }
 
         use std::fmt::Write;
         writeln!(source, "#include \"{}\"", name)?;

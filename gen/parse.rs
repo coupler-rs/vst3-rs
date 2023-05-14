@@ -1,6 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
-use super::clang::*;
+use super::clang;
+use clang::*;
 
 struct Parser {
     namespace_stack: Vec<String>,
@@ -57,9 +58,22 @@ impl Parser {
                 self.namespace_stack.pop();
             }
             CursorKind::TypedefDecl => {
+                let typedef = cursor.type_().unwrap();
+                let name = typedef.typedef_name();
+
+                let type_ = Type::parse(cursor.typedef_underlying_type().unwrap());
+                if type_.is_none() {
+                    let underlying_type = cursor.typedef_underlying_type().unwrap();
+                    panic!(
+                        "could not parse typedef {} = {}",
+                        typedef.name().to_str().unwrap(),
+                        underlying_type.name().to_str().unwrap(),
+                    );
+                }
+
                 self.current_namespace().typedefs.push(Typedef {
-                    name: cursor.name().to_str().unwrap().to_string(),
-                    type_: Type {},
+                    name: name.unwrap().to_str().unwrap().to_string(),
+                    type_: type_.unwrap(),
                 });
             }
             CursorKind::ClassDecl => {
@@ -91,7 +105,77 @@ pub struct Class {
 }
 
 #[derive(Debug)]
-pub struct Type {}
+pub enum Type {
+    Void,
+    Bool,
+    Char,
+    UChar,
+    UShort,
+    UInt,
+    ULong,
+    ULongLong,
+    SChar,
+    Short,
+    Int,
+    Long,
+    LongLong,
+    Float,
+    Double,
+    Pointer(Box<Type>),
+    Reference(Box<Type>),
+    Typedef(String),
+    Array(usize, Box<Type>),
+}
+
+impl Type {
+    fn parse(type_: clang::Type) -> Option<Type> {
+        match type_.kind() {
+            TypeKind::Void => Some(Type::Void),
+            TypeKind::Bool => Some(Type::Bool),
+            TypeKind::Char_U | TypeKind::Char_S => Some(Type::Char),
+            TypeKind::UChar => Some(Type::UChar),
+            TypeKind::UShort => Some(Type::UShort),
+            TypeKind::UInt => Some(Type::UInt),
+            TypeKind::SChar => Some(Type::SChar),
+            TypeKind::Char16 => Some(Type::Short),
+            TypeKind::ULong => Some(Type::ULong),
+            TypeKind::ULongLong => Some(Type::ULongLong),
+            TypeKind::Short => Some(Type::Short),
+            TypeKind::Int => Some(Type::Int),
+            TypeKind::Long => Some(Type::Long),
+            TypeKind::LongLong => Some(Type::LongLong),
+            TypeKind::Float => Some(Type::Float),
+            TypeKind::Double => Some(Type::Double),
+            TypeKind::Pointer => {
+                let pointee = Type::parse(type_.pointee().unwrap())?;
+                Some(Type::Pointer(Box::new(pointee)))
+            }
+            TypeKind::LValueReference => {
+                let pointee = Type::parse(type_.pointee().unwrap())?;
+                Some(Type::Reference(Box::new(pointee)))
+            }
+            // TypeKind::Record,
+            // TypeKind::Enum,
+            TypeKind::Typedef => {
+                // Skip typedef declarations that are found in system headers
+                let declaration = type_.declaration();
+                if declaration.is_in_system_header() {
+                    let underlying_type = declaration.typedef_underlying_type().unwrap();
+                    return Some(Type::parse(underlying_type)?);
+                }
+
+                let name = type_.typedef_name().unwrap().to_str().unwrap().to_string();
+                Some(Type::Typedef(name))
+            }
+            TypeKind::ConstantArray => {
+                let size = type_.array_size().unwrap();
+                let element_type = Type::parse(type_.array_element_type().unwrap())?;
+                Some(Type::Array(size, Box::new(element_type)))
+            }
+            _ => None,
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct Typedef {

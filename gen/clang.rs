@@ -106,11 +106,8 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    pub fn name(&self) -> StringRef {
-        StringRef {
-            string: unsafe { clang_getCursorSpelling(self.cursor) },
-            _marker: PhantomData,
-        }
+    pub fn name(&self) -> StringRef<'a> {
+        unsafe { StringRef::from_raw(clang_getCursorSpelling(self.cursor)) }
     }
 
     pub fn is_in_system_header(&self) -> bool {
@@ -122,6 +119,24 @@ impl<'a> Cursor<'a> {
 
     pub fn is_definition(&self) -> bool {
         unsafe { clang_equalCursors(self.cursor, clang_getCursorDefinition(self.cursor)) != 0 }
+    }
+
+    pub fn type_(&self) -> Option<Type<'a>> {
+        let type_ = unsafe { clang_getCursorType(self.cursor) };
+        if type_.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(type_) })
+        }
+    }
+
+    pub fn typedef_underlying_type(&self) -> Option<Type<'a>> {
+        let type_ = unsafe { clang_getTypedefDeclUnderlyingType(self.cursor) };
+        if type_.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(type_) })
+        }
     }
 
     pub fn visit_children<F>(&self, mut callback: F)
@@ -175,9 +190,140 @@ impl<'a> Cursor<'a> {
     }
 }
 
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+pub enum TypeKind {
+    Void,
+    Bool,
+    #[allow(non_camel_case_types)]
+    Char_U,
+    UChar,
+    Char16,
+    Char32,
+    UShort,
+    UInt,
+    ULong,
+    ULongLong,
+    #[allow(non_camel_case_types)]
+    Char_S,
+    SChar,
+    WChar,
+    Short,
+    Int,
+    Long,
+    LongLong,
+    Float,
+    Double,
+    Pointer,
+    LValueReference,
+    Record,
+    Enum,
+    Typedef,
+    ConstantArray,
+    Other,
+}
+
+pub struct Type<'a> {
+    type_: CXType,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> Type<'a> {
+    unsafe fn from_raw(type_: CXType) -> Type<'a> {
+        Type {
+            type_,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn kind(&self) -> TypeKind {
+        #[allow(non_upper_case_globals)]
+        match self.type_.kind {
+            CXType_Void => TypeKind::Void,
+            CXType_Bool => TypeKind::Bool,
+            CXType_Char_U => TypeKind::Char_U,
+            CXType_UChar => TypeKind::UChar,
+            CXType_Char16 => TypeKind::Char16,
+            CXType_Char32 => TypeKind::Char32,
+            CXType_UShort => TypeKind::UShort,
+            CXType_UInt => TypeKind::UInt,
+            CXType_ULong => TypeKind::ULong,
+            CXType_ULongLong => TypeKind::ULongLong,
+            CXType_Char_S => TypeKind::Char_S,
+            CXType_SChar => TypeKind::SChar,
+            CXType_WChar => TypeKind::WChar,
+            CXType_Short => TypeKind::Short,
+            CXType_Int => TypeKind::Int,
+            CXType_Long => TypeKind::Long,
+            CXType_LongLong => TypeKind::LongLong,
+            CXType_Float => TypeKind::Float,
+            CXType_Double => TypeKind::Double,
+            CXType_Pointer => TypeKind::Pointer,
+            CXType_LValueReference => TypeKind::LValueReference,
+            CXType_Record => TypeKind::Record,
+            CXType_Enum => TypeKind::Enum,
+            CXType_Typedef => TypeKind::Typedef,
+            CXType_ConstantArray => TypeKind::ConstantArray,
+            _ => TypeKind::Other,
+        }
+    }
+
+    pub fn name(&self) -> StringRef<'a> {
+        unsafe { StringRef::from_raw(clang_getTypeSpelling(self.type_)) }
+    }
+
+    pub fn declaration(&self) -> Cursor<'a> {
+        unsafe { Cursor::from_raw(clang_getTypeDeclaration(self.type_)) }
+    }
+
+    pub fn pointee(&self) -> Option<Type<'a>> {
+        let pointee = unsafe { clang_getPointeeType(self.type_) };
+        if pointee.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(pointee) })
+        }
+    }
+
+    pub fn typedef_name(&self) -> Option<StringRef<'a>> {
+        let name = unsafe { StringRef::from_raw(clang_getTypedefName(self.type_)) };
+        if name.to_bytes().is_empty() {
+            None
+        } else {
+            Some(name)
+        }
+    }
+
+    pub fn array_size(&self) -> Option<usize> {
+        let size = unsafe { clang_getArraySize(self.type_) };
+        if size == -1 {
+            None
+        } else {
+            Some(size as usize)
+        }
+    }
+
+    pub fn array_element_type(&self) -> Option<Type<'a>> {
+        let element_type = unsafe { clang_getArrayElementType(self.type_) };
+        if element_type.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(element_type) })
+        }
+    }
+}
+
 pub struct StringRef<'a> {
     string: CXString,
     _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> StringRef<'a> {
+    unsafe fn from_raw(string: CXString) -> StringRef<'a> {
+        StringRef {
+            string,
+            _marker: PhantomData,
+        }
+    }
 }
 
 impl<'a> Deref for StringRef<'a> {
