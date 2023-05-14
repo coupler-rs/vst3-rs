@@ -46,7 +46,7 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
         let name = header.strip_prefix(&sdk_dir).unwrap().to_str().unwrap();
 
         use std::fmt::Write;
-        writeln!(source, "#include \"{}\"", name).unwrap();
+        writeln!(source, "#include \"{}\"", name)?;
     }
 
     let unit = TranslationUnit::new(&source, &sdk_dir).unwrap();
@@ -54,9 +54,9 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
     let skip_list = &["ConstStringTable", "FUID", "FVariant", "UString"];
     let namespace = Namespace::parse(&unit.cursor(), skip_list);
 
-    let bindings = File::create(Path::new(&out_dir).join("bindings.rs")).unwrap();
+    let bindings = File::create(Path::new(&out_dir).join("bindings.rs"))?;
     let mut printer = RustPrinter::new(BufWriter::new(bindings));
-    printer.print_namespace(&namespace);
+    printer.print_namespace(&namespace)?;
 
     Ok(())
 }

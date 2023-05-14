@@ -1,4 +1,4 @@
-use std::io::Write;
+use std::io::{Result, Write};
 
 use super::parse::Namespace;
 
@@ -15,28 +15,32 @@ impl<W: Write> RustPrinter<W> {
         }
     }
 
-    pub fn print_namespace(&mut self, namespace: &Namespace) {
+    fn indent(&mut self) -> Result<()> {
+        for _ in 0..self.indent_level {
+            write!(self.sink, "    ")?;
+        }
+
+        Ok(())
+    }
+
+    pub fn print_namespace(&mut self, namespace: &Namespace) -> Result<()> {
         for class in &namespace.classes {
-            for _ in 0..self.indent_level {
-                write!(self.sink, "    ").unwrap();
-            }
-            writeln!(self.sink, "pub struct {};", &class.name).unwrap();
+            self.indent()?;
+            writeln!(self.sink, "pub struct {};", &class.name)?;
         }
 
         for (name, child) in &namespace.children {
-            for _ in 0..self.indent_level {
-                write!(self.sink, "    ").unwrap();
-            }
-            writeln!(self.sink, "pub mod {} {{", name).unwrap();
+            self.indent()?;
+            writeln!(self.sink, "pub mod {} {{", name)?;
 
             self.indent_level += 1;
-            self.print_namespace(child);
+            self.print_namespace(child)?;
             self.indent_level -= 1;
 
-            for _ in 0..self.indent_level {
-                write!(self.sink, "    ").unwrap();
-            }
-            writeln!(self.sink, "}}").unwrap();
+            self.indent()?;
+            writeln!(self.sink, "}}")?;
         }
+
+        Ok(())
     }
 }
