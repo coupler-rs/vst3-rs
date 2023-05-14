@@ -57,7 +57,7 @@ impl Parser {
 
                 self.namespace_stack.pop();
             }
-            CursorKind::TypedefDecl => {
+            CursorKind::TypedefDecl | CursorKind::TypeAliasDecl => {
                 let typedef = cursor.type_().unwrap();
                 let name = typedef.typedef_name();
 

@@ -79,6 +79,7 @@ impl Drop for TranslationUnit {
 pub enum CursorKind {
     Namespace,
     TypedefDecl,
+    TypeAliasDecl,
     ClassDecl,
     Other,
 }
@@ -101,6 +102,7 @@ impl<'a> Cursor<'a> {
         match unsafe { clang_getCursorKind(self.cursor) } {
             CXCursor_Namespace => CursorKind::Namespace,
             CXCursor_TypedefDecl => CursorKind::TypedefDecl,
+            CXCursor_TypeAliasDecl => CursorKind::TypeAliasDecl,
             CXCursor_ClassDecl => CursorKind::ClassDecl,
             _ => CursorKind::Other,
         }
