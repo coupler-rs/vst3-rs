@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 
 use super::clang;
 use clang::*;
@@ -104,7 +104,7 @@ impl Parser {
 
 #[derive(Clone, Debug)]
 pub struct Namespace {
-    pub children: HashMap<String, Namespace>,
+    pub children: BTreeMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
     pub classes: Vec<Class>,
@@ -113,7 +113,7 @@ pub struct Namespace {
 impl Namespace {
     pub fn new() -> Namespace {
         Namespace {
-            children: HashMap::new(),
+            children: BTreeMap::new(),
             typedefs: Vec::new(),
             records: Vec::new(),
             classes: Vec::new(),
