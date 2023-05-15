@@ -39,6 +39,10 @@ impl Parser {
             return;
         }
 
+        if self.skip_list.contains(cursor.name().to_str().unwrap()) {
+            return;
+        }
+
         match cursor.kind() {
             CursorKind::Namespace => {
                 let name = cursor.name();
