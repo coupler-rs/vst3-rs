@@ -63,7 +63,7 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
 
     let unit = TranslationUnit::new(&source, &sdk_dir).unwrap();
 
-    let skip_list = &["ConstStringTable", "FUID", "FVariant", "UString"];
+    let skip_list = &["ConstStringTable", "FUID", "FReleaser", "LARGE_INT"];
     let namespace = Namespace::parse(&unit.cursor(), skip_list);
 
     let bindings = File::create(Path::new(&out_dir).join("bindings.rs"))?;
