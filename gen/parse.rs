@@ -76,12 +76,10 @@ impl Parser {
                     type_: type_.unwrap(),
                 });
             }
-            CursorKind::StructDecl => {
+            CursorKind::StructDecl | CursorKind::UnionDecl => {
                 if cursor.is_definition() {
-                    let name = cursor.name();
-                    self.current_namespace().structs.push(Struct {
-                        name: name.to_str().unwrap().to_string(),
-                    });
+                    let record = Record::parse(cursor.type_().unwrap()).unwrap();
+                    self.current_namespace().records.push(record);
                 }
             }
             CursorKind::ClassDecl => {
@@ -100,11 +98,11 @@ impl Parser {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Namespace {
     pub children: HashMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
-    pub structs: Vec<Struct>,
+    pub records: Vec<Record>,
     pub classes: Vec<Class>,
 }
 
@@ -113,7 +111,7 @@ impl Namespace {
         Namespace {
             children: HashMap::new(),
             typedefs: Vec::new(),
-            structs: Vec::new(),
+            records: Vec::new(),
             classes: Vec::new(),
         }
     }
@@ -129,23 +127,69 @@ impl Namespace {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Typedef {
     pub name: String,
     pub type_: Type,
 }
 
-#[derive(Debug)]
-pub struct Struct {
-    pub name: String,
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+pub enum RecordKind {
+    Struct,
+    Union,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
+pub struct Record {
+    pub name: String,
+    pub kind: RecordKind,
+    pub fields: Vec<Field>,
+}
+
+impl Record {
+    fn parse(record: clang::Type) -> Option<Record> {
+        let decl = record.declaration();
+        let name = decl.name().to_str().unwrap().to_string();
+        let kind = match decl.kind() {
+            CursorKind::StructDecl | CursorKind::ClassDecl => RecordKind::Struct,
+            CursorKind::UnionDecl => RecordKind::Union,
+            _ => unreachable!(),
+        };
+
+        let mut fields = Vec::new();
+        record.visit_fields(|cursor| {
+            let type_ = Type::parse(cursor.type_().unwrap());
+
+            if type_.is_none() {
+                panic!(
+                    "could not parse field {}: {}",
+                    cursor.name().to_str().unwrap(),
+                    cursor.type_().unwrap().name().to_str().unwrap(),
+                );
+            }
+
+            fields.push(Field {
+                name: cursor.name().to_str().unwrap().to_string(),
+                type_: type_.unwrap(),
+            });
+        });
+
+        Some(Record { name, kind, fields })
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Field {
+    pub name: String,
+    pub type_: Type,
+}
+
+#[derive(Clone, Debug)]
 pub struct Class {
     pub name: String,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Type {
     Void,
     Bool,
@@ -165,6 +209,7 @@ pub enum Type {
     Pointer { is_const: bool, pointee: Box<Type> },
     Reference { is_const: bool, pointee: Box<Type> },
     Record(String),
+    UnnamedRecord(Record),
     Typedef(String),
     Array(usize, Box<Type>),
 }
@@ -204,7 +249,12 @@ impl Type {
             }
             TypeKind::Record => {
                 let decl = type_.declaration();
-                Some(Type::Record(decl.name().to_str().unwrap().to_string()))
+                let name = decl.name().to_str().unwrap().to_string();
+                if name.is_empty() {
+                    Some(Type::UnnamedRecord(Record::parse(type_)?))
+                } else {
+                    Some(Type::Record(name))
+                }
             }
             // TypeKind::Enum,
             TypeKind::Typedef => {

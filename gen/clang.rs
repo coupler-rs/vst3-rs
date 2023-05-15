@@ -81,6 +81,7 @@ pub enum CursorKind {
     TypedefDecl,
     TypeAliasDecl,
     StructDecl,
+    UnionDecl,
     ClassDecl,
     Other,
 }
@@ -105,6 +106,7 @@ impl<'a> Cursor<'a> {
             CXCursor_TypedefDecl => CursorKind::TypedefDecl,
             CXCursor_TypeAliasDecl => CursorKind::TypeAliasDecl,
             CXCursor_StructDecl => CursorKind::StructDecl,
+            CXCursor_UnionDecl => CursorKind::UnionDecl,
             CXCursor_ClassDecl => CursorKind::ClassDecl,
             _ => CursorKind::Other,
         }

@@ -1,10 +1,15 @@
+use std::collections::HashSet;
 use std::io::{Result, Write};
+use std::mem;
 
-use super::parse::{Namespace, Type};
+use super::parse::{Namespace, Record, RecordKind, Type};
 
 pub struct RustPrinter<W> {
     sink: W,
     indent_level: usize,
+    container: Option<String>,
+    unnamed_records: Vec<Record>,
+    reserved: HashSet<&'static str>,
 }
 
 impl<W: Write> RustPrinter<W> {
@@ -12,6 +17,9 @@ impl<W: Write> RustPrinter<W> {
         RustPrinter {
             sink,
             indent_level: 0,
+            container: None,
+            unnamed_records: Vec::new(),
+            reserved: HashSet::from(["type"]),
         }
     }
 
@@ -31,9 +39,15 @@ impl<W: Write> RustPrinter<W> {
             writeln!(self.sink, ";")?;
         }
 
-        for struct_ in &namespace.structs {
-            self.indent()?;
-            writeln!(self.sink, "pub struct {};", struct_.name)?;
+        for record in &namespace.records {
+            self.print_record(&record)?;
+
+            let mut unnamed_counter = 0;
+            for mut unnamed in mem::take(&mut self.unnamed_records) {
+                unnamed.name = format!("{}__type{}", record.name, unnamed_counter);
+                self.print_record(&unnamed)?;
+                unnamed_counter += 1;
+            }
         }
 
         for class in &namespace.classes {
@@ -44,7 +58,6 @@ impl<W: Write> RustPrinter<W> {
         for (name, child) in &namespace.children {
             self.indent()?;
             writeln!(self.sink, "pub mod {} {{", name)?;
-
             self.indent_level += 1;
 
             self.indent()?;
@@ -53,10 +66,53 @@ impl<W: Write> RustPrinter<W> {
             self.print_namespace(child)?;
 
             self.indent_level -= 1;
-
             self.indent()?;
             writeln!(self.sink, "}}")?;
         }
+
+        Ok(())
+    }
+
+    fn print_record(&mut self, record: &Record) -> Result<()> {
+        self.container = Some(record.name.clone());
+
+        self.indent()?;
+        writeln!(self.sink, "#[repr(C)]")?;
+        self.indent()?;
+        writeln!(self.sink, "#[derive(Copy, Clone)]")?;
+
+        self.indent()?;
+        match record.kind {
+            RecordKind::Struct => {
+                writeln!(self.sink, "pub struct {} {{", record.name)?;
+            }
+            RecordKind::Union => {
+                writeln!(self.sink, "pub union {} {{", record.name)?;
+            }
+        }
+        self.indent_level += 1;
+
+        let mut anon_counter = 0;
+        for field in &record.fields {
+            self.indent()?;
+            if field.name.is_empty() {
+                write!(self.sink, "pub __field{anon_counter}: ")?;
+                anon_counter += 1;
+            } else if self.reserved.contains(&*field.name) {
+                write!(self.sink, "pub r#{}: ", field.name)?;
+            } else {
+                write!(self.sink, "pub {}: ", field.name)?;
+            }
+
+            self.print_type(&field.type_)?;
+            writeln!(self.sink, ",")?;
+        }
+
+        self.indent_level -= 1;
+        self.indent()?;
+        writeln!(self.sink, "}}")?;
+
+        self.container = None;
 
         Ok(())
     }
@@ -85,6 +141,15 @@ impl<W: Write> RustPrinter<W> {
                     write!(self.sink, "*mut ")?;
                 }
                 self.print_type(pointee)?;
+            }
+            Type::UnnamedRecord(record) => {
+                let counter = self.unnamed_records.len();
+                self.unnamed_records.push(record.clone());
+
+                if let Some(container) = &self.container {
+                    write!(self.sink, "{}", container)?;
+                }
+                write!(self.sink, "__type{}", counter)?;
             }
             Type::Record(name) => write!(self.sink, "{}", name)?,
             Type::Typedef(name) => write!(self.sink, "{}", name)?,
