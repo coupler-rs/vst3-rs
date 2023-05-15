@@ -1,5 +1,5 @@
 use std::any::Any;
-use std::ffi::{c_char, c_int, c_uint, c_void, CStr, CString};
+use std::ffi::{c_char, c_int, c_uint, c_ulong, c_void, CStr, CString};
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
@@ -36,7 +36,7 @@ impl TranslationUnit {
             let mut sources = [CXUnsavedFile {
                 Filename: filename,
                 Contents: source.as_ptr() as *const c_char,
-                Length: source.len() as u64,
+                Length: source.len() as c_ulong,
             }];
 
             let mut unit = MaybeUninit::uninit();
