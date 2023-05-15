@@ -318,6 +318,52 @@ impl<'a> Type<'a> {
             Some(unsafe { Type::from_raw(element_type) })
         }
     }
+
+    pub fn visit_fields<F>(&self, mut callback: F)
+    where
+        F: FnMut(&Cursor),
+    {
+        extern "C" fn visitor(cursor: CXCursor, client_data: CXClientData) -> CXVisitorResult {
+            let data = unsafe { &*(client_data as *mut Data) };
+            if data.panic.is_some() {
+                return CXVisit_Break;
+            }
+
+            let result = catch_unwind(|| unsafe {
+                let data = &mut *(client_data as *mut Data);
+                (data.callback)(&Cursor::from_raw(cursor));
+
+                CXVisit_Continue
+            });
+
+            match result {
+                Ok(res) => res,
+                Err(err) => {
+                    let data = unsafe { &mut *(client_data as *mut Data) };
+                    data.panic = Some(err);
+
+                    CXVisit_Break
+                }
+            }
+        }
+
+        struct Data<'c> {
+            callback: &'c mut dyn FnMut(&Cursor),
+            panic: Option<Box<dyn Any + Send + 'static>>,
+        }
+        let mut data = Data {
+            callback: &mut callback,
+            panic: None,
+        };
+
+        unsafe {
+            clang_Type_visitFields(self.type_, visitor, &mut data as *mut Data as *mut c_void);
+        }
+
+        if let Some(panic) = data.panic {
+            resume_unwind(panic);
+        }
+    }
 }
 
 pub struct StringRef<'a> {
