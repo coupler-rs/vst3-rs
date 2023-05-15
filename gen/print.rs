@@ -101,6 +101,8 @@ impl<W: Write> RustPrinter<W> {
             self.indent_level += 1;
 
             self.indent()?;
+            writeln!(self.sink, "#[allow(unused_imports)]")?;
+            self.indent()?;
             writeln!(self.sink, "use super::*;")?;
 
             self.print_namespace(child)?;
