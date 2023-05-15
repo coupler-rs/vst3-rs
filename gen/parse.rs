@@ -80,21 +80,17 @@ impl Parser {
                     type_: type_.unwrap(),
                 });
             }
-            CursorKind::StructDecl | CursorKind::UnionDecl => {
+            CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {
-                    let record = Record::parse(cursor.type_().unwrap()).unwrap();
-                    self.current_namespace().records.push(record);
-                }
-            }
-            CursorKind::ClassDecl => {
-                if cursor.is_definition() {
-                    let name = cursor.name();
-                    let name_str = name.to_str().unwrap();
-                    if !self.skip_list.contains(name_str) {
-                        self.current_namespace().classes.push(Class {
-                            name: name_str.to_string(),
-                        });
+                    // Skip unnamed records here, as Record::parse will take care of them
+                    if !cursor.name().to_str().unwrap().is_empty() {
+                        let record = Record::parse(cursor.type_().unwrap()).unwrap();
+                        self.current_namespace().records.push(record);
                     }
+
+                    cursor.visit_children(|cursor| {
+                        self.visit(cursor);
+                    });
                 }
             }
             _ => {}
@@ -107,7 +103,6 @@ pub struct Namespace {
     pub children: BTreeMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
-    pub classes: Vec<Class>,
 }
 
 impl Namespace {
@@ -116,7 +111,6 @@ impl Namespace {
             children: BTreeMap::new(),
             typedefs: Vec::new(),
             records: Vec::new(),
-            classes: Vec::new(),
         }
     }
 
@@ -148,6 +142,13 @@ pub struct Record {
     pub name: String,
     pub kind: RecordKind,
     pub fields: Vec<Field>,
+    pub virtual_methods: Vec<Method>,
+}
+
+#[derive(Clone, Debug)]
+pub struct Field {
+    pub name: String,
+    pub type_: Type,
 }
 
 impl Record {
@@ -161,39 +162,73 @@ impl Record {
         };
 
         let mut fields = Vec::new();
+        let mut virtual_methods = Vec::new();
         decl.visit_children(|cursor| {
-            // Check for UnionDecl to handle anonymous unions
-            if let CursorKind::FieldDecl | CursorKind::UnionDecl = cursor.kind() {
-                let type_ = Type::parse(cursor.type_().unwrap());
+            match cursor.kind() {
+                // Check for UnionDecl to handle anonymous unions
+                CursorKind::FieldDecl | CursorKind::UnionDecl => {
+                    let type_ = Type::parse(cursor.type_().unwrap());
 
-                if type_.is_none() {
-                    panic!(
-                        "could not parse field {}: {}",
-                        cursor.name().to_str().unwrap(),
-                        cursor.type_().unwrap().name().to_str().unwrap(),
-                    );
+                    if type_.is_none() {
+                        panic!(
+                            "could not parse field {}: {}",
+                            cursor.name().to_str().unwrap(),
+                            cursor.type_().unwrap().name().to_str().unwrap(),
+                        );
+                    }
+
+                    fields.push(Field {
+                        name: cursor.name().to_str().unwrap().to_string(),
+                        type_: type_.unwrap(),
+                    });
                 }
+                CursorKind::CxxMethod => {
+                    if cursor.is_virtual() {
+                        let mut arguments = Vec::new();
 
-                fields.push(Field {
-                    name: cursor.name().to_str().unwrap().to_string(),
-                    type_: type_.unwrap(),
-                });
+                        for i in 0..cursor.num_arguments().unwrap() {
+                            let arg = cursor.argument(i).unwrap();
+
+                            let arg_type = Type::parse(arg.type_().unwrap());
+                            arguments.push(Argument {
+                                name: arg.name().to_str().unwrap().to_string(),
+                                type_: arg_type.unwrap_or(Type::Void),
+                            });
+                        }
+
+                        let result_type = Type::parse(cursor.result_type().unwrap()).unwrap();
+
+                        virtual_methods.push(Method {
+                            name: cursor.name().to_str().unwrap().to_string(),
+                            arguments,
+                            result_type,
+                        });
+                    }
+                }
+                _ => {}
             }
         });
 
-        Some(Record { name, kind, fields })
+        Some(Record {
+            name,
+            kind,
+            fields,
+            virtual_methods,
+        })
     }
 }
 
 #[derive(Clone, Debug)]
-pub struct Field {
+pub struct Method {
     pub name: String,
-    pub type_: Type,
+    pub arguments: Vec<Argument>,
+    pub result_type: Type,
 }
 
 #[derive(Clone, Debug)]
-pub struct Class {
+pub struct Argument {
     pub name: String,
+    pub type_: Type,
 }
 
 #[derive(Clone, Debug)]

@@ -1,5 +1,5 @@
 use std::any::Any;
-use std::ffi::{c_char, c_int, c_void, CStr, CString};
+use std::ffi::{c_char, c_int, c_uint, c_void, CStr, CString};
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
@@ -84,6 +84,7 @@ pub enum CursorKind {
     UnionDecl,
     ClassDecl,
     FieldDecl,
+    CxxMethod,
     Other,
 }
 
@@ -110,6 +111,7 @@ impl<'a> Cursor<'a> {
             CXCursor_UnionDecl => CursorKind::UnionDecl,
             CXCursor_ClassDecl => CursorKind::ClassDecl,
             CXCursor_FieldDecl => CursorKind::FieldDecl,
+            CXCursor_CXXMethod => CursorKind::CxxMethod,
             _ => CursorKind::Other,
         }
     }
@@ -145,6 +147,41 @@ impl<'a> Cursor<'a> {
         } else {
             Some(unsafe { Type::from_raw(type_) })
         }
+    }
+
+    pub fn num_arguments(&self) -> Option<usize> {
+        let num_arguments = unsafe { clang_Cursor_getNumArguments(self.cursor) };
+
+        if num_arguments == -1 {
+            None
+        } else {
+            Some(num_arguments as usize)
+        }
+    }
+
+    pub fn argument(&self, index: usize) -> Option<Cursor<'a>> {
+        unsafe {
+            let argument = clang_Cursor_getArgument(self.cursor, index as c_uint);
+
+            if clang_Cursor_isNull(argument) != 0 {
+                None
+            } else {
+                Some(Cursor::from_raw(argument))
+            }
+        }
+    }
+
+    pub fn result_type(&self) -> Option<Type<'a>> {
+        let result_type = unsafe { clang_getCursorResultType(self.cursor) };
+        if result_type.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(result_type) })
+        }
+    }
+
+    pub fn is_virtual(&self) -> bool {
+        unsafe { clang_CXXMethod_isVirtual(self.cursor) != 0 }
     }
 
     pub fn visit_children<F>(&self, mut callback: F)

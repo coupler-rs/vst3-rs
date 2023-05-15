@@ -48,11 +48,51 @@ impl<W: Write> RustPrinter<W> {
                 self.print_record(&unnamed)?;
                 unnamed_counter += 1;
             }
-        }
 
-        for class in &namespace.classes {
-            self.indent()?;
-            writeln!(self.sink, "pub struct {};", &class.name)?;
+            if !record.virtual_methods.is_empty() {
+                self.indent()?;
+                writeln!(self.sink, "#[repr(C)]")?;
+                self.indent()?;
+                writeln!(self.sink, "#[derive(Copy, Clone)]")?;
+                self.indent()?;
+                writeln!(self.sink, "pub struct {}Vtbl {{", record.name)?;
+                self.indent_level += 1;
+
+                for method in &record.virtual_methods {
+                    self.indent()?;
+                    writeln!(self.sink, "pub {}: fn(", method.name)?;
+                    self.indent_level += 1;
+
+                    self.indent()?;
+                    writeln!(self.sink, "this: *mut {},", record.name)?;
+                    for arg in &method.arguments {
+                        self.indent()?;
+                        if !arg.name.is_empty() {
+                            if self.reserved.contains(&*arg.name) {
+                                write!(self.sink, "r#{}: ", arg.name)?;
+                            } else {
+                                write!(self.sink, "{}: ", arg.name)?;
+                            }
+                        }
+                        self.print_type(&arg.type_)?;
+                        writeln!(self.sink, ",")?;
+                    }
+
+                    self.indent_level -= 1;
+                    self.indent()?;
+                    write!(self.sink, ")")?;
+                    if let Type::Void = method.result_type {
+                    } else {
+                        write!(self.sink, " -> ")?;
+                        self.print_type(&method.result_type)?;
+                    }
+                    writeln!(self.sink, ",")?;
+                }
+
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
         }
 
         for (name, child) in &namespace.children {
@@ -91,6 +131,11 @@ impl<W: Write> RustPrinter<W> {
             }
         }
         self.indent_level += 1;
+
+        if !record.virtual_methods.is_empty() {
+            self.indent()?;
+            writeln!(self.sink, "pub vtbl: {}Vtbl,", record.name)?;
+        }
 
         let mut anon_counter = 0;
         for field in &record.fields {
