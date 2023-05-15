@@ -43,8 +43,10 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
     let headers = find_headers(&pluginterfaces_path).expect("error scanning directory");
 
     let skip_headers = HashSet::from([
-        "pluginterfaces/base/ustring.h",
         "pluginterfaces/base/funknownimpl.h",
+        "pluginterfaces/base/ustring.h",
+        "pluginterfaces/test/itest.h",
+        "pluginterfaces/vst/ivsttestplugprovider.h",
     ]);
 
     let mut source = String::new();
