@@ -161,21 +161,24 @@ impl Record {
         };
 
         let mut fields = Vec::new();
-        record.visit_fields(|cursor| {
-            let type_ = Type::parse(cursor.type_().unwrap());
+        decl.visit_children(|cursor| {
+            // Check for UnionDecl to handle anonymous unions
+            if let CursorKind::FieldDecl | CursorKind::UnionDecl = cursor.kind() {
+                let type_ = Type::parse(cursor.type_().unwrap());
 
-            if type_.is_none() {
-                panic!(
-                    "could not parse field {}: {}",
-                    cursor.name().to_str().unwrap(),
-                    cursor.type_().unwrap().name().to_str().unwrap(),
-                );
+                if type_.is_none() {
+                    panic!(
+                        "could not parse field {}: {}",
+                        cursor.name().to_str().unwrap(),
+                        cursor.type_().unwrap().name().to_str().unwrap(),
+                    );
+                }
+
+                fields.push(Field {
+                    name: cursor.name().to_str().unwrap().to_string(),
+                    type_: type_.unwrap(),
+                });
             }
-
-            fields.push(Field {
-                name: cursor.name().to_str().unwrap().to_string(),
-                type_: type_.unwrap(),
-            });
         });
 
         Some(Record { name, kind, fields })
