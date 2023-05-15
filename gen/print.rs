@@ -179,6 +179,20 @@ impl<W: Write> RustPrinter<W> {
             Type::Int => write!(self.sink, "std::ffi::c_int")?,
             Type::Long => write!(self.sink, "std::ffi::c_long")?,
             Type::LongLong => write!(self.sink, "std::ffi::c_longlong")?,
+            Type::Unsigned(size) => match size {
+                1 => write!(self.sink, "u8")?,
+                2 => write!(self.sink, "u16")?,
+                4 => write!(self.sink, "u32")?,
+                8 => write!(self.sink, "u64")?,
+                _ => panic!("unexpected size {} for unsigned integer", size),
+            },
+            Type::Signed(size) => match size {
+                1 => write!(self.sink, "i8")?,
+                2 => write!(self.sink, "i16")?,
+                4 => write!(self.sink, "i32")?,
+                8 => write!(self.sink, "i64")?,
+                _ => panic!("unexpected size {} for signed integer", size),
+            },
             Type::Float => write!(self.sink, "f32")?,
             Type::Double => write!(self.sink, "f64")?,
             Type::Pointer { is_const, pointee } | Type::Reference { is_const, pointee } => {

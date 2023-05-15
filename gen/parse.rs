@@ -246,6 +246,9 @@ pub enum Type {
     Int,
     Long,
     LongLong,
+    Unsigned(usize),
+    #[allow(dead_code)]
+    Signed(usize),
     Float,
     Double,
     Pointer { is_const: bool, pointee: Box<Type> },
@@ -267,6 +270,7 @@ impl Type {
             TypeKind::UInt => Some(Type::UInt),
             TypeKind::SChar => Some(Type::SChar),
             TypeKind::Char16 => Some(Type::Short),
+            TypeKind::WChar => Some(Type::Unsigned(type_.size())),
             TypeKind::ULong => Some(Type::ULong),
             TypeKind::ULongLong => Some(Type::ULongLong),
             TypeKind::Short => Some(Type::Short),

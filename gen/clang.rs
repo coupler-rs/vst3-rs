@@ -316,6 +316,10 @@ impl<'a> Type<'a> {
         unsafe { clang_isConstQualifiedType(self.type_) != 0 }
     }
 
+    pub fn size(&self) -> usize {
+        unsafe { clang_Type_getSizeOf(self.type_) as usize }
+    }
+
     pub fn name(&self) -> StringRef<'a> {
         unsafe { StringRef::from_raw(clang_getTypeSpelling(self.type_)) }
     }
