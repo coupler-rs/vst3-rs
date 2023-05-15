@@ -43,19 +43,20 @@ pub fn generate(sdk_dir: &str, out_dir: &str) -> Result<(), Box<dyn Error>> {
     let headers = find_headers(&pluginterfaces_path).expect("error scanning directory");
 
     let skip_headers = HashSet::from([
-        "pluginterfaces/base/funknownimpl.h",
-        "pluginterfaces/base/ustring.h",
-        "pluginterfaces/test/itest.h",
-        "pluginterfaces/vst/ivsttestplugprovider.h",
+        Path::new("pluginterfaces/base/funknownimpl.h"),
+        Path::new("pluginterfaces/base/ustring.h"),
+        Path::new("pluginterfaces/test/itest.h"),
+        Path::new("pluginterfaces/vst/ivsttestplugprovider.h"),
     ]);
 
     let mut source = String::new();
     for header in &headers {
-        let name = header.strip_prefix(&sdk_dir).unwrap().to_str().unwrap();
-
-        if skip_headers.contains(name) {
+        let relative = header.strip_prefix(&sdk_dir).unwrap();
+        if skip_headers.contains(relative) {
             continue;
         }
+
+        let name = relative.to_str().unwrap();
 
         use std::fmt::Write;
         writeln!(source, "#include \"{}\"", name)?;
