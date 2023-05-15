@@ -58,6 +58,14 @@ impl<W: Write> RustPrinter<W> {
                 writeln!(self.sink, "pub struct {}Vtbl {{", record.name)?;
                 self.indent_level += 1;
 
+                if record.bases.len() > 1 {
+                    panic!("type {} has more than one base class", record.name);
+                }
+                if let Some(base) = record.bases.first() {
+                    self.indent()?;
+                    writeln!(self.sink, "pub base: {base}Vtbl,")?;
+                }
+
                 for method in &record.virtual_methods {
                     self.indent()?;
                     writeln!(self.sink, "pub {}: fn(", method.name)?;

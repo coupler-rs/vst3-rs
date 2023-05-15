@@ -85,6 +85,7 @@ pub enum CursorKind {
     ClassDecl,
     FieldDecl,
     CxxMethod,
+    CxxBaseSpecifier,
     Other,
 }
 
@@ -112,6 +113,7 @@ impl<'a> Cursor<'a> {
             CXCursor_ClassDecl => CursorKind::ClassDecl,
             CXCursor_FieldDecl => CursorKind::FieldDecl,
             CXCursor_CXXMethod => CursorKind::CxxMethod,
+            CXCursor_CXXBaseSpecifier => CursorKind::CxxBaseSpecifier,
             _ => CursorKind::Other,
         }
     }

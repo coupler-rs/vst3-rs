@@ -142,6 +142,7 @@ pub struct Record {
     pub name: String,
     pub kind: RecordKind,
     pub fields: Vec<Field>,
+    pub bases: Vec<String>,
     pub virtual_methods: Vec<Method>,
 }
 
@@ -162,6 +163,7 @@ impl Record {
         };
 
         let mut fields = Vec::new();
+        let mut bases = Vec::new();
         let mut virtual_methods = Vec::new();
         decl.visit_children(|cursor| {
             match cursor.kind() {
@@ -205,6 +207,9 @@ impl Record {
                         });
                     }
                 }
+                CursorKind::CxxBaseSpecifier => {
+                    bases.push(cursor.type_().unwrap().name().to_str().unwrap().to_string());
+                }
                 _ => {}
             }
         });
@@ -213,6 +218,7 @@ impl Record {
             name,
             kind,
             fields,
+            bases,
             virtual_methods,
         })
     }
