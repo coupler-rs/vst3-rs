@@ -3,7 +3,7 @@ use std::ffi::{c_char, c_int, c_uint, c_ulong, c_void, CStr, CString};
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
-use std::panic::{catch_unwind, resume_unwind};
+use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
 
 use clang_sys::*;
 
@@ -186,54 +186,70 @@ impl<'a> Cursor<'a> {
         unsafe { clang_CXXMethod_isVirtual(self.cursor) != 0 }
     }
 
-    pub fn visit_children<F>(&self, mut callback: F)
+    pub fn visit_children<F, E>(&self, mut callback: F) -> Result<(), E>
     where
-        F: FnMut(&Cursor),
+        F: FnMut(&Cursor) -> Result<(), E>,
     {
-        extern "C" fn visitor(
+        extern "C" fn visitor<E>(
             cursor: CXCursor,
             _parent: CXCursor,
             client_data: CXClientData,
         ) -> CXChildVisitResult {
-            let data = unsafe { &*(client_data as *mut Data) };
+            let data_ptr = client_data as *mut Data<E>;
+
+            // If a re-entrant call to visit_children panicked, continue unwinding
+            let data = unsafe { &*data_ptr };
             if data.panic.is_some() {
                 return CXChildVisit_Break;
             }
 
-            let result = catch_unwind(|| unsafe {
-                let data = &mut *(client_data as *mut Data);
-                (data.callback)(&Cursor::from_raw(cursor));
-
-                CXChildVisit_Continue
-            });
+            let result = catch_unwind(AssertUnwindSafe(|| unsafe {
+                let data = &mut *data_ptr;
+                (data.callback)(&Cursor::from_raw(cursor))
+            }));
 
             match result {
-                Ok(res) => res,
-                Err(err) => {
-                    let data = unsafe { &mut *(client_data as *mut Data) };
-                    data.panic = Some(err);
+                Ok(res) => match res {
+                    Ok(()) => CXChildVisit_Continue,
+                    Err(err) => {
+                        let data = unsafe { &mut *data_ptr };
+                        data.result = Err(err);
+                        CXChildVisit_Break
+                    }
+                },
+                Err(panic) => {
+                    let data = unsafe { &mut *data_ptr };
+                    data.panic = Some(panic);
 
                     CXChildVisit_Break
                 }
             }
         }
 
-        struct Data<'c> {
-            callback: &'c mut dyn FnMut(&Cursor),
+        struct Data<'c, E> {
+            callback: &'c mut dyn FnMut(&Cursor) -> Result<(), E>,
+            result: Result<(), E>,
             panic: Option<Box<dyn Any + Send + 'static>>,
         }
         let mut data = Data {
             callback: &mut callback,
+            result: Ok(()),
             panic: None,
         };
 
         unsafe {
-            clang_visitChildren(self.cursor, visitor, &mut data as *mut Data as *mut c_void);
+            clang_visitChildren(
+                self.cursor,
+                visitor::<E>,
+                &mut data as *mut Data<E> as *mut c_void,
+            );
         }
 
         if let Some(panic) = data.panic {
             resume_unwind(panic);
         }
+
+        data.result
     }
 }
 

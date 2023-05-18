@@ -1,4 +1,5 @@
 use std::collections::{BTreeMap, HashSet};
+use std::error::Error;
 
 use super::clang;
 use clang::*;
@@ -34,13 +35,13 @@ impl Parser {
         namespace
     }
 
-    fn visit(&mut self, cursor: &Cursor) {
+    fn visit(&mut self, cursor: &Cursor) -> Result<(), Box<dyn Error>> {
         if cursor.is_in_system_header() {
-            return;
+            return Ok(());
         }
 
         if self.skip_list.contains(cursor.name().to_str().unwrap()) {
-            return;
+            return Ok(());
         }
 
         match cursor.kind() {
@@ -50,14 +51,12 @@ impl Parser {
 
                 // Skip the contents of unnamed namespaces
                 if name_str.len() == 0 {
-                    return;
+                    return Ok(());
                 }
 
                 self.namespace_stack.push(name_str.to_string());
 
-                cursor.visit_children(|cursor| {
-                    self.visit(cursor);
-                });
+                cursor.visit_children(|cursor| self.visit(cursor))?;
 
                 self.namespace_stack.pop();
             }
@@ -66,7 +65,7 @@ impl Parser {
                 let name = typedef.typedef_name();
 
                 let type_ = Type::parse(cursor.typedef_underlying_type().unwrap());
-                if type_.is_none() {
+                if type_.is_err() {
                     let underlying_type = cursor.typedef_underlying_type().unwrap();
                     panic!(
                         "could not parse typedef {} = {}",
@@ -88,13 +87,13 @@ impl Parser {
                         self.current_namespace().records.push(record);
                     }
 
-                    cursor.visit_children(|cursor| {
-                        self.visit(cursor);
-                    });
+                    cursor.visit_children(|cursor| self.visit(cursor))?;
                 }
             }
             _ => {}
         }
+
+        Ok(())
     }
 }
 
@@ -114,14 +113,12 @@ impl Namespace {
         }
     }
 
-    pub fn parse(cursor: &Cursor, skip_list: &[&str]) -> Namespace {
+    pub fn parse(cursor: &Cursor, skip_list: &[&str]) -> Result<Namespace, Box<dyn Error>> {
         let mut parser = Parser::new(skip_list);
 
-        cursor.visit_children(|cursor| {
-            parser.visit(cursor);
-        });
+        cursor.visit_children(|cursor| parser.visit(cursor))?;
 
-        parser.namespace
+        Ok(parser.namespace)
     }
 }
 
@@ -153,7 +150,7 @@ pub struct Field {
 }
 
 impl Record {
-    fn parse(record: clang::Type) -> Option<Record> {
+    fn parse(record: clang::Type) -> Result<Record, Box<dyn Error>> {
         let decl = record.declaration();
         let name = decl.name().to_str().unwrap().to_string();
         let kind = match decl.kind() {
@@ -165,13 +162,13 @@ impl Record {
         let mut fields = Vec::new();
         let mut bases = Vec::new();
         let mut virtual_methods = Vec::new();
-        decl.visit_children(|cursor| {
+        decl.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
             match cursor.kind() {
                 // Check for UnionDecl to handle anonymous unions
                 CursorKind::FieldDecl | CursorKind::UnionDecl => {
                     let type_ = Type::parse(cursor.type_().unwrap());
 
-                    if type_.is_none() {
+                    if type_.is_err() {
                         panic!(
                             "could not parse field {}: {}",
                             cursor.name().to_str().unwrap(),
@@ -212,9 +209,11 @@ impl Record {
                 }
                 _ => {}
             }
-        });
 
-        Some(Record {
+            Ok(())
+        })?;
+
+        Ok(Record {
             name,
             kind,
             fields,
@@ -257,8 +256,14 @@ pub enum Type {
     Signed(usize),
     Float,
     Double,
-    Pointer { is_const: bool, pointee: Box<Type> },
-    Reference { is_const: bool, pointee: Box<Type> },
+    Pointer {
+        is_const: bool,
+        pointee: Box<Type>,
+    },
+    Reference {
+        is_const: bool,
+        pointee: Box<Type>,
+    },
     Record(String),
     UnnamedRecord(Record),
     Typedef(String),
@@ -266,35 +271,35 @@ pub enum Type {
 }
 
 impl Type {
-    fn parse(type_: clang::Type) -> Option<Type> {
+    fn parse(type_: clang::Type) -> Result<Type, Box<dyn Error>> {
         match type_.kind() {
-            TypeKind::Void => Some(Type::Void),
-            TypeKind::Bool => Some(Type::Bool),
-            TypeKind::Char_U | TypeKind::Char_S => Some(Type::Char),
-            TypeKind::UChar => Some(Type::UChar),
-            TypeKind::UShort => Some(Type::UShort),
-            TypeKind::UInt => Some(Type::UInt),
-            TypeKind::SChar => Some(Type::SChar),
-            TypeKind::Char16 => Some(Type::Short),
-            TypeKind::WChar => Some(Type::Unsigned(type_.size())),
-            TypeKind::ULong => Some(Type::ULong),
-            TypeKind::ULongLong => Some(Type::ULongLong),
-            TypeKind::Short => Some(Type::Short),
-            TypeKind::Int => Some(Type::Int),
-            TypeKind::Long => Some(Type::Long),
-            TypeKind::LongLong => Some(Type::LongLong),
-            TypeKind::Float => Some(Type::Float),
-            TypeKind::Double => Some(Type::Double),
+            TypeKind::Void => Ok(Type::Void),
+            TypeKind::Bool => Ok(Type::Bool),
+            TypeKind::Char_U | TypeKind::Char_S => Ok(Type::Char),
+            TypeKind::UChar => Ok(Type::UChar),
+            TypeKind::UShort => Ok(Type::UShort),
+            TypeKind::UInt => Ok(Type::UInt),
+            TypeKind::SChar => Ok(Type::SChar),
+            TypeKind::Char16 => Ok(Type::Short),
+            TypeKind::WChar => Ok(Type::Unsigned(type_.size())),
+            TypeKind::ULong => Ok(Type::ULong),
+            TypeKind::ULongLong => Ok(Type::ULongLong),
+            TypeKind::Short => Ok(Type::Short),
+            TypeKind::Int => Ok(Type::Int),
+            TypeKind::Long => Ok(Type::Long),
+            TypeKind::LongLong => Ok(Type::LongLong),
+            TypeKind::Float => Ok(Type::Float),
+            TypeKind::Double => Ok(Type::Double),
             TypeKind::Pointer => {
                 let pointee = type_.pointee().unwrap();
-                Some(Type::Pointer {
+                Ok(Type::Pointer {
                     is_const: pointee.is_const(),
                     pointee: Box::new(Type::parse(pointee)?),
                 })
             }
             TypeKind::LValueReference => {
                 let pointee = type_.pointee().unwrap();
-                Some(Type::Reference {
+                Ok(Type::Reference {
                     is_const: pointee.is_const(),
                     pointee: Box::new(Type::parse(pointee)?),
                 })
@@ -303,9 +308,9 @@ impl Type {
                 let decl = type_.declaration();
                 let name = decl.name().to_str().unwrap().to_string();
                 if name.is_empty() {
-                    Some(Type::UnnamedRecord(Record::parse(type_)?))
+                    Ok(Type::UnnamedRecord(Record::parse(type_)?))
                 } else {
-                    Some(Type::Record(name))
+                    Ok(Type::Record(name))
                 }
             }
             // TypeKind::Enum,
@@ -314,18 +319,18 @@ impl Type {
                 let declaration = type_.declaration();
                 if declaration.is_in_system_header() {
                     let underlying_type = declaration.typedef_underlying_type().unwrap();
-                    return Some(Type::parse(underlying_type)?);
+                    return Ok(Type::parse(underlying_type)?);
                 }
 
                 let name = type_.typedef_name().unwrap().to_str().unwrap().to_string();
-                Some(Type::Typedef(name))
+                Ok(Type::Typedef(name))
             }
             TypeKind::ConstantArray => {
                 let size = type_.array_size().unwrap();
                 let element_type = Type::parse(type_.array_element_type().unwrap())?;
-                Some(Type::Array(size, Box::new(element_type)))
+                Ok(Type::Array(size, Box::new(element_type)))
             }
-            _ => None,
+            _ => Err(format!("unhandled type kind {:?}", type_.kind()).into()),
         }
     }
 }
