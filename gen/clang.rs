@@ -1,9 +1,11 @@
 use std::any::Any;
 use std::ffi::{c_char, c_int, c_uint, c_ulong, c_void, CStr, CString};
+use std::fmt::Display;
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
 use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
+use std::{fmt, ptr};
 
 use clang_sys::*;
 
@@ -120,6 +122,10 @@ impl<'a> Cursor<'a> {
 
     pub fn name(&self) -> StringRef<'a> {
         unsafe { StringRef::from_raw(clang_getCursorSpelling(self.cursor)) }
+    }
+
+    pub fn location(&self) -> Location<'a> {
+        unsafe { Location::from_raw(clang_getCursorLocation(self.cursor)) }
     }
 
     pub fn is_in_system_header(&self) -> bool {
@@ -380,6 +386,50 @@ impl<'a> Type<'a> {
         } else {
             Some(unsafe { Type::from_raw(element_type) })
         }
+    }
+}
+
+pub struct Location<'a> {
+    location: CXSourceLocation,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> Location<'a> {
+    unsafe fn from_raw(location: CXSourceLocation) -> Location<'a> {
+        Location {
+            location,
+            _marker: PhantomData,
+        }
+    }
+}
+
+impl<'a> Display for Location<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        let mut filename = None;
+        let mut line = 0;
+        let mut column = 0;
+        unsafe {
+            let mut file = ptr::null_mut();
+            clang_getFileLocation(
+                self.location,
+                &mut file,
+                &mut line,
+                &mut column,
+                ptr::null_mut(),
+            );
+
+            if !file.is_null() {
+                filename = Some(StringRef::from_raw(clang_getFileName(file)));
+            }
+        }
+
+        if let Some(filename) = filename {
+            write!(f, "{}:{line}:{column}", filename.to_str().unwrap())?;
+        } else {
+            write!(f, "<unknown location>")?;
+        }
+
+        Ok(())
     }
 }
 
