@@ -64,26 +64,19 @@ impl Parser {
                 let typedef = cursor.type_().unwrap();
                 let name = typedef.typedef_name();
 
-                let type_ = Type::parse(cursor.typedef_underlying_type().unwrap());
-                if type_.is_err() {
-                    let underlying_type = cursor.typedef_underlying_type().unwrap();
-                    return Err(format!(
-                        "could not parse typedef {} = {}",
-                        typedef.name().to_str().unwrap(),
-                        underlying_type.name().to_str().unwrap(),
-                    ).into());
-                }
+                let type_ =
+                    Type::parse(cursor.typedef_underlying_type().unwrap(), cursor.location())?;
 
                 self.current_namespace().typedefs.push(Typedef {
                     name: name.unwrap().to_str().unwrap().to_string(),
-                    type_: type_.unwrap(),
+                    type_,
                 });
             }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {
                     // Skip unnamed records here, as Record::parse will take care of them
                     if !cursor.name().to_str().unwrap().is_empty() {
-                        let record = Record::parse(cursor.type_().unwrap()).unwrap();
+                        let record = Record::parse(cursor.type_().unwrap())?;
                         self.current_namespace().records.push(record);
                     }
 
@@ -166,20 +159,11 @@ impl Record {
             match cursor.kind() {
                 // Check for UnionDecl to handle anonymous unions
                 CursorKind::FieldDecl | CursorKind::UnionDecl => {
-                    let type_ = Type::parse(cursor.type_().unwrap());
-
-                    if type_.is_err() {
-                        return Err(format!(
-                            "could not parse field {}: {}",
-                            cursor.name().to_str().unwrap(),
-                            cursor.type_().unwrap().name().to_str().unwrap(),
-                        )
-                        .into());
-                    }
+                    let type_ = Type::parse(cursor.type_().unwrap(), cursor.location())?;
 
                     fields.push(Field {
                         name: cursor.name().to_str().unwrap().to_string(),
-                        type_: type_.unwrap(),
+                        type_,
                     });
                 }
                 CursorKind::CxxMethod => {
@@ -189,14 +173,15 @@ impl Record {
                         for i in 0..cursor.num_arguments().unwrap() {
                             let arg = cursor.argument(i).unwrap();
 
-                            let arg_type = Type::parse(arg.type_().unwrap());
+                            let arg_type = Type::parse(arg.type_().unwrap(), arg.location());
                             arguments.push(Argument {
                                 name: arg.name().to_str().unwrap().to_string(),
                                 type_: arg_type.unwrap_or(Type::Void),
                             });
                         }
 
-                        let result_type = Type::parse(cursor.result_type().unwrap()).unwrap();
+                        let result_type =
+                            Type::parse(cursor.result_type().unwrap(), cursor.location()).unwrap();
 
                         virtual_methods.push(Method {
                             name: cursor.name().to_str().unwrap().to_string(),
@@ -272,7 +257,7 @@ pub enum Type {
 }
 
 impl Type {
-    fn parse(type_: clang::Type) -> Result<Type, Box<dyn Error>> {
+    fn parse(type_: clang::Type, location: Location) -> Result<Type, Box<dyn Error>> {
         match type_.kind() {
             TypeKind::Void => Ok(Type::Void),
             TypeKind::Bool => Ok(Type::Bool),
@@ -295,14 +280,14 @@ impl Type {
                 let pointee = type_.pointee().unwrap();
                 Ok(Type::Pointer {
                     is_const: pointee.is_const(),
-                    pointee: Box::new(Type::parse(pointee)?),
+                    pointee: Box::new(Type::parse(pointee, location)?),
                 })
             }
             TypeKind::LValueReference => {
                 let pointee = type_.pointee().unwrap();
                 Ok(Type::Reference {
                     is_const: pointee.is_const(),
-                    pointee: Box::new(Type::parse(pointee)?),
+                    pointee: Box::new(Type::parse(pointee, location)?),
                 })
             }
             TypeKind::Record => {
@@ -320,7 +305,7 @@ impl Type {
                 let declaration = type_.declaration();
                 if declaration.is_in_system_header() {
                     let underlying_type = declaration.typedef_underlying_type().unwrap();
-                    return Ok(Type::parse(underlying_type)?);
+                    return Ok(Type::parse(underlying_type, location)?);
                 }
 
                 let name = type_.typedef_name().unwrap().to_str().unwrap().to_string();
@@ -328,10 +313,14 @@ impl Type {
             }
             TypeKind::ConstantArray => {
                 let size = type_.array_size().unwrap();
-                let element_type = Type::parse(type_.array_element_type().unwrap())?;
+                let element_type = Type::parse(type_.array_element_type().unwrap(), location)?;
                 Ok(Type::Array(size, Box::new(element_type)))
             }
-            _ => Err(format!("unhandled type kind {:?}", type_.kind()).into()),
+            _ => Err(format!(
+                "error at {location}: unhandled type kind {:?}",
+                type_.kind()
+            )
+            .into()),
         }
     }
 }
