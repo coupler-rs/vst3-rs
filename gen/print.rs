@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use std::io::{Result, Write};
+use std::io::{self, ErrorKind, Write};
 use std::mem;
 
 use super::parse::{Namespace, Record, RecordKind, Type};
@@ -23,7 +23,7 @@ impl<W: Write> RustPrinter<W> {
         }
     }
 
-    fn indent(&mut self) -> Result<()> {
+    fn indent(&mut self) -> io::Result<()> {
         for _ in 0..self.indent_level {
             write!(self.sink, "    ")?;
         }
@@ -31,7 +31,7 @@ impl<W: Write> RustPrinter<W> {
         Ok(())
     }
 
-    pub fn print_namespace(&mut self, namespace: &Namespace) -> Result<()> {
+    pub fn print_namespace(&mut self, namespace: &Namespace) -> io::Result<()> {
         for typedef in &namespace.typedefs {
             self.indent()?;
             write!(self.sink, "pub type {} = ", typedef.name)?;
@@ -59,7 +59,10 @@ impl<W: Write> RustPrinter<W> {
                 self.indent_level += 1;
 
                 if record.bases.len() > 1 {
-                    panic!("type {} has more than one base class", record.name);
+                    return Err(io::Error::new(
+                        ErrorKind::Other,
+                        format!("type {} has more than one base class", record.name),
+                    ));
                 }
                 if let Some(base) = record.bases.first() {
                     self.indent()?;
@@ -123,7 +126,7 @@ impl<W: Write> RustPrinter<W> {
         Ok(())
     }
 
-    fn print_record(&mut self, record: &Record) -> Result<()> {
+    fn print_record(&mut self, record: &Record) -> io::Result<()> {
         self.container = Some(record.name.clone());
 
         self.indent()?;
@@ -172,7 +175,7 @@ impl<W: Write> RustPrinter<W> {
         Ok(())
     }
 
-    fn print_type(&mut self, type_: &Type) -> Result<()> {
+    fn print_type(&mut self, type_: &Type) -> io::Result<()> {
         match type_ {
             Type::Void => write!(self.sink, "std::ffi::c_void")?,
             Type::Bool => write!(self.sink, "bool")?,
@@ -192,14 +195,24 @@ impl<W: Write> RustPrinter<W> {
                 2 => write!(self.sink, "u16")?,
                 4 => write!(self.sink, "u32")?,
                 8 => write!(self.sink, "u64")?,
-                _ => panic!("unexpected size {} for unsigned integer", size),
+                _ => {
+                    return Err(io::Error::new(
+                        ErrorKind::Other,
+                        format!("unexpected size {} for unsigned integer", size),
+                    ))
+                }
             },
             Type::Signed(size) => match size {
                 1 => write!(self.sink, "i8")?,
                 2 => write!(self.sink, "i16")?,
                 4 => write!(self.sink, "i32")?,
                 8 => write!(self.sink, "i64")?,
-                _ => panic!("unexpected size {} for signed integer", size),
+                _ => {
+                    return Err(io::Error::new(
+                        ErrorKind::Other,
+                        format!("unexpected size {} for signed integer", size),
+                    ))
+                }
             },
             Type::Float => write!(self.sink, "f32")?,
             Type::Double => write!(self.sink, "f64")?,

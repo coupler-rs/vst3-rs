@@ -67,11 +67,11 @@ impl Parser {
                 let type_ = Type::parse(cursor.typedef_underlying_type().unwrap());
                 if type_.is_err() {
                     let underlying_type = cursor.typedef_underlying_type().unwrap();
-                    panic!(
+                    return Err(format!(
                         "could not parse typedef {} = {}",
                         typedef.name().to_str().unwrap(),
                         underlying_type.name().to_str().unwrap(),
-                    );
+                    ).into());
                 }
 
                 self.current_namespace().typedefs.push(Typedef {
@@ -169,11 +169,12 @@ impl Record {
                     let type_ = Type::parse(cursor.type_().unwrap());
 
                     if type_.is_err() {
-                        panic!(
+                        return Err(format!(
                             "could not parse field {}: {}",
                             cursor.name().to_str().unwrap(),
                             cursor.type_().unwrap().name().to_str().unwrap(),
-                        );
+                        )
+                        .into());
                     }
 
                     fields.push(Field {
