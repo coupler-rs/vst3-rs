@@ -157,6 +157,15 @@ impl<'a> Cursor<'a> {
         }
     }
 
+    pub fn enum_integer_type(&self) -> Option<Type<'a>> {
+        let type_ = unsafe { clang_getEnumDeclIntegerType(self.cursor) };
+        if type_.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(type_) })
+        }
+    }
+
     pub fn num_arguments(&self) -> Option<usize> {
         let num_arguments = unsafe { clang_Cursor_getNumArguments(self.cursor) };
 

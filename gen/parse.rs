@@ -299,7 +299,13 @@ impl Type {
                     Ok(Type::Record(name))
                 }
             }
-            // TypeKind::Enum,
+            TypeKind::Enum => {
+                // For now, just treat enum types as the underlying integer type.
+                // TODO: Refer to the generated enum typedef once we handle enum declarations
+                let decl = type_.declaration();
+                let int_type = decl.enum_integer_type().unwrap();
+                Type::parse(int_type, location)
+            }
             TypeKind::Typedef => {
                 // Skip typedef declarations that are found in system headers
                 let declaration = type_.declaration();
