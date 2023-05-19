@@ -33,7 +33,7 @@ impl Parser {
                 let name_str = name.to_str().unwrap();
 
                 // Skip the contents of unnamed namespaces
-                if name_str.len() == 0 {
+                if name_str.is_empty() {
                     return Ok(());
                 }
 
