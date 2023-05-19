@@ -316,6 +316,7 @@ impl Type {
                 let element_type = Type::parse(type_.array_element_type().unwrap(), location)?;
                 Ok(Type::Array(size, Box::new(element_type)))
             }
+            TypeKind::Elaborated => Type::parse(type_.named_type().unwrap(), location),
             _ => Err(format!(
                 "error at {location}: unhandled type kind {:?}",
                 type_.kind()

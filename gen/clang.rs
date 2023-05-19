@@ -288,6 +288,7 @@ pub enum TypeKind {
     Enum,
     Typedef,
     ConstantArray,
+    Elaborated,
     Other,
 }
 
@@ -332,6 +333,7 @@ impl<'a> Type<'a> {
             CXType_Enum => TypeKind::Enum,
             CXType_Typedef => TypeKind::Typedef,
             CXType_ConstantArray => TypeKind::ConstantArray,
+            CXType_Elaborated => TypeKind::Elaborated,
             _ => TypeKind::Other,
         }
     }
@@ -385,6 +387,15 @@ impl<'a> Type<'a> {
             None
         } else {
             Some(unsafe { Type::from_raw(element_type) })
+        }
+    }
+
+    pub fn named_type(&self) -> Option<Type<'a>> {
+        let named_type = unsafe { clang_Type_getNamedType(self.type_) };
+        if named_type.kind == CXType_Invalid {
+            None
+        } else {
+            Some(unsafe { Type::from_raw(named_type) })
         }
     }
 }
