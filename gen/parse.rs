@@ -173,10 +173,10 @@ impl Record {
                         for i in 0..cursor.num_arguments().unwrap() {
                             let arg = cursor.argument(i).unwrap();
 
-                            let arg_type = Type::parse(arg.type_().unwrap(), arg.location());
+                            let arg_type = Type::parse(arg.type_().unwrap(), arg.location())?;
                             arguments.push(Argument {
                                 name: arg.name().to_str().unwrap().to_string(),
-                                type_: arg_type.unwrap_or(Type::Void),
+                                type_: arg_type,
                             });
                         }
 
