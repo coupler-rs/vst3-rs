@@ -5,9 +5,7 @@ use super::clang;
 use clang::*;
 
 struct Parser {
-    namespace_stack: Vec<String>,
     skip_list: HashSet<String>,
-    namespace: Namespace,
 }
 
 impl Parser {
@@ -17,25 +15,10 @@ impl Parser {
             .map(|s| s.to_string())
             .collect::<HashSet<_>>();
 
-        Parser {
-            namespace_stack: Vec::new(),
-            skip_list,
-            namespace: Namespace::new(),
-        }
+        Parser { skip_list }
     }
 
-    fn current_namespace(&mut self) -> &mut Namespace {
-        let mut namespace = &mut self.namespace;
-        for name in &self.namespace_stack {
-            if !namespace.children.contains_key(name) {
-                namespace.children.insert(name.clone(), Namespace::new());
-            }
-            namespace = namespace.children.get_mut(name).unwrap();
-        }
-        namespace
-    }
-
-    fn visit(&mut self, cursor: &Cursor) -> Result<(), Box<dyn Error>> {
+    fn visit(&mut self, namespace: &mut Namespace, cursor: &Cursor) -> Result<(), Box<dyn Error>> {
         if cursor.is_in_system_header() {
             return Ok(());
         }
@@ -54,11 +37,13 @@ impl Parser {
                     return Ok(());
                 }
 
-                self.namespace_stack.push(name_str.to_string());
-
-                cursor.visit_children(|cursor| self.visit(cursor))?;
-
-                self.namespace_stack.pop();
+                if !namespace.children.contains_key(name_str) {
+                    namespace
+                        .children
+                        .insert(name_str.to_string(), Namespace::new());
+                }
+                let child_namespace = namespace.children.get_mut(name_str).unwrap();
+                cursor.visit_children(|cursor| self.visit(child_namespace, cursor))?;
             }
             CursorKind::TypedefDecl | CursorKind::TypeAliasDecl => {
                 let typedef = cursor.type_().unwrap();
@@ -67,7 +52,7 @@ impl Parser {
                 let type_ =
                     Type::parse(cursor.typedef_underlying_type().unwrap(), cursor.location())?;
 
-                self.current_namespace().typedefs.push(Typedef {
+                namespace.typedefs.push(Typedef {
                     name: name.unwrap().to_str().unwrap().to_string(),
                     type_,
                 });
@@ -77,10 +62,10 @@ impl Parser {
                     // Skip unnamed records here, as Record::parse will take care of them
                     if !cursor.name().to_str().unwrap().is_empty() {
                         let record = Record::parse(cursor.type_().unwrap())?;
-                        self.current_namespace().records.push(record);
+                        namespace.records.push(record);
                     }
 
-                    cursor.visit_children(|cursor| self.visit(cursor))?;
+                    cursor.visit_children(|cursor| self.visit(namespace, cursor))?;
                 }
             }
             _ => {}
@@ -108,10 +93,11 @@ impl Namespace {
 
     pub fn parse(cursor: &Cursor, skip_list: &[&str]) -> Result<Namespace, Box<dyn Error>> {
         let mut parser = Parser::new(skip_list);
+        let mut namespace = Namespace::new();
 
-        cursor.visit_children(|cursor| parser.visit(cursor))?;
+        cursor.visit_children(|cursor| parser.visit(&mut namespace, cursor))?;
 
-        Ok(parser.namespace)
+        Ok(namespace)
     }
 }
 
