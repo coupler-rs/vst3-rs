@@ -9,6 +9,7 @@ pub struct Namespace {
     pub children: BTreeMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
+    unnamed_record_counter: usize,
 }
 
 impl Namespace {
@@ -17,6 +18,7 @@ impl Namespace {
             children: BTreeMap::new(),
             typedefs: Vec::new(),
             records: Vec::new(),
+            unnamed_record_counter: 0,
         }
     }
 
@@ -106,7 +108,6 @@ pub enum Type {
         pointee: Box<Type>,
     },
     Record(String),
-    UnnamedRecord(Record),
     Typedef(String),
     Array(usize, Box<Type>),
 }
@@ -156,8 +157,11 @@ impl Parser {
                 let typedef = cursor.type_().unwrap();
                 let name = typedef.typedef_name();
 
-                let type_ =
-                    self.parse_type(cursor.typedef_underlying_type().unwrap(), cursor.location())?;
+                let type_ = self.parse_type(
+                    cursor.typedef_underlying_type().unwrap(),
+                    cursor.location(),
+                    namespace,
+                )?;
 
                 namespace.typedefs.push(Typedef {
                     name: name.unwrap().to_str().unwrap().to_string(),
@@ -168,7 +172,7 @@ impl Parser {
                 if cursor.is_definition() {
                     // Skip unnamed records here, as parse_type will take care of them
                     if !cursor.name().to_str().unwrap().is_empty() {
-                        let record = self.parse_record(cursor.type_().unwrap())?;
+                        let record = self.parse_record(cursor.type_().unwrap(), namespace)?;
                         namespace.records.push(record);
                     }
                 }
@@ -179,7 +183,11 @@ impl Parser {
         Ok(())
     }
 
-    fn parse_record(&mut self, record: clang::Type) -> Result<Record, Box<dyn Error>> {
+    fn parse_record(
+        &mut self,
+        record: clang::Type,
+        namespace: &mut Namespace,
+    ) -> Result<Record, Box<dyn Error>> {
         let decl = record.declaration();
         let name = decl.name().to_str().unwrap().to_string();
         let kind = match decl.kind() {
@@ -195,7 +203,8 @@ impl Parser {
             match cursor.kind() {
                 // Check for UnionDecl to handle anonymous unions
                 CursorKind::FieldDecl | CursorKind::UnionDecl => {
-                    let type_ = self.parse_type(cursor.type_().unwrap(), cursor.location())?;
+                    let type_ =
+                        self.parse_type(cursor.type_().unwrap(), cursor.location(), namespace)?;
 
                     fields.push(Field {
                         name: cursor.name().to_str().unwrap().to_string(),
@@ -209,7 +218,8 @@ impl Parser {
                         for i in 0..cursor.num_arguments().unwrap() {
                             let arg = cursor.argument(i).unwrap();
 
-                            let arg_type = self.parse_type(arg.type_().unwrap(), arg.location())?;
+                            let arg_type =
+                                self.parse_type(arg.type_().unwrap(), arg.location(), namespace)?;
                             arguments.push(Argument {
                                 name: arg.name().to_str().unwrap().to_string(),
                                 type_: arg_type,
@@ -217,7 +227,7 @@ impl Parser {
                         }
 
                         let result_type = self
-                            .parse_type(cursor.result_type().unwrap(), cursor.location())
+                            .parse_type(cursor.result_type().unwrap(), cursor.location(), namespace)
                             .unwrap();
 
                         virtual_methods.push(Method {
@@ -254,6 +264,7 @@ impl Parser {
         &mut self,
         type_: clang::Type,
         location: Location,
+        namespace: &mut Namespace,
     ) -> Result<Type, Box<dyn Error>> {
         match type_.kind() {
             TypeKind::Void => Ok(Type::Void),
@@ -277,38 +288,44 @@ impl Parser {
                 let pointee = type_.pointee().unwrap();
                 Ok(Type::Pointer {
                     is_const: pointee.is_const(),
-                    pointee: Box::new(self.parse_type(pointee, location)?),
+                    pointee: Box::new(self.parse_type(pointee, location, namespace)?),
                 })
             }
             TypeKind::LValueReference => {
                 let pointee = type_.pointee().unwrap();
                 Ok(Type::Reference {
                     is_const: pointee.is_const(),
-                    pointee: Box::new(self.parse_type(pointee, location)?),
+                    pointee: Box::new(self.parse_type(pointee, location, namespace)?),
                 })
             }
             TypeKind::Record => {
                 let decl = type_.declaration();
-                let name = decl.name().to_str().unwrap().to_string();
+                let mut name = decl.name().to_str().unwrap().to_string();
+
                 if name.is_empty() {
-                    Ok(Type::UnnamedRecord(self.parse_record(type_)?))
-                } else {
-                    Ok(Type::Record(name))
+                    name = format!("__type{}", namespace.unnamed_record_counter);
+                    namespace.unnamed_record_counter += 1;
+
+                    let mut record = self.parse_record(type_, namespace)?;
+                    record.name = name.clone();
+                    namespace.records.push(record);
                 }
+
+                Ok(Type::Record(name))
             }
             TypeKind::Enum => {
                 // For now, just treat enum types as the underlying integer type.
                 // TODO: Refer to the generated enum typedef once we handle enum declarations
                 let decl = type_.declaration();
                 let int_type = decl.enum_integer_type().unwrap();
-                self.parse_type(int_type, location)
+                self.parse_type(int_type, location, namespace)
             }
             TypeKind::Typedef => {
                 // Skip typedef declarations that are found in system headers
                 let declaration = type_.declaration();
                 if declaration.is_in_system_header() {
                     let underlying_type = declaration.typedef_underlying_type().unwrap();
-                    return Ok(self.parse_type(underlying_type, location)?);
+                    return Ok(self.parse_type(underlying_type, location, namespace)?);
                 }
 
                 let name = type_.typedef_name().unwrap().to_str().unwrap().to_string();
@@ -317,10 +334,12 @@ impl Parser {
             TypeKind::ConstantArray => {
                 let size = type_.array_size().unwrap();
                 let element_type =
-                    self.parse_type(type_.array_element_type().unwrap(), location)?;
+                    self.parse_type(type_.array_element_type().unwrap(), location, namespace)?;
                 Ok(Type::Array(size, Box::new(element_type)))
             }
-            TypeKind::Elaborated => self.parse_type(type_.named_type().unwrap(), location),
+            TypeKind::Elaborated => {
+                self.parse_type(type_.named_type().unwrap(), location, namespace)
+            }
             _ => Err(format!(
                 "error at {location}: unhandled type kind {:?}",
                 type_.kind()

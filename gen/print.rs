@@ -1,14 +1,11 @@
 use std::collections::HashSet;
 use std::io::{self, ErrorKind, Write};
-use std::mem;
 
 use super::parse::{Namespace, Record, RecordKind, Type};
 
 pub struct RustPrinter<W> {
     sink: W,
     indent_level: usize,
-    container: Option<String>,
-    unnamed_records: Vec<Record>,
     reserved: HashSet<&'static str>,
 }
 
@@ -17,8 +14,6 @@ impl<W: Write> RustPrinter<W> {
         RustPrinter {
             sink,
             indent_level: 0,
-            container: None,
-            unnamed_records: Vec::new(),
             reserved: HashSet::from(["type"]),
         }
     }
@@ -41,13 +36,6 @@ impl<W: Write> RustPrinter<W> {
 
         for record in &namespace.records {
             self.print_record(&record)?;
-
-            let mut unnamed_counter = 0;
-            for mut unnamed in mem::take(&mut self.unnamed_records) {
-                unnamed.name = format!("{}__type{}", record.name, unnamed_counter);
-                self.print_record(&unnamed)?;
-                unnamed_counter += 1;
-            }
 
             if !record.virtual_methods.is_empty() {
                 self.indent()?;
@@ -131,8 +119,6 @@ impl<W: Write> RustPrinter<W> {
     }
 
     fn print_record(&mut self, record: &Record) -> io::Result<()> {
-        self.container = Some(record.name.clone());
-
         self.indent()?;
         writeln!(self.sink, "#[repr(C)]")?;
         self.indent()?;
@@ -173,8 +159,6 @@ impl<W: Write> RustPrinter<W> {
         self.indent_level -= 1;
         self.indent()?;
         writeln!(self.sink, "}}")?;
-
-        self.container = None;
 
         Ok(())
     }
@@ -227,15 +211,6 @@ impl<W: Write> RustPrinter<W> {
                     write!(self.sink, "*mut ")?;
                 }
                 self.print_type(pointee)?;
-            }
-            Type::UnnamedRecord(record) => {
-                let counter = self.unnamed_records.len();
-                self.unnamed_records.push(record.clone());
-
-                if let Some(container) = &self.container {
-                    write!(self.sink, "{}", container)?;
-                }
-                write!(self.sink, "__type{}", counter)?;
             }
             Type::Record(name) => write!(self.sink, "{}", name)?,
             Type::Typedef(name) => write!(self.sink, "{}", name)?,
