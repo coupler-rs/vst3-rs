@@ -229,7 +229,8 @@ impl Parser {
                     }
                 }
                 CursorKind::CxxBaseSpecifier => {
-                    bases.push(cursor.type_().unwrap().name().to_str().unwrap().to_string());
+                    let name = cursor.type_().unwrap().declaration().name();
+                    bases.push(name.to_str().unwrap().to_string());
                 }
                 _ => {}
             }
