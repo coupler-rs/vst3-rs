@@ -28,6 +28,12 @@ impl Namespace {
 
         Ok(namespace)
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.typedefs.is_empty()
+            && self.records.is_empty()
+            && self.children.values().all(|child| child.is_empty())
+    }
 }
 
 #[derive(Clone, Debug)]

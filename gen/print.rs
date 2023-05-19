@@ -107,20 +107,22 @@ impl<W: Write> RustPrinter<W> {
         }
 
         for (name, child) in &namespace.children {
-            self.indent()?;
-            writeln!(self.sink, "pub mod {} {{", name)?;
-            self.indent_level += 1;
+            if !child.is_empty() {
+                self.indent()?;
+                writeln!(self.sink, "pub mod {} {{", name)?;
+                self.indent_level += 1;
 
-            self.indent()?;
-            writeln!(self.sink, "#[allow(unused_imports)]")?;
-            self.indent()?;
-            writeln!(self.sink, "use super::*;")?;
+                self.indent()?;
+                writeln!(self.sink, "#[allow(unused_imports)]")?;
+                self.indent()?;
+                writeln!(self.sink, "use super::*;")?;
 
-            self.print_namespace(child)?;
+                self.print_namespace(child)?;
 
-            self.indent_level -= 1;
-            self.indent()?;
-            writeln!(self.sink, "}}")?;
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
         }
 
         Ok(())
