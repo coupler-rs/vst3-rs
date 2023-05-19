@@ -55,6 +55,7 @@ pub struct Record {
     pub fields: Vec<Field>,
     pub bases: Vec<String>,
     pub virtual_methods: Vec<Method>,
+    pub inner: Namespace,
 }
 
 #[derive(Clone, Debug)]
@@ -165,13 +166,11 @@ impl Parser {
             }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {
-                    // Skip unnamed records here, as Record::parse will take care of them
+                    // Skip unnamed records here, as parse_type will take care of them
                     if !cursor.name().to_str().unwrap().is_empty() {
                         let record = self.parse_record(cursor.type_().unwrap())?;
                         namespace.records.push(record);
                     }
-
-                    cursor.visit_children(|cursor| self.visit(namespace, cursor))?;
                 }
             }
             _ => {}
@@ -238,12 +237,16 @@ impl Parser {
             Ok(())
         })?;
 
+        let mut inner = Namespace::new();
+        decl.visit_children(|cursor| self.visit(&mut inner, cursor))?;
+
         Ok(Record {
             name,
             kind,
             fields,
             bases,
             virtual_methods,
+            inner,
         })
     }
 

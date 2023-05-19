@@ -104,6 +104,8 @@ impl<W: Write> RustPrinter<W> {
                 self.indent()?;
                 writeln!(self.sink, "}}")?;
             }
+
+            self.print_namespace(&record.inner)?;
         }
 
         for (name, child) in &namespace.children {
