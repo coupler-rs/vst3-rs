@@ -36,6 +36,69 @@ impl<W: Write> RustPrinter<W> {
 
         for record in &namespace.records {
             self.print_record(&record)?;
+        }
+
+        for (name, child) in &namespace.children {
+            if !child.is_empty() {
+                self.indent()?;
+                writeln!(self.sink, "pub mod {} {{", name)?;
+                self.indent_level += 1;
+
+                self.indent()?;
+                writeln!(self.sink, "#[allow(unused_imports)]")?;
+                self.indent()?;
+                writeln!(self.sink, "use super::*;")?;
+
+                self.print_namespace(child)?;
+
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
+        }
+
+        Ok(())
+    }
+
+    fn print_record(&mut self, record: &Record) -> io::Result<()> {
+        let needs_module = !record.inner.is_empty() || !record.virtual_methods.is_empty();
+
+        if needs_module {
+            self.indent()?;
+            writeln!(self.sink, "mod __{}_wrapper {{", record.name)?;
+            self.indent_level += 1;
+
+            self.indent()?;
+            writeln!(self.sink, "#[allow(unused_imports)]")?;
+            self.indent()?;
+            writeln!(self.sink, "use super::*;")?;
+
+            self.indent()?;
+            writeln!(self.sink, "#[allow(unused_imports)]")?;
+            self.indent()?;
+            writeln!(self.sink, "use super::{}_::*;", record.name)?;
+
+            self.print_record_body(record)?;
+
+            self.indent_level -= 1;
+            self.indent()?;
+            writeln!(self.sink, "}}")?;
+
+            self.indent()?;
+            writeln!(
+                self.sink,
+                "pub use __{}_wrapper::{};",
+                record.name, record.name
+            )?;
+
+            self.indent()?;
+            writeln!(self.sink, "pub mod {}_ {{", record.name)?;
+            self.indent_level += 1;
+
+            self.indent()?;
+            writeln!(self.sink, "#[allow(unused_imports)]")?;
+            self.indent()?;
+            writeln!(self.sink, "use super::*;")?;
 
             if !record.virtual_methods.is_empty() {
                 self.indent()?;
@@ -43,7 +106,7 @@ impl<W: Write> RustPrinter<W> {
                 self.indent()?;
                 writeln!(self.sink, "#[derive(Copy, Clone)]")?;
                 self.indent()?;
-                writeln!(self.sink, "pub struct {}Vtbl {{", record.name)?;
+                writeln!(self.sink, "pub struct Vtbl {{")?;
                 self.indent_level += 1;
 
                 if record.bases.len() > 1 {
@@ -54,7 +117,7 @@ impl<W: Write> RustPrinter<W> {
                 }
                 if let Some(base) = record.bases.first() {
                     self.indent()?;
-                    writeln!(self.sink, "pub base: {base}Vtbl,")?;
+                    writeln!(self.sink, "pub base: {base}_::Vtbl,")?;
                 }
 
                 for method in &record.virtual_methods {
@@ -94,31 +157,18 @@ impl<W: Write> RustPrinter<W> {
             }
 
             self.print_namespace(&record.inner)?;
-        }
 
-        for (name, child) in &namespace.children {
-            if !child.is_empty() {
-                self.indent()?;
-                writeln!(self.sink, "pub mod {} {{", name)?;
-                self.indent_level += 1;
-
-                self.indent()?;
-                writeln!(self.sink, "#[allow(unused_imports)]")?;
-                self.indent()?;
-                writeln!(self.sink, "use super::*;")?;
-
-                self.print_namespace(child)?;
-
-                self.indent_level -= 1;
-                self.indent()?;
-                writeln!(self.sink, "}}")?;
-            }
+            self.indent_level -= 1;
+            self.indent()?;
+            writeln!(self.sink, "}}")?;
+        } else {
+            self.print_record_body(record)?;
         }
 
         Ok(())
     }
 
-    fn print_record(&mut self, record: &Record) -> io::Result<()> {
+    fn print_record_body(&mut self, record: &Record) -> io::Result<()> {
         self.indent()?;
         writeln!(self.sink, "#[repr(C)]")?;
         self.indent()?;
@@ -137,7 +187,7 @@ impl<W: Write> RustPrinter<W> {
 
         if !record.virtual_methods.is_empty() {
             self.indent()?;
-            writeln!(self.sink, "pub vtbl: {}Vtbl,", record.name)?;
+            writeln!(self.sink, "pub vtbl: {}_::Vtbl,", record.name)?;
         }
 
         let mut anon_counter = 0;

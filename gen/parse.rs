@@ -172,7 +172,7 @@ impl Parser {
                 if cursor.is_definition() {
                     // Skip unnamed records here, as parse_type will take care of them
                     if !cursor.name().to_str().unwrap().is_empty() {
-                        let record = self.parse_record(cursor.type_().unwrap(), namespace)?;
+                        let record = self.parse_record(cursor.type_().unwrap())?;
                         namespace.records.push(record);
                     }
                 }
@@ -183,11 +183,7 @@ impl Parser {
         Ok(())
     }
 
-    fn parse_record(
-        &mut self,
-        record: clang::Type,
-        namespace: &mut Namespace,
-    ) -> Result<Record, Box<dyn Error>> {
+    fn parse_record(&mut self, record: clang::Type) -> Result<Record, Box<dyn Error>> {
         let decl = record.declaration();
         let name = decl.name().to_str().unwrap().to_string();
         let kind = match decl.kind() {
@@ -199,12 +195,14 @@ impl Parser {
         let mut fields = Vec::new();
         let mut bases = Vec::new();
         let mut virtual_methods = Vec::new();
+        let mut inner = Namespace::new();
+
         decl.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
             match cursor.kind() {
                 // Check for UnionDecl to handle anonymous unions
                 CursorKind::FieldDecl | CursorKind::UnionDecl => {
                     let type_ =
-                        self.parse_type(cursor.type_().unwrap(), cursor.location(), namespace)?;
+                        self.parse_type(cursor.type_().unwrap(), cursor.location(), &mut inner)?;
 
                     fields.push(Field {
                         name: cursor.name().to_str().unwrap().to_string(),
@@ -219,7 +217,7 @@ impl Parser {
                             let arg = cursor.argument(i).unwrap();
 
                             let arg_type =
-                                self.parse_type(arg.type_().unwrap(), arg.location(), namespace)?;
+                                self.parse_type(arg.type_().unwrap(), arg.location(), &mut inner)?;
                             arguments.push(Argument {
                                 name: arg.name().to_str().unwrap().to_string(),
                                 type_: arg_type,
@@ -227,7 +225,11 @@ impl Parser {
                         }
 
                         let result_type = self
-                            .parse_type(cursor.result_type().unwrap(), cursor.location(), namespace)
+                            .parse_type(
+                                cursor.result_type().unwrap(),
+                                cursor.location(),
+                                &mut inner,
+                            )
                             .unwrap();
 
                         virtual_methods.push(Method {
@@ -247,7 +249,6 @@ impl Parser {
             Ok(())
         })?;
 
-        let mut inner = Namespace::new();
         decl.visit_children(|cursor| self.visit(&mut inner, cursor))?;
 
         Ok(Record {
@@ -306,7 +307,7 @@ impl Parser {
                     name = format!("__type{}", namespace.unnamed_record_counter);
                     namespace.unnamed_record_counter += 1;
 
-                    let mut record = self.parse_record(type_, namespace)?;
+                    let mut record = self.parse_record(type_)?;
                     record.name = name.clone();
                     namespace.records.push(record);
                 }
