@@ -9,6 +9,7 @@ pub struct Namespace {
     pub children: BTreeMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
+    pub constants: Vec<Constant>,
     unnamed_record_counter: usize,
 }
 
@@ -18,6 +19,7 @@ impl Namespace {
             children: BTreeMap::new(),
             typedefs: Vec::new(),
             records: Vec::new(),
+            constants: Vec::new(),
             unnamed_record_counter: 0,
         }
     }
@@ -80,6 +82,13 @@ pub struct Argument {
 }
 
 #[derive(Clone, Debug)]
+pub struct Constant {
+    pub name: String,
+    pub type_: Type,
+    pub value: Value,
+}
+
+#[derive(Clone, Debug)]
 pub enum Type {
     Void,
     Bool,
@@ -110,6 +119,12 @@ pub enum Type {
     Record(String),
     Typedef(String),
     Array(usize, Box<Type>),
+}
+
+#[derive(Clone, Debug)]
+pub enum Value {
+    Signed(i64),
+    Unsigned(u64),
 }
 
 struct Parser {
@@ -184,6 +199,44 @@ impl Parser {
                         type_: int_type.clone(),
                     });
                 }
+
+                let canonical_type = cursor.enum_integer_type().unwrap().canonical_type();
+                let signed = match canonical_type.kind() {
+                    TypeKind::Char_U
+                    | TypeKind::UChar
+                    | TypeKind::UShort
+                    | TypeKind::UInt
+                    | TypeKind::ULong
+                    | TypeKind::ULongLong => false,
+                    TypeKind::Char_S
+                    | TypeKind::SChar
+                    | TypeKind::Short
+                    | TypeKind::Int
+                    | TypeKind::Long
+                    | TypeKind::LongLong => true,
+                    _ => return Err(format!("unhandled enum type {:?}", int_type).into()),
+                };
+
+                cursor.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
+                    match cursor.kind() {
+                        CursorKind::EnumConstantDecl => {
+                            let value = if signed {
+                                Value::Signed(cursor.enum_constant_value().unwrap())
+                            } else {
+                                Value::Unsigned(cursor.enum_constant_value_unsigned().unwrap())
+                            };
+
+                            namespace.constants.push(Constant {
+                                name: cursor.name().to_str().unwrap().to_string(),
+                                type_: int_type.clone(),
+                                value,
+                            });
+                        }
+                        _ => {}
+                    }
+
+                    Ok(())
+                })?;
             }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {

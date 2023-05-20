@@ -1,5 +1,5 @@
 use std::any::Any;
-use std::ffi::{c_char, c_int, c_uint, c_ulong, c_void, CStr, CString};
+use std::ffi::{c_char, c_int, c_longlong, c_uint, c_ulong, c_ulonglong, c_void, CStr, CString};
 use std::fmt::Display;
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
@@ -83,6 +83,7 @@ pub enum CursorKind {
     TypedefDecl,
     TypeAliasDecl,
     EnumDecl,
+    EnumConstantDecl,
     StructDecl,
     UnionDecl,
     ClassDecl,
@@ -112,6 +113,7 @@ impl<'a> Cursor<'a> {
             CXCursor_TypedefDecl => CursorKind::TypedefDecl,
             CXCursor_TypeAliasDecl => CursorKind::TypeAliasDecl,
             CXCursor_EnumDecl => CursorKind::EnumDecl,
+            CXCursor_EnumConstantDecl => CursorKind::EnumConstantDecl,
             CXCursor_StructDecl => CursorKind::StructDecl,
             CXCursor_UnionDecl => CursorKind::UnionDecl,
             CXCursor_ClassDecl => CursorKind::ClassDecl,
@@ -165,6 +167,22 @@ impl<'a> Cursor<'a> {
             None
         } else {
             Some(unsafe { Type::from_raw(type_) })
+        }
+    }
+
+    pub fn enum_constant_value(&self) -> Option<c_longlong> {
+        if self.kind() == CursorKind::EnumConstantDecl {
+            unsafe { Some(clang_getEnumConstantDeclValue(self.cursor)) }
+        } else {
+            None
+        }
+    }
+
+    pub fn enum_constant_value_unsigned(&self) -> Option<c_ulonglong> {
+        if self.kind() == CursorKind::EnumConstantDecl {
+            unsafe { Some(clang_getEnumConstantDeclUnsignedValue(self.cursor)) }
+        } else {
+            None
         }
     }
 
@@ -363,6 +381,10 @@ impl<'a> Type<'a> {
 
     pub fn declaration(&self) -> Cursor<'a> {
         unsafe { Cursor::from_raw(clang_getTypeDeclaration(self.type_)) }
+    }
+
+    pub fn canonical_type(&self) -> Type<'a> {
+        unsafe { Type::from_raw(clang_getCanonicalType(self.type_)) }
     }
 
     pub fn pointee(&self) -> Option<Type<'a>> {

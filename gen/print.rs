@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::io::{self, ErrorKind, Write};
 
-use super::parse::{Namespace, Record, RecordKind, Type};
+use super::parse::{Namespace, Record, RecordKind, Type, Value};
 
 pub struct RustPrinter<W> {
     sink: W,
@@ -36,6 +36,16 @@ impl<W: Write> RustPrinter<W> {
 
         for record in &namespace.records {
             self.print_record(&record)?;
+        }
+
+        for constant in &namespace.constants {
+            self.indent()?;
+            write!(self.sink, "pub const {}: ", constant.name)?;
+            self.print_type(&constant.type_)?;
+            match constant.value {
+                Value::Signed(value) => writeln!(self.sink, " = {};", value)?,
+                Value::Unsigned(value) => writeln!(self.sink, " = {};", value)?,
+            }
         }
 
         for (name, child) in &namespace.children {
