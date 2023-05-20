@@ -168,6 +168,23 @@ impl Parser {
                     type_,
                 });
             }
+            CursorKind::EnumDecl => {
+                let name = cursor.name();
+                let name_str = name.to_str().unwrap();
+
+                let int_type = self.parse_type(
+                    cursor.enum_integer_type().unwrap(),
+                    cursor.location(),
+                    namespace,
+                )?;
+
+                if !name_str.is_empty() {
+                    namespace.typedefs.push(Typedef {
+                        name: name_str.to_string(),
+                        type_: int_type.clone(),
+                    });
+                }
+            }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {
                     // Skip unnamed records here, as parse_type will take care of them
@@ -315,11 +332,8 @@ impl Parser {
                 Ok(Type::Record(name))
             }
             TypeKind::Enum => {
-                // For now, just treat enum types as the underlying integer type.
-                // TODO: Refer to the generated enum typedef once we handle enum declarations
                 let decl = type_.declaration();
-                let int_type = decl.enum_integer_type().unwrap();
-                self.parse_type(int_type, location, namespace)
+                Ok(Type::Typedef(decl.name().to_str().unwrap().to_string()))
             }
             TypeKind::Typedef => {
                 // Skip typedef declarations that are found in system headers
