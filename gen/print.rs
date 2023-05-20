@@ -237,6 +237,11 @@ impl<W: Write> RustPrinter<W> {
         self.indent()?;
         writeln!(self.sink, "}}")?;
 
+        self.indent()?;
+        writeln!(self.sink, "unsafe impl Send for {} {{}}", record.name)?;
+        self.indent()?;
+        writeln!(self.sink, "unsafe impl Sync for {} {{}}", record.name)?;
+
         Ok(())
     }
 
