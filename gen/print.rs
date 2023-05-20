@@ -32,6 +32,23 @@ impl<W: Write> RustPrinter<W> {
             write!(self.sink, "pub type {} = ", typedef.name)?;
             self.print_type(&typedef.type_)?;
             writeln!(self.sink, ";")?;
+
+            if !typedef.inner.is_empty() {
+                self.indent()?;
+                writeln!(self.sink, "pub mod {}_ {{", typedef.name)?;
+                self.indent_level += 1;
+
+                self.indent()?;
+                writeln!(self.sink, "#[allow(unused_imports)]")?;
+                self.indent()?;
+                writeln!(self.sink, "use super::*;")?;
+
+                self.print_namespace(&typedef.inner)?;
+
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
         }
 
         for record in &namespace.records {

@@ -45,6 +45,7 @@ impl Namespace {
 pub struct Typedef {
     pub name: String,
     pub type_: Type,
+    pub inner: Namespace,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -182,6 +183,7 @@ impl Parser {
                 namespace.typedefs.push(Typedef {
                     name: name.unwrap().to_str().unwrap().to_string(),
                     type_,
+                    inner: Namespace::new(),
                 });
             }
             CursorKind::EnumDecl => {
@@ -193,13 +195,6 @@ impl Parser {
                     cursor.location(),
                     namespace,
                 )?;
-
-                if !name_str.is_empty() {
-                    namespace.typedefs.push(Typedef {
-                        name: name_str.to_string(),
-                        type_: int_type.clone(),
-                    });
-                }
 
                 let canonical_type = cursor.enum_integer_type().unwrap().canonical_type();
                 let signed = match canonical_type.kind() {
@@ -218,6 +213,7 @@ impl Parser {
                     _ => return Err(format!("unhandled enum type {:?}", int_type).into()),
                 };
 
+                let mut constants = Vec::new();
                 cursor.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
                     match cursor.kind() {
                         CursorKind::EnumConstantDecl => {
@@ -227,7 +223,7 @@ impl Parser {
                                 Value::Unsigned(cursor.enum_constant_value_unsigned().unwrap())
                             };
 
-                            namespace.constants.push(Constant {
+                            constants.push(Constant {
                                 name: cursor.name().to_str().unwrap().to_string(),
                                 type_: int_type.clone(),
                                 value,
@@ -238,6 +234,19 @@ impl Parser {
 
                     Ok(())
                 })?;
+
+                if name_str.is_empty() {
+                    namespace.constants.extend(constants);
+                } else {
+                    let mut inner = Namespace::new();
+                    inner.constants.extend(constants);
+
+                    namespace.typedefs.push(Typedef {
+                        name: name_str.to_string(),
+                        type_: int_type.clone(),
+                        inner,
+                    });
+                }
             }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {
