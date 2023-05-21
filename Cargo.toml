@@ -6,4 +6,9 @@ edition = "2021"
 [dependencies]
 
 [build-dependencies]
-clang-sys = { version = "1", features = ["clang_6_0"] }
+com-bindgen = { path = "com-bindgen" }
+
+[workspace]
+members = [
+    "com-bindgen",
+]

@@ -1,9 +1,7 @@
-mod gen;
-
 use std::env;
 use std::process;
 
-use gen::generate;
+use com_bindgen::generate;
 
 fn main() {
     println!("cargo:rerun-if-env-changed=VST3_SDK_DIR");

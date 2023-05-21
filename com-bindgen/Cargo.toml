@@ -1,0 +1,9 @@
+[package]
+name = "com-bindgen"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clang-sys = { version = "1", features = ["clang_6_0"] }
+
+[build-dependencies]
