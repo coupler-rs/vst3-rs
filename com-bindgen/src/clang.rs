@@ -7,7 +7,8 @@ use std::mem::MaybeUninit;
 use std::ops::Deref;
 use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
 use std::path::PathBuf;
-use std::{fmt, ptr};
+use std::ptr::NonNull;
+use std::{fmt, ptr, slice};
 
 use clang_sys::*;
 
@@ -256,6 +257,26 @@ impl<'a> Cursor<'a> {
         }
     }
 
+    pub fn tokens(&self) -> Tokens<'a> {
+        unsafe {
+            let unit = clang_Cursor_getTranslationUnit(self.cursor);
+
+            let extent = clang_getCursorExtent(self.cursor);
+            let start = Location::from_raw(clang_getRangeStart(extent)).file_location();
+            let end = Location::from_raw(clang_getRangeEnd(extent)).file_location();
+
+            let physical_start = clang_getLocationForOffset(unit, start.file, start.offset);
+            let physical_end = clang_getLocationForOffset(unit, end.file, end.offset);
+            let physical_extent = clang_getRange(physical_start, physical_end);
+
+            let mut ptr = NonNull::dangling().as_ptr();
+            let mut len = 0;
+            clang_tokenize(unit, physical_extent, &mut ptr, &mut len);
+
+            Tokens::from_raw(unit, ptr, len as usize)
+        }
+    }
+
     pub fn visit_children<F, E>(&self, mut callback: F) -> Result<(), E>
     where
         F: FnMut(&Cursor) -> Result<(), E>,
@@ -481,35 +502,75 @@ impl<'a> Location<'a> {
             _marker: PhantomData,
         }
     }
-}
 
-impl<'a> Display for Location<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
-        let mut filename = None;
+    pub fn file_location(&self) -> FileLocation<'a> {
+        let mut file = ptr::null_mut();
         let mut line = 0;
         let mut column = 0;
+        let mut offset = 0;
         unsafe {
-            let mut file = ptr::null_mut();
             clang_getFileLocation(
                 self.location,
                 &mut file,
                 &mut line,
                 &mut column,
-                ptr::null_mut(),
+                &mut offset,
             );
-
-            if !file.is_null() {
-                filename = Some(StringRef::from_raw(clang_getFileName(file)));
-            }
         }
 
-        if let Some(filename) = filename {
-            write!(f, "{}:{line}:{column}", filename.to_str().unwrap())?;
+        FileLocation {
+            file,
+            line,
+            column,
+            offset,
+            _marker: PhantomData,
+        }
+    }
+}
+
+impl<'a> Display for Location<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
+        let file_location = self.file_location();
+
+        if let Some(filename) = file_location.file_name() {
+            write!(
+                f,
+                "{}:{}:{}",
+                filename.to_str().unwrap(),
+                file_location.line(),
+                file_location.column()
+            )?;
         } else {
             write!(f, "<unknown location>")?;
         }
 
         Ok(())
+    }
+}
+
+pub struct FileLocation<'a> {
+    file: CXFile,
+    line: c_uint,
+    column: c_uint,
+    offset: c_uint,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> FileLocation<'a> {
+    pub fn file_name(&self) -> Option<StringRef<'a>> {
+        if self.file.is_null() {
+            return None;
+        }
+
+        unsafe { Some(StringRef::from_raw(clang_getFileName(self.file))) }
+    }
+
+    pub fn line(&self) -> c_uint {
+        self.line
+    }
+
+    pub fn column(&self) -> c_uint {
+        self.column
     }
 }
 
@@ -547,4 +608,61 @@ pub enum EvalResult {
     Unsigned(c_ulonglong),
     Signed(c_longlong),
     Float(f64),
+}
+
+pub struct Tokens<'a> {
+    unit: CXTranslationUnit,
+    ptr: *mut CXToken,
+    len: usize,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> Tokens<'a> {
+    unsafe fn from_raw(unit: CXTranslationUnit, ptr: *mut CXToken, len: usize) -> Tokens<'a> {
+        Tokens {
+            unit,
+            ptr,
+            len,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn len(&self) -> usize {
+        self.len
+    }
+
+    pub fn get(&self, index: usize) -> Option<Token<'a>> {
+        unsafe {
+            let slice = slice::from_raw_parts(self.ptr, self.len as usize);
+            slice.get(index).map(|t| Token::from_raw(self.unit, *t))
+        }
+    }
+}
+
+impl<'a> Drop for Tokens<'a> {
+    fn drop(&mut self) {
+        unsafe {
+            clang_disposeTokens(self.unit, self.ptr, self.len.try_into().unwrap());
+        }
+    }
+}
+
+pub struct Token<'a> {
+    unit: CXTranslationUnit,
+    token: CXToken,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> Token<'a> {
+    unsafe fn from_raw(unit: CXTranslationUnit, token: CXToken) -> Token<'a> {
+        Token {
+            unit,
+            token,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn spelling(&self) -> StringRef<'a> {
+        unsafe { StringRef::from_raw(clang_getTokenSpelling(self.unit, self.token)) }
+    }
 }
