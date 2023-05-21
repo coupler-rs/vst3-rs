@@ -316,11 +316,26 @@ impl Parser {
                         for i in 0..cursor.num_arguments().unwrap() {
                             let arg = cursor.argument(i).unwrap();
 
-                            let arg_type =
-                                self.parse_type(arg.type_().unwrap(), arg.location(), &mut inner)?;
+                            let arg_type = arg.type_().unwrap();
+
+                            // Apply array-to-pointer decay for argument types
+                            let canonical_type = arg_type.canonical_type();
+                            let type_ = if canonical_type.kind() == TypeKind::ConstantArray {
+                                let element_type = canonical_type.array_element_type().unwrap();
+                                let is_const = element_type.is_const();
+                                let pointee =
+                                    self.parse_type(element_type, arg.location(), &mut inner)?;
+                                Type::Pointer {
+                                    is_const,
+                                    pointee: Box::new(pointee),
+                                }
+                            } else {
+                                self.parse_type(arg_type, arg.location(), &mut inner)?
+                            };
+
                             arguments.push(Argument {
                                 name: arg.name().to_str().unwrap().to_string(),
-                                type_: arg_type,
+                                type_,
                             });
                         }
 
