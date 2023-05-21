@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use std::error::Error;
-use std::io::Write;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
 use crate::clang::*;
@@ -10,6 +10,7 @@ use crate::print::*;
 pub struct GeneratorOptions {
     pub skip_types: HashSet<String>,
     pub include_paths: Vec<PathBuf>,
+    pub constant_parser: Option<Box<dyn Fn(&[String], &mut dyn Write) -> Result<(), io::Error>>>,
 }
 
 impl Default for GeneratorOptions {
@@ -17,6 +18,7 @@ impl Default for GeneratorOptions {
         GeneratorOptions {
             skip_types: HashSet::new(),
             include_paths: Vec::new(),
+            constant_parser: None,
         }
     }
 }
@@ -46,6 +48,14 @@ impl Generator {
         self
     }
 
+    pub fn constant_parser<F>(mut self, f: F) -> Self
+    where
+        F: Fn(&[String], &mut dyn Write) -> Result<(), io::Error> + 'static,
+    {
+        self.options.constant_parser = Some(Box::new(f));
+        self
+    }
+
     pub fn include_path<T: AsRef<Path>>(mut self, path: T) -> Self {
         self.options.include_paths.push(path.as_ref().to_path_buf());
         self
@@ -61,7 +71,7 @@ impl Generator {
 
         let namespace = Namespace::parse(&unit.cursor(), &self.options)?;
 
-        let mut printer = RustPrinter::new(sink);
+        let mut printer = RustPrinter::new(sink, &self.options);
         printer.print_namespace(&namespace)?;
 
         Ok(())

@@ -1,18 +1,21 @@
 use std::collections::HashSet;
 use std::io::{self, ErrorKind, Write};
 
-use super::parse::{Namespace, Record, RecordKind, Type, Value};
+use crate::generator::GeneratorOptions;
+use crate::parse::{Namespace, Record, RecordKind, Type, Value};
 
-pub struct RustPrinter<W> {
+pub struct RustPrinter<'a, W> {
     sink: W,
+    options: &'a GeneratorOptions,
     indent_level: usize,
     reserved: HashSet<&'static str>,
 }
 
-impl<W: Write> RustPrinter<W> {
-    pub fn new(sink: W) -> RustPrinter<W> {
+impl<'a, W: Write> RustPrinter<'a, W> {
+    pub fn new(sink: W, options: &'a GeneratorOptions) -> RustPrinter<'a, W> {
         RustPrinter {
             sink,
+            options,
             indent_level: 0,
             reserved: HashSet::from(["type"]),
         }
@@ -63,6 +66,18 @@ impl<W: Write> RustPrinter<W> {
                 Value::Signed(value) => writeln!(self.sink, " = {:?};", value)?,
                 Value::Unsigned(value) => writeln!(self.sink, " = {:?};", value)?,
                 Value::Float(value) => writeln!(self.sink, " = {:?};", value)?,
+            }
+        }
+
+        for unparsed in &namespace.unparsed_constants {
+            if let Some(parser) = &self.options.constant_parser {
+                let mut buf = Vec::new();
+                parser(&unparsed.tokens, &mut buf)?;
+
+                if !buf.is_empty() {
+                    self.indent()?;
+                    self.sink.write(&buf)?;
+                }
             }
         }
 

@@ -10,6 +10,7 @@ pub struct Namespace {
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
     pub constants: Vec<Constant>,
+    pub unparsed_constants: Vec<UnparsedConstant>,
     unnamed_record_counter: usize,
 }
 
@@ -20,6 +21,7 @@ impl Namespace {
             typedefs: Vec::new(),
             records: Vec::new(),
             constants: Vec::new(),
+            unparsed_constants: Vec::new(),
             unnamed_record_counter: 0,
         }
     }
@@ -37,6 +39,7 @@ impl Namespace {
         self.typedefs.is_empty()
             && self.records.is_empty()
             && self.constants.is_empty()
+            && self.unparsed_constants.is_empty()
             && self.children.values().all(|child| child.is_empty())
     }
 }
@@ -88,6 +91,11 @@ pub struct Constant {
     pub name: String,
     pub type_: Type,
     pub value: Value,
+}
+
+#[derive(Clone, Debug)]
+pub struct UnparsedConstant {
+    pub tokens: Vec<String>,
 }
 
 #[derive(Clone, Debug)]
@@ -263,6 +271,18 @@ impl<'a> Parser<'a> {
                             name: cursor.name().to_str().unwrap().to_string(),
                             type_,
                             value,
+                        });
+                    } else {
+                        let tokens = cursor.tokens();
+
+                        let mut token_strings = Vec::new();
+                        for i in 0..tokens.len() {
+                            let token = tokens.get(i).unwrap();
+                            token_strings.push(token.spelling().to_str().unwrap().to_string());
+                        }
+
+                        namespace.unparsed_constants.push(UnparsedConstant {
+                            tokens: token_strings,
                         });
                     }
                 }
