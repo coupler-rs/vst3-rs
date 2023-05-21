@@ -190,7 +190,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
         if !record.virtual_methods.is_empty() {
             self.indent()?;
-            writeln!(self.sink, "pub vtbl: {}Vtbl,", record.name)?;
+            writeln!(self.sink, "pub vtbl: *const {}Vtbl,", record.name)?;
         }
 
         let mut anon_counter = 0;
