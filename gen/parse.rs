@@ -106,7 +106,7 @@ pub enum Type {
     Long,
     LongLong,
     Unsigned(usize),
-    #[allow(dead_code)]
+    #[allow(unused)]
     Signed(usize),
     Float,
     Double,

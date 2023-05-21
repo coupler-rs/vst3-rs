@@ -407,6 +407,7 @@ impl<'a> Type<'a> {
         unsafe { clang_Type_getSizeOf(self.type_) as usize }
     }
 
+    #[allow(unused)]
     pub fn name(&self) -> StringRef<'a> {
         unsafe { StringRef::from_raw(clang_getTypeSpelling(self.type_)) }
     }
