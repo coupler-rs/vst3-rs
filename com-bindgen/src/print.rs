@@ -244,7 +244,11 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             for method in &record.virtual_methods {
                 self.indent()?;
-                writeln!(self.sink, "pub {}: fn(", method.name)?;
+                writeln!(
+                    self.sink,
+                    "pub {}: unsafe extern \"system\" fn(",
+                    method.name
+                )?;
                 self.indent_level += 1;
 
                 self.indent()?;
