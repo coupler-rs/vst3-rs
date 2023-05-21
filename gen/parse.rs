@@ -127,6 +127,7 @@ pub enum Type {
 pub enum Value {
     Signed(i64),
     Unsigned(u64),
+    Float(f64),
 }
 
 struct Parser {
@@ -246,6 +247,25 @@ impl Parser {
                         type_: int_type.clone(),
                         inner,
                     });
+                }
+            }
+            CursorKind::VarDecl => {
+                let type_ = cursor.type_().unwrap();
+                if cursor.is_static() && type_.is_const() {
+                    if let Some(eval_result) = cursor.evaluate() {
+                        let value = match eval_result {
+                            EvalResult::Unsigned(value) => Value::Unsigned(value),
+                            EvalResult::Signed(value) => Value::Signed(value),
+                            EvalResult::Float(value) => Value::Float(value),
+                        };
+
+                        let type_ = self.parse_type(type_, cursor.location(), namespace)?;
+                        namespace.constants.push(Constant {
+                            name: cursor.name().to_str().unwrap().to_string(),
+                            type_,
+                            value,
+                        });
+                    }
                 }
             }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {

@@ -60,8 +60,9 @@ impl<W: Write> RustPrinter<W> {
             write!(self.sink, "pub const {}: ", constant.name)?;
             self.print_type(&constant.type_)?;
             match constant.value {
-                Value::Signed(value) => writeln!(self.sink, " = {};", value)?,
-                Value::Unsigned(value) => writeln!(self.sink, " = {};", value)?,
+                Value::Signed(value) => writeln!(self.sink, " = {:?};", value)?,
+                Value::Unsigned(value) => writeln!(self.sink, " = {:?};", value)?,
+                Value::Float(value) => writeln!(self.sink, " = {:?};", value)?,
             }
         }
 

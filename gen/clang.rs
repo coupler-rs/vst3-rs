@@ -84,6 +84,7 @@ pub enum CursorKind {
     TypeAliasDecl,
     EnumDecl,
     EnumConstantDecl,
+    VarDecl,
     StructDecl,
     UnionDecl,
     ClassDecl,
@@ -114,6 +115,7 @@ impl<'a> Cursor<'a> {
             CXCursor_TypeAliasDecl => CursorKind::TypeAliasDecl,
             CXCursor_EnumDecl => CursorKind::EnumDecl,
             CXCursor_EnumConstantDecl => CursorKind::EnumConstantDecl,
+            CXCursor_VarDecl => CursorKind::VarDecl,
             CXCursor_StructDecl => CursorKind::StructDecl,
             CXCursor_UnionDecl => CursorKind::UnionDecl,
             CXCursor_ClassDecl => CursorKind::ClassDecl,
@@ -141,6 +143,10 @@ impl<'a> Cursor<'a> {
 
     pub fn is_definition(&self) -> bool {
         unsafe { clang_equalCursors(self.cursor, clang_getCursorDefinition(self.cursor)) != 0 }
+    }
+
+    pub fn is_static(&self) -> bool {
+        unsafe { clang_Cursor_getStorageClass(self.cursor) == CX_SC_Static }
     }
 
     pub fn type_(&self) -> Option<Type<'a>> {
@@ -219,6 +225,32 @@ impl<'a> Cursor<'a> {
 
     pub fn is_virtual(&self) -> bool {
         unsafe { clang_CXXMethod_isVirtual(self.cursor) != 0 }
+    }
+
+    pub fn evaluate(&self) -> Option<EvalResult> {
+        unsafe {
+            let result = clang_Cursor_Evaluate(self.cursor);
+
+            let result_type = clang_EvalResult_getKind(result);
+            #[allow(non_upper_case_globals)]
+            let value = match result_type {
+                CXEval_Int => {
+                    if clang_EvalResult_isUnsignedInt(result) != 0 {
+                        EvalResult::Unsigned(clang_EvalResult_getAsUnsigned(result))
+                    } else {
+                        EvalResult::Signed(clang_EvalResult_getAsLongLong(result))
+                    }
+                }
+                CXEval_Float => EvalResult::Float(clang_EvalResult_getAsDouble(result)),
+                _ => {
+                    return None;
+                }
+            };
+
+            clang_EvalResult_dispose(result);
+
+            Some(value)
+        }
     }
 
     pub fn visit_children<F, E>(&self, mut callback: F) -> Result<(), E>
@@ -505,4 +537,10 @@ impl<'a> Drop for StringRef<'a> {
             clang_disposeString(self.string);
         }
     }
+}
+
+pub enum EvalResult {
+    Unsigned(c_ulonglong),
+    Signed(c_longlong),
+    Float(f64),
 }
