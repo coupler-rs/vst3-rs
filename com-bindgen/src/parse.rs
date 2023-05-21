@@ -1,8 +1,8 @@
-use std::collections::{BTreeMap, HashSet};
+use std::collections::BTreeMap;
 use std::error::Error;
 
-use super::clang;
-use clang::*;
+use crate::clang::{self, *};
+use crate::generator::GeneratorOptions;
 
 #[derive(Clone, Debug)]
 pub struct Namespace {
@@ -24,8 +24,8 @@ impl Namespace {
         }
     }
 
-    pub fn parse(cursor: &Cursor, skip_list: &[&str]) -> Result<Namespace, Box<dyn Error>> {
-        let mut parser = Parser::new(skip_list);
+    pub fn parse(cursor: &Cursor, options: &GeneratorOptions) -> Result<Namespace, Box<dyn Error>> {
+        let mut parser = Parser::new(options);
         let mut namespace = Namespace::new();
 
         cursor.visit_children(|cursor| parser.visit(&mut namespace, cursor))?;
@@ -130,18 +130,13 @@ pub enum Value {
     Float(f64),
 }
 
-struct Parser {
-    skip_list: HashSet<String>,
+struct Parser<'a> {
+    options: &'a GeneratorOptions,
 }
 
-impl Parser {
-    fn new(skip_list: &[&str]) -> Parser {
-        let skip_list = skip_list
-            .iter()
-            .map(|s| s.to_string())
-            .collect::<HashSet<_>>();
-
-        Parser { skip_list }
+impl<'a> Parser<'a> {
+    fn new(options: &'a GeneratorOptions) -> Parser<'a> {
+        Parser { options }
     }
 
     fn visit(&mut self, namespace: &mut Namespace, cursor: &Cursor) -> Result<(), Box<dyn Error>> {
@@ -149,7 +144,11 @@ impl Parser {
             return Ok(());
         }
 
-        if self.skip_list.contains(cursor.name().to_str().unwrap()) {
+        if self
+            .options
+            .skip_types
+            .contains(cursor.name().to_str().unwrap())
+        {
             return Ok(());
         }
 

@@ -1,10 +1,12 @@
 use std::any::Any;
+use std::error::Error;
 use std::ffi::{c_char, c_int, c_longlong, c_uint, c_ulong, c_ulonglong, c_void, CStr, CString};
 use std::fmt::Display;
 use std::marker::PhantomData;
 use std::mem::MaybeUninit;
 use std::ops::Deref;
 use std::panic::{catch_unwind, resume_unwind, AssertUnwindSafe};
+use std::path::PathBuf;
 use std::{fmt, ptr};
 
 use clang_sys::*;
@@ -21,18 +23,19 @@ pub struct TranslationUnit {
 }
 
 impl TranslationUnit {
-    pub fn new(source: &str, include_path: &str) -> Result<TranslationUnit, ()> {
-        let path = CString::new(include_path).unwrap();
+    pub fn new(source: &str, include_paths: &[PathBuf]) -> Result<TranslationUnit, Box<dyn Error>> {
+        let mut paths = Vec::new();
+        for include_path in include_paths {
+            paths.push(CString::new(include_path.to_str().unwrap()).unwrap());
+        }
 
         unsafe {
             let index = clang_createIndex(0, 0);
 
-            let args = [
-                c_str!("-x"),
-                c_str!("c++"),
-                c_str!("-I"),
-                path.as_ptr() as *const c_char,
-            ];
+            let mut args = vec![c_str!("-x"), c_str!("c++")];
+            for path in &paths {
+                args.extend_from_slice(&[c_str!("-I"), path.as_ptr() as *const c_char]);
+            }
 
             let filename = c_str!("header.h");
             let mut sources = [CXUnsavedFile {
@@ -56,7 +59,7 @@ impl TranslationUnit {
 
             if result != CXError_Success {
                 clang_disposeIndex(index);
-                return Err(());
+                return Err("error building translation unit".into());
             }
 
             Ok(TranslationUnit { index, unit })
