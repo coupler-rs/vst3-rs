@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::env;
 use std::error::Error;
 use std::fs::File;
-use std::io::{BufWriter, Write};
+use std::io::BufWriter;
 use std::path::{Path, PathBuf};
 use std::process;
 use std::{fs, io};
@@ -32,18 +32,17 @@ fn find_headers<P: AsRef<Path>>(dir: P) -> Result<Vec<PathBuf>, io::Error> {
     Ok(headers)
 }
 
-fn parse_iid(tokens: &[String], sink: &mut dyn Write) -> Result<(), io::Error> {
+fn parse_iid(tokens: &[String]) -> Option<String> {
     if let Some(first) = tokens.first() {
         if first == "DECLARE_CLASS_IID" {
-            writeln!(
-                sink,
+            return Some(format!(
                 "pub const {}_iid: TUID = uid({}, {}, {}, {});",
                 tokens[2], tokens[4], tokens[6], tokens[8], tokens[10]
-            )?;
+            ));
         }
     }
 
-    Ok(())
+    None
 }
 
 fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {

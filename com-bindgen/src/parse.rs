@@ -10,8 +10,7 @@ pub struct Namespace {
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
     pub constants: Vec<Constant>,
-    pub unparsed_constants: Vec<UnparsedConstant>,
-    unnamed_record_counter: usize,
+    pub unparsed_constants: Vec<String>,
 }
 
 impl Namespace {
@@ -22,7 +21,6 @@ impl Namespace {
             records: Vec::new(),
             constants: Vec::new(),
             unparsed_constants: Vec::new(),
-            unnamed_record_counter: 0,
         }
     }
 
@@ -94,11 +92,6 @@ pub struct Constant {
 }
 
 #[derive(Clone, Debug)]
-pub struct UnparsedConstant {
-    pub tokens: Vec<String>,
-}
-
-#[derive(Clone, Debug)]
 pub enum Type {
     Void,
     Bool,
@@ -127,6 +120,7 @@ pub enum Type {
         pointee: Box<Type>,
     },
     Record(String),
+    UnnamedRecord(Record),
     Typedef(String),
     Array(usize, Box<Type>),
 }
@@ -182,11 +176,8 @@ impl<'a> Parser<'a> {
                 let typedef = cursor.type_().unwrap();
                 let name = typedef.typedef_name();
 
-                let type_ = self.parse_type(
-                    cursor.typedef_underlying_type().unwrap(),
-                    cursor.location(),
-                    namespace,
-                )?;
+                let type_ =
+                    self.parse_type(cursor.typedef_underlying_type().unwrap(), cursor.location())?;
 
                 namespace.typedefs.push(Typedef {
                     name: name.unwrap().to_str().unwrap().to_string(),
@@ -198,11 +189,8 @@ impl<'a> Parser<'a> {
                 let name = cursor.name();
                 let name_str = name.to_str().unwrap();
 
-                let int_type = self.parse_type(
-                    cursor.enum_integer_type().unwrap(),
-                    cursor.location(),
-                    namespace,
-                )?;
+                let int_type =
+                    self.parse_type(cursor.enum_integer_type().unwrap(), cursor.location())?;
 
                 let canonical_type = cursor.enum_integer_type().unwrap().canonical_type();
                 let signed = match canonical_type.kind() {
@@ -266,24 +254,26 @@ impl<'a> Parser<'a> {
                             EvalResult::Float(value) => Value::Float(value),
                         };
 
-                        let type_ = self.parse_type(type_, cursor.location(), namespace)?;
+                        let type_ = self.parse_type(type_, cursor.location())?;
                         namespace.constants.push(Constant {
                             name: cursor.name().to_str().unwrap().to_string(),
                             type_,
                             value,
                         });
                     } else {
-                        let tokens = cursor.tokens();
+                        if let Some(parser) = &self.options.constant_parser {
+                            let tokens = cursor.tokens();
 
-                        let mut token_strings = Vec::new();
-                        for i in 0..tokens.len() {
-                            let token = tokens.get(i).unwrap();
-                            token_strings.push(token.spelling().to_str().unwrap().to_string());
+                            let mut token_strings = Vec::new();
+                            for i in 0..tokens.len() {
+                                let token = tokens.get(i).unwrap();
+                                token_strings.push(token.spelling().to_str().unwrap().to_string());
+                            }
+
+                            if let Some(result) = parser(&token_strings) {
+                                namespace.unparsed_constants.push(result);
+                            }
                         }
-
-                        namespace.unparsed_constants.push(UnparsedConstant {
-                            tokens: token_strings,
-                        });
                     }
                 }
             }
@@ -314,14 +304,11 @@ impl<'a> Parser<'a> {
         let mut fields = Vec::new();
         let mut bases = Vec::new();
         let mut virtual_methods = Vec::new();
-        let mut inner = Namespace::new();
-
         decl.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
             match cursor.kind() {
                 // Check for UnionDecl to handle anonymous unions
                 CursorKind::FieldDecl | CursorKind::UnionDecl => {
-                    let type_ =
-                        self.parse_type(cursor.type_().unwrap(), cursor.location(), &mut inner)?;
+                    let type_ = self.parse_type(cursor.type_().unwrap(), cursor.location())?;
 
                     fields.push(Field {
                         name: cursor.name().to_str().unwrap().to_string(),
@@ -342,14 +329,13 @@ impl<'a> Parser<'a> {
                             let type_ = if canonical_type.kind() == TypeKind::ConstantArray {
                                 let element_type = canonical_type.array_element_type().unwrap();
                                 let is_const = element_type.is_const();
-                                let pointee =
-                                    self.parse_type(element_type, arg.location(), &mut inner)?;
+                                let pointee = self.parse_type(element_type, arg.location())?;
                                 Type::Pointer {
                                     is_const,
                                     pointee: Box::new(pointee),
                                 }
                             } else {
-                                self.parse_type(arg_type, arg.location(), &mut inner)?
+                                self.parse_type(arg_type, arg.location())?
                             };
 
                             arguments.push(Argument {
@@ -359,11 +345,7 @@ impl<'a> Parser<'a> {
                         }
 
                         let result_type = self
-                            .parse_type(
-                                cursor.result_type().unwrap(),
-                                cursor.location(),
-                                &mut inner,
-                            )
+                            .parse_type(cursor.result_type().unwrap(), cursor.location())
                             .unwrap();
 
                         virtual_methods.push(Method {
@@ -383,6 +365,7 @@ impl<'a> Parser<'a> {
             Ok(())
         })?;
 
+        let mut inner = Namespace::new();
         decl.visit_children(|cursor| self.visit(&mut inner, cursor))?;
 
         Ok(Record {
@@ -399,7 +382,6 @@ impl<'a> Parser<'a> {
         &mut self,
         type_: clang::Type,
         location: Location,
-        namespace: &mut Namespace,
     ) -> Result<Type, Box<dyn Error>> {
         match type_.kind() {
             TypeKind::Void => Ok(Type::Void),
@@ -423,30 +405,26 @@ impl<'a> Parser<'a> {
                 let pointee = type_.pointee().unwrap();
                 Ok(Type::Pointer {
                     is_const: pointee.is_const(),
-                    pointee: Box::new(self.parse_type(pointee, location, namespace)?),
+                    pointee: Box::new(self.parse_type(pointee, location)?),
                 })
             }
             TypeKind::LValueReference => {
                 let pointee = type_.pointee().unwrap();
                 Ok(Type::Reference {
                     is_const: pointee.is_const(),
-                    pointee: Box::new(self.parse_type(pointee, location, namespace)?),
+                    pointee: Box::new(self.parse_type(pointee, location)?),
                 })
             }
             TypeKind::Record => {
                 let decl = type_.declaration();
-                let mut name = decl.name().to_str().unwrap().to_string();
-
+                let name = decl.name().to_str().unwrap().to_string();
                 if name.is_empty() {
-                    name = format!("__type{}", namespace.unnamed_record_counter);
-                    namespace.unnamed_record_counter += 1;
-
-                    let mut record = self.parse_record(type_)?;
-                    record.name = name.clone();
-                    namespace.records.push(record);
+                    Ok(Type::UnnamedRecord(self.parse_record(type_)?))
+                } else {
+                    Ok(Type::Record(name))
                 }
-
-                Ok(Type::Record(name))
+                // name = format!("__type{}", namespace.unnamed_record_counter);
+                // namespace.unnamed_record_counter += 1;
             }
             TypeKind::Enum => {
                 let decl = type_.declaration();
@@ -457,7 +435,7 @@ impl<'a> Parser<'a> {
                 let declaration = type_.declaration();
                 if declaration.is_in_system_header() {
                     let underlying_type = declaration.typedef_underlying_type().unwrap();
-                    return Ok(self.parse_type(underlying_type, location, namespace)?);
+                    return Ok(self.parse_type(underlying_type, location)?);
                 }
 
                 let name = type_.typedef_name().unwrap().to_str().unwrap().to_string();
@@ -466,12 +444,10 @@ impl<'a> Parser<'a> {
             TypeKind::ConstantArray => {
                 let size = type_.array_size().unwrap();
                 let element_type =
-                    self.parse_type(type_.array_element_type().unwrap(), location, namespace)?;
+                    self.parse_type(type_.array_element_type().unwrap(), location)?;
                 Ok(Type::Array(size, Box::new(element_type)))
             }
-            TypeKind::Elaborated => {
-                self.parse_type(type_.named_type().unwrap(), location, namespace)
-            }
+            TypeKind::Elaborated => self.parse_type(type_.named_type().unwrap(), location),
             _ => Err(format!(
                 "error at {location}: unhandled type kind {:?}",
                 type_.kind()

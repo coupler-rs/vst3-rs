@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use std::error::Error;
-use std::io::{self, Write};
+use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use crate::clang::*;
@@ -10,7 +10,7 @@ use crate::print::*;
 pub struct GeneratorOptions {
     pub skip_types: HashSet<String>,
     pub include_paths: Vec<PathBuf>,
-    pub constant_parser: Option<Box<dyn Fn(&[String], &mut dyn Write) -> Result<(), io::Error>>>,
+    pub constant_parser: Option<Box<dyn Fn(&[String]) -> Option<String>>>,
 }
 
 impl Default for GeneratorOptions {
@@ -50,7 +50,7 @@ impl Generator {
 
     pub fn constant_parser<F>(mut self, f: F) -> Self
     where
-        F: Fn(&[String], &mut dyn Write) -> Result<(), io::Error> + 'static,
+        F: Fn(&[String]) -> Option<String> + 'static,
     {
         self.options.constant_parser = Some(Box::new(f));
         self
