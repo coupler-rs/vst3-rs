@@ -149,10 +149,6 @@ impl<'a> Cursor<'a> {
         unsafe { clang_equalCursors(self.cursor, clang_getCursorDefinition(self.cursor)) != 0 }
     }
 
-    pub fn is_static(&self) -> bool {
-        unsafe { clang_Cursor_getStorageClass(self.cursor) == CX_SC_Static }
-    }
-
     pub fn type_(&self) -> Option<Type<'a>> {
         let type_ = unsafe { clang_getCursorType(self.cursor) };
         if type_.kind == CXType_Invalid {

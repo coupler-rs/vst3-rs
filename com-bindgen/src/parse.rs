@@ -246,7 +246,7 @@ impl<'a> Parser<'a> {
             }
             CursorKind::VarDecl => {
                 let type_ = cursor.type_().unwrap();
-                if cursor.is_static() && type_.is_const() {
+                if type_.is_const() {
                     if let Some(eval_result) = cursor.evaluate() {
                         let value = match eval_result {
                             EvalResult::Unsigned(value) => Value::Unsigned(value),
