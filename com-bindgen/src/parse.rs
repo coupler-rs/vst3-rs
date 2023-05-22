@@ -327,12 +327,11 @@ impl<'a> Parser<'a> {
                             // Apply array-to-pointer decay for argument types
                             let canonical_type = arg_type.canonical_type();
                             let type_ = if canonical_type.kind() == TypeKind::ConstantArray {
-                                let element_type = canonical_type.array_element_type().unwrap();
-                                let is_const = element_type.is_const();
-                                let pointee = self.parse_type(element_type, arg.location())?;
+                                let is_const = canonical_type.is_const();
+                                let array_type = self.parse_type(arg_type, arg.location())?;
                                 Type::Pointer {
                                     is_const,
-                                    pointee: Box::new(pointee),
+                                    pointee: Box::new(array_type),
                                 }
                             } else {
                                 self.parse_type(arg_type, arg.location())?
