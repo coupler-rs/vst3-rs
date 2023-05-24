@@ -21,7 +21,7 @@ impl UnnamedRecordScope {
 
 pub struct RustPrinter<'a, W> {
     sink: W,
-    _options: &'a GeneratorOptions,
+    options: &'a GeneratorOptions,
     reserved: HashSet<&'static str>,
     indent_level: usize,
     unnamed_records: Vec<UnnamedRecordScope>,
@@ -31,7 +31,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
     pub fn new(sink: W, options: &'a GeneratorOptions) -> RustPrinter<'a, W> {
         RustPrinter {
             sink,
-            _options: options,
+            options: options,
             reserved: HashSet::from(["type"]),
             indent_level: 0,
             unnamed_records: Vec::new(),
@@ -360,6 +360,43 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             self.indent_level -= 1;
             self.indent()?;
             writeln!(self.sink, "}}")?;
+
+            if !self.options.skip_interface_traits.contains(&record.name) {
+                self.indent()?;
+                write!(self.sink, "pub trait {}Trait", record.name)?;
+                if let Some(base) = record.bases.first() {
+                    if !self.options.skip_interface_traits.contains(base) {
+                        write!(self.sink, ": {base}Trait")?;
+                    }
+                }
+                writeln!(self.sink, " {{")?;
+                self.indent_level += 1;
+
+                for method in &record.virtual_methods {
+                    self.indent()?;
+                    writeln!(self.sink, "unsafe fn {}(", method.name)?;
+                    self.indent_level += 1;
+
+                    self.indent()?;
+                    writeln!(self.sink, "&self,")?;
+
+                    self.print_args(method)?;
+
+                    self.indent_level -= 1;
+                    self.indent()?;
+                    write!(self.sink, ")")?;
+                    if let Type::Void = method.result_type {
+                    } else {
+                        write!(self.sink, " -> ")?;
+                        self.print_type(&method.result_type)?;
+                    }
+                    writeln!(self.sink, ";")?;
+                }
+
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
         }
 
         Ok(())
