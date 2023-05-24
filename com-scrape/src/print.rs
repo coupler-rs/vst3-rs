@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::io::{self, ErrorKind, Write};
 
 use crate::generator::GeneratorOptions;
-use crate::parse::{Namespace, Record, RecordKind, Type, Value};
+use crate::parse::{Method, Namespace, Record, RecordKind, Type, Value};
 
 struct UnnamedRecordScope {
     prefix: String,
@@ -138,7 +138,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             writeln!(self.sink, "use super::{}_::*;", record.name)?;
 
             self.print_record_body(record)?;
-            self.print_vtable(record)?;
+            self.print_interface(record)?;
 
             self.indent_level -= 1;
             self.indent()?;
@@ -163,7 +163,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             writeln!(self.sink, "}}")?;
         } else {
             self.print_record_body(record)?;
-            self.print_vtable(record)?;
+            self.print_interface(record)?;
         }
 
         self.pop_unnamed_records()?;
@@ -221,7 +221,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         Ok(())
     }
 
-    fn print_vtable(&mut self, record: &Record) -> io::Result<()> {
+    fn print_interface(&mut self, record: &Record) -> io::Result<()> {
         if !record.virtual_methods.is_empty() {
             self.indent()?;
             writeln!(self.sink, "#[repr(C)]")?;
@@ -253,18 +253,8 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
                 self.indent()?;
                 writeln!(self.sink, "this: *mut {},", record.name)?;
-                for arg in &method.arguments {
-                    self.indent()?;
-                    if !arg.name.is_empty() {
-                        if self.reserved.contains(&*arg.name) {
-                            write!(self.sink, "r#{}: ", arg.name)?;
-                        } else {
-                            write!(self.sink, "{}: ", arg.name)?;
-                        }
-                    }
-                    self.print_type(&arg.type_)?;
-                    writeln!(self.sink, ",")?;
-                }
+
+                self.print_args(method)?;
 
                 self.indent_level -= 1;
                 self.indent()?;
@@ -280,6 +270,118 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             self.indent_level -= 1;
             self.indent()?;
             writeln!(self.sink, "}}")?;
+
+            self.indent()?;
+            writeln!(self.sink, "#[repr(transparent)]")?;
+            self.indent()?;
+            writeln!(self.sink, "#[derive(Copy, Clone)]")?;
+            self.indent()?;
+            writeln!(self.sink, "pub struct {0}Ptr(pub *mut {0});", record.name)?;
+
+            if let Some(base) = record.bases.first() {
+                self.indent()?;
+                writeln!(
+                    self.sink,
+                    "impl ::std::ops::Deref for {}Ptr {{",
+                    record.name
+                )?;
+                self.indent()?;
+                writeln!(self.sink, "    type Target = {}Ptr;", base)?;
+                self.indent()?;
+                writeln!(self.sink, "    fn deref(&self) -> &Self::Target {{")?;
+                self.indent()?;
+                writeln!(
+                    self.sink,
+                    "        unsafe {{ ::std::mem::transmute(self) }}"
+                )?;
+                self.indent()?;
+                writeln!(self.sink, "    }}")?;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
+
+            self.indent()?;
+            writeln!(self.sink, "impl {}Ptr {{", record.name)?;
+            self.indent_level += 1;
+
+            for method in &record.virtual_methods {
+                self.indent()?;
+                writeln!(self.sink, "pub unsafe fn {}(", method.name)?;
+                self.indent_level += 1;
+
+                self.indent()?;
+                writeln!(self.sink, "&self,")?;
+
+                self.print_args(method)?;
+
+                self.indent_level -= 1;
+                self.indent()?;
+                write!(self.sink, ")")?;
+                if let Type::Void = method.result_type {
+                } else {
+                    write!(self.sink, " -> ")?;
+                    self.print_type(&method.result_type)?;
+                }
+                writeln!(self.sink, " {{")?;
+                self.indent_level += 1;
+
+                self.indent()?;
+                writeln!(self.sink, "((*(*self.0).vtbl).{})(", method.name)?;
+                self.indent_level += 1;
+
+                self.indent()?;
+                writeln!(self.sink, "self.0,")?;
+
+                let mut unnamed_counter = 0;
+                for arg in &method.arguments {
+                    self.indent()?;
+                    if arg.name.is_empty() {
+                        write!(self.sink, "_{unnamed_counter}")?;
+                        unnamed_counter += 1;
+                    } else {
+                        if self.reserved.contains(&*arg.name) {
+                            write!(self.sink, "r#{}", arg.name)?;
+                        } else {
+                            write!(self.sink, "{}", arg.name)?;
+                        }
+                    }
+                    writeln!(self.sink, ",")?;
+                }
+
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, ")")?;
+
+                self.indent_level -= 1;
+                self.indent()?;
+                writeln!(self.sink, "}}")?;
+            }
+
+            self.indent_level -= 1;
+            self.indent()?;
+            writeln!(self.sink, "}}")?;
+        }
+
+        Ok(())
+    }
+
+    fn print_args(&mut self, method: &Method) -> io::Result<()> {
+        let mut unnamed_counter = 0;
+
+        for arg in &method.arguments {
+            self.indent()?;
+            if arg.name.is_empty() {
+                write!(self.sink, "_{unnamed_counter}: ")?;
+                unnamed_counter += 1;
+            } else {
+                if self.reserved.contains(&*arg.name) {
+                    write!(self.sink, "r#{}: ", arg.name)?;
+                } else {
+                    write!(self.sink, "{}: ", arg.name)?;
+                }
+            }
+            self.print_type(&arg.type_)?;
+            writeln!(self.sink, ",")?;
         }
 
         Ok(())
