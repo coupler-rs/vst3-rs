@@ -74,7 +74,7 @@ fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {
     let bindings = File::create(Path::new(&out_dir).join("bindings.rs"))?;
     let sink = BufWriter::new(bindings);
 
-    com_bindgen::Generator::new()
+    com_scrape::Generator::new()
         .skip_types(&[
             "Adopt",
             "ConstStringTable",

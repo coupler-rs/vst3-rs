@@ -6,9 +6,9 @@ edition = "2021"
 [dependencies]
 
 [build-dependencies]
-com-bindgen = { path = "com-bindgen" }
+com-scrape = { path = "com-scrape" }
 
 [workspace]
 members = [
-    "com-bindgen",
+    "com-scrape",
 ]
