@@ -8,6 +8,10 @@ edition = "2021"
 [build-dependencies]
 com-scrape = { path = "com-scrape" }
 
+[[example]]
+name = "gain"
+crate-type = ["cdylib"]
+
 [workspace]
 members = [
     "com-scrape",
