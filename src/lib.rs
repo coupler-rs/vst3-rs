@@ -2,6 +2,8 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
+pub use com_scrape_types::*;
+
 use Steinberg::{int8, TUID};
 
 #[cfg(target_os = "windows")]

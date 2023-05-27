@@ -192,6 +192,10 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let indent = self.indent();
             let name = &record.name;
 
+            writeln!(self.sink, "{indent}impl Interface for {name} {{")?;
+            writeln!(self.sink, "{indent}    type Ptr = {name}Ptr;")?;
+            writeln!(self.sink, "{indent}}}")?;
+
             writeln!(self.sink, "{indent}#[repr(C)]")?;
             writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
             writeln!(self.sink, "{indent}pub struct {name}Vtbl {{")?;
@@ -232,11 +236,29 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}#[repr(transparent)]")?;
             writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
-            writeln!(self.sink, "{indent}pub struct {name}Ptr(pub *mut {name});")?;
+            writeln!(self.sink, "{indent}pub struct {name}Ptr(*mut {name});")?;
+
+            writeln!(
+                self.sink,
+                "{indent}impl InterfacePtr<{name}> for {name}Ptr {{"
+            )?;
+            writeln!(self.sink, "{indent}    #[inline]")?;
+            writeln!(
+                self.sink,
+                "{indent}    fn from_raw(ptr: *mut {name}) -> Self {{"
+            )?;
+            writeln!(self.sink, "{indent}        Self(ptr)")?;
+            writeln!(self.sink, "{indent}    }}")?;
+            writeln!(self.sink, "{indent}    #[inline]")?;
+            writeln!(self.sink, "{indent}    fn into_raw(self) -> *mut {name} {{")?;
+            writeln!(self.sink, "{indent}        self.0")?;
+            writeln!(self.sink, "{indent}    }}")?;
+            writeln!(self.sink, "{indent}}}")?;
 
             if let Some(base) = record.bases.first() {
                 writeln!(self.sink, "{indent}impl ::std::ops::Deref for {name}Ptr {{")?;
                 writeln!(self.sink, "{indent}    type Target = {base}Ptr;")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
                 writeln!(self.sink, "{indent}    fn deref(&self) -> &Self::Target {{")?;
                 writeln!(
                     self.sink,
@@ -251,6 +273,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             for method in &record.virtual_methods {
                 let method_name = &method.name;
 
+                writeln!(self.sink, "{indent}    #[inline]")?;
                 writeln!(self.sink, "{indent}    pub unsafe fn {method_name}(")?;
                 writeln!(self.sink, "{indent}        &self,")?;
 

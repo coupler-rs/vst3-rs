@@ -8,7 +8,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use std::{ptr, slice};
 
-use vst3_bindgen::{uid, Steinberg::Vst::*, Steinberg::*};
+use vst3_bindgen::{uid, ComPtr, Steinberg::Vst::*, Steinberg::*};
 
 macro_rules! offset_of {
     ($struct:ty, $field:ident) => {{
@@ -419,28 +419,27 @@ impl GainProcessor {
 
         let process_data = &*data;
 
-        let param_changes = process_data.inputParameterChanges;
-        if !param_changes.is_null() {
-            let param_count = IParameterChangesPtr(param_changes).getParameterCount();
-            for param_index in 0..param_count {
-                let param_queue = IParameterChangesPtr(param_changes).getParameterData(param_index);
+        if !process_data.inputParameterChanges.is_null() {
+            let param_changes = ComPtr::from_raw(process_data.inputParameterChanges);
 
-                if param_queue.is_null() {
+            let param_count = param_changes.getParameterCount();
+            for param_index in 0..param_count {
+                let param_queue_ptr = param_changes.getParameterData(param_index);
+                if param_queue_ptr.is_null() {
                     continue;
                 }
 
-                let param_id = IParamValueQueuePtr(param_queue).getParameterId();
-                let point_count = IParamValueQueuePtr(param_queue).getPointCount();
+                let param_queue = ComPtr::from_raw(param_queue_ptr);
+
+                let param_id = param_queue.getParameterId();
+                let point_count = param_queue.getPointCount();
 
                 match param_id {
                     0 => {
                         let mut sample_offset = 0;
                         let mut value = 0.0;
-                        let result = IParamValueQueuePtr(param_queue).getPoint(
-                            point_count - 1,
-                            &mut sample_offset,
-                            &mut value,
-                        );
+                        let result =
+                            param_queue.getPoint(point_count - 1, &mut sample_offset, &mut value);
 
                         if result == kResultTrue {
                             processor.gain.store(value.to_bits(), Ordering::Relaxed);
@@ -882,14 +881,12 @@ impl Factory {
         };
 
         if let Some(instance) = instance {
-            let result = FUnknownPtr(instance).queryInterface(iid as *mut TUID, obj);
-            if result == kResultOk {
-                FUnknownPtr(instance).release();
-                kResultOk
-            } else {
-                FUnknownPtr(instance).release();
-                kNoInterface
-            }
+            let instance = ComPtr::from_raw(instance);
+
+            let result = instance.queryInterface(iid as *mut TUID, obj);
+            instance.release();
+
+            result
         } else {
             kInvalidArgument
         }

@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+com-scrape-types = { path = "com-scrape-types" }
 
 [build-dependencies]
 com-scrape = { path = "com-scrape" }
@@ -15,4 +16,5 @@ crate-type = ["cdylib"]
 [workspace]
 members = [
     "com-scrape",
+    "com-scrape-types",
 ]
