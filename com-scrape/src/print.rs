@@ -192,7 +192,10 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let indent = self.indent();
             let name = &record.name;
 
-            writeln!(self.sink, "{indent}impl Interface for {name} {{")?;
+            writeln!(
+                self.sink,
+                "{indent}impl ::com_scrape_types::Interface for {name} {{"
+            )?;
             writeln!(self.sink, "{indent}}}")?;
 
             writeln!(
@@ -279,11 +282,17 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             writeln!(self.sink, "{indent}impl<P> {name}Trait for P")?;
             writeln!(self.sink, "{indent}where")?;
             writeln!(self.sink, "{indent}    P: ::com_scrape_types::SmartPtr,")?;
-            writeln!(self.sink, "{indent}    P::Target: Inherits<{name}>,")?;
+            writeln!(
+                self.sink,
+                "{indent}    P::Target: ::com_scrape_types::Inherits<{name}>,"
+            )?;
             let mut bases = &record.bases;
             while let Some(base) = bases.first() {
                 let base_name = &base.name;
-                writeln!(self.sink, "{indent}    P::Target: Inherits<{base_name}>,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,"
+                )?;
                 bases = &base.bases;
             }
             writeln!(self.sink, "{indent}{{")?;
@@ -360,19 +369,19 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
     fn print_type(&mut self, type_: &Type) -> io::Result<()> {
         match type_ {
-            Type::Void => write!(self.sink, "std::ffi::c_void")?,
+            Type::Void => write!(self.sink, "::std::ffi::c_void")?,
             Type::Bool => write!(self.sink, "bool")?,
-            Type::Char => write!(self.sink, "std::ffi::c_char")?,
-            Type::UChar => write!(self.sink, "std::ffi::c_uchar")?,
-            Type::UShort => write!(self.sink, "std::ffi::c_ushort")?,
-            Type::UInt => write!(self.sink, "std::ffi::c_uint")?,
-            Type::ULong => write!(self.sink, "std::ffi::c_ulong")?,
-            Type::ULongLong => write!(self.sink, "std::ffi::c_ulonglong")?,
-            Type::SChar => write!(self.sink, "std::ffi::c_schar")?,
-            Type::Short => write!(self.sink, "std::ffi::c_short")?,
-            Type::Int => write!(self.sink, "std::ffi::c_int")?,
-            Type::Long => write!(self.sink, "std::ffi::c_long")?,
-            Type::LongLong => write!(self.sink, "std::ffi::c_longlong")?,
+            Type::Char => write!(self.sink, "::std::ffi::c_char")?,
+            Type::UChar => write!(self.sink, "::std::ffi::c_uchar")?,
+            Type::UShort => write!(self.sink, "::std::ffi::c_ushort")?,
+            Type::UInt => write!(self.sink, "::std::ffi::c_uint")?,
+            Type::ULong => write!(self.sink, "::std::ffi::c_ulong")?,
+            Type::ULongLong => write!(self.sink, "::std::ffi::c_ulonglong")?,
+            Type::SChar => write!(self.sink, "::std::ffi::c_schar")?,
+            Type::Short => write!(self.sink, "::std::ffi::c_short")?,
+            Type::Int => write!(self.sink, "::std::ffi::c_int")?,
+            Type::Long => write!(self.sink, "::std::ffi::c_long")?,
+            Type::LongLong => write!(self.sink, "::std::ffi::c_longlong")?,
             Type::Unsigned(size) => match size {
                 1 => write!(self.sink, "u8")?,
                 2 => write!(self.sink, "u16")?,
