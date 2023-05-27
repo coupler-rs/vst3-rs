@@ -207,7 +207,8 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 ));
             }
             if let Some(base) = record.bases.first() {
-                writeln!(self.sink, "{indent}    pub base: {base}Vtbl,")?;
+                let base_name = &base.name;
+                writeln!(self.sink, "{indent}    pub base: {base_name}Vtbl,")?;
             }
 
             for method in &record.virtual_methods {
@@ -256,8 +257,9 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             writeln!(self.sink, "{indent}}}")?;
 
             if let Some(base) = record.bases.first() {
+                let base_name = &base.name;
                 writeln!(self.sink, "{indent}impl ::std::ops::Deref for {name}Ptr {{")?;
-                writeln!(self.sink, "{indent}    type Target = {base}Ptr;")?;
+                writeln!(self.sink, "{indent}    type Target = {base_name}Ptr;")?;
                 writeln!(self.sink, "{indent}    #[inline]")?;
                 writeln!(self.sink, "{indent}    fn deref(&self) -> &Self::Target {{")?;
                 writeln!(
@@ -315,7 +317,8 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             write!(self.sink, "{indent}pub trait {name}Trait")?;
             if let Some(base) = record.bases.first() {
-                write!(self.sink, ": {base}Trait")?;
+                let base_name = &base.name;
+                write!(self.sink, ": {base_name}Trait")?;
             }
             writeln!(self.sink, " {{")?;
 

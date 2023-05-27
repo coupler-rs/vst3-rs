@@ -60,9 +60,15 @@ pub struct Record {
     pub name: String,
     pub kind: RecordKind,
     pub fields: Vec<Field>,
-    pub bases: Vec<String>,
+    pub bases: Vec<Base>,
     pub virtual_methods: Vec<Method>,
     pub inner: Namespace,
+}
+
+#[derive(Clone, Debug)]
+pub struct Base {
+    pub name: String,
+    pub bases: Vec<Base>,
 }
 
 #[derive(Clone, Debug)]
@@ -302,7 +308,6 @@ impl<'a> Parser<'a> {
         };
 
         let mut fields = Vec::new();
-        let mut bases = Vec::new();
         let mut virtual_methods = Vec::new();
         decl.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
             match cursor.kind() {
@@ -354,15 +359,13 @@ impl<'a> Parser<'a> {
                         });
                     }
                 }
-                CursorKind::CxxBaseSpecifier => {
-                    let name = cursor.type_().unwrap().declaration().name();
-                    bases.push(name.to_str().unwrap().to_string());
-                }
                 _ => {}
             }
 
             Ok(())
         })?;
+
+        let bases = self.collect_bases(&decl)?;
 
         let mut inner = Namespace::new();
         decl.visit_children(|cursor| self.visit(&mut inner, cursor))?;
@@ -375,6 +378,28 @@ impl<'a> Parser<'a> {
             virtual_methods,
             inner,
         })
+    }
+
+    fn collect_bases(&self, decl: &Cursor) -> Result<Vec<Base>, Box<dyn Error>> {
+        let mut bases = Vec::new();
+
+        decl.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
+            if cursor.kind() == CursorKind::CxxBaseSpecifier {
+                let decl = cursor.type_().unwrap().declaration();
+
+                let name = decl.name();
+                let transitive_bases = self.collect_bases(&decl)?;
+
+                bases.push(Base {
+                    name: name.to_str().unwrap().to_string(),
+                    bases: transitive_bases,
+                });
+            }
+
+            Ok(())
+        })?;
+
+        Ok(bases)
     }
 
     fn parse_type(
