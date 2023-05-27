@@ -419,33 +419,31 @@ impl GainProcessor {
 
         let process_data = &*data;
 
-        if !process_data.inputParameterChanges.is_null() {
-            let param_changes = ComPtr::from_raw(process_data.inputParameterChanges);
-
+        if let Some(param_changes) = ComPtr::from_raw(process_data.inputParameterChanges) {
             let param_count = param_changes.getParameterCount();
             for param_index in 0..param_count {
-                let param_queue_ptr = param_changes.getParameterData(param_index);
-                if param_queue_ptr.is_null() {
-                    continue;
-                }
+                if let Some(param_queue) =
+                    ComPtr::from_raw(param_changes.getParameterData(param_index))
+                {
+                    let param_id = param_queue.getParameterId();
+                    let point_count = param_queue.getPointCount();
 
-                let param_queue = ComPtr::from_raw(param_queue_ptr);
+                    match param_id {
+                        0 => {
+                            let mut sample_offset = 0;
+                            let mut value = 0.0;
+                            let result = param_queue.getPoint(
+                                point_count - 1,
+                                &mut sample_offset,
+                                &mut value,
+                            );
 
-                let param_id = param_queue.getParameterId();
-                let point_count = param_queue.getPointCount();
-
-                match param_id {
-                    0 => {
-                        let mut sample_offset = 0;
-                        let mut value = 0.0;
-                        let result =
-                            param_queue.getPoint(point_count - 1, &mut sample_offset, &mut value);
-
-                        if result == kResultTrue {
-                            processor.gain.store(value.to_bits(), Ordering::Relaxed);
+                            if result == kResultTrue {
+                                processor.gain.store(value.to_bits(), Ordering::Relaxed);
+                            }
                         }
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
         }
@@ -881,7 +879,7 @@ impl Factory {
         };
 
         if let Some(instance) = instance {
-            let instance = ComPtr::from_raw(instance);
+            let instance = ComPtr::from_raw_unchecked(instance);
 
             let result = instance.queryInterface(iid as *mut TUID, obj);
             instance.release();
