@@ -21,7 +21,7 @@ impl UnnamedRecordScope {
 
 pub struct RustPrinter<'a, W> {
     sink: W,
-    options: &'a GeneratorOptions,
+    _options: &'a GeneratorOptions,
     reserved: HashSet<&'static str>,
     indent_level: usize,
     unnamed_records: Vec<UnnamedRecordScope>,
@@ -31,7 +31,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
     pub fn new(sink: W, options: &'a GeneratorOptions) -> RustPrinter<'a, W> {
         RustPrinter {
             sink,
-            options: options,
+            _options: options,
             reserved: HashSet::from(["type"]),
             indent_level: 0,
             unnamed_records: Vec::new(),
@@ -313,36 +313,32 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}}}")?;
 
-            if !self.options.skip_interface_traits.contains(&record.name) {
-                write!(self.sink, "{indent}pub trait {name}Trait")?;
-                if let Some(base) = record.bases.first() {
-                    if !self.options.skip_interface_traits.contains(base) {
-                        write!(self.sink, ": {base}Trait")?;
-                    }
-                }
-                writeln!(self.sink, " {{")?;
-
-                for method in &record.virtual_methods {
-                    let method_name = &method.name;
-
-                    writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
-                    writeln!(self.sink, "{indent}        &self,")?;
-
-                    self.indent_level += 2;
-                    self.print_args(method)?;
-                    self.indent_level -= 2;
-
-                    write!(self.sink, "{indent}    )")?;
-                    if let Type::Void = method.result_type {
-                    } else {
-                        write!(self.sink, " -> ")?;
-                        self.print_type(&method.result_type)?;
-                    }
-                    writeln!(self.sink, ";")?;
-                }
-
-                writeln!(self.sink, "{indent}}}")?;
+            write!(self.sink, "{indent}pub trait {name}Trait")?;
+            if let Some(base) = record.bases.first() {
+                write!(self.sink, ": {base}Trait")?;
             }
+            writeln!(self.sink, " {{")?;
+
+            for method in &record.virtual_methods {
+                let method_name = &method.name;
+
+                writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
+                writeln!(self.sink, "{indent}        &self,")?;
+
+                self.indent_level += 2;
+                self.print_args(method)?;
+                self.indent_level -= 2;
+
+                write!(self.sink, "{indent}    )")?;
+                if let Type::Void = method.result_type {
+                } else {
+                    write!(self.sink, " -> ")?;
+                    self.print_type(&method.result_type)?;
+                }
+                writeln!(self.sink, ";")?;
+            }
+
+            writeln!(self.sink, "{indent}}}")?;
         }
 
         Ok(())

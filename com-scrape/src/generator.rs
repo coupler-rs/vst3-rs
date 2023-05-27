@@ -50,20 +50,6 @@ impl Generator {
         self
     }
 
-    pub fn skip_interface_trait<T: AsRef<str>>(mut self, interface: T) -> Self {
-        self.options
-            .skip_interface_traits
-            .insert(interface.as_ref().to_string());
-        self
-    }
-
-    pub fn skip_interface_traits<'a, T: AsRef<[&'a str]>>(mut self, interfaces: T) -> Self {
-        self.options
-            .skip_interface_traits
-            .extend(interfaces.as_ref().iter().map(|s| s.to_string()));
-        self
-    }
-
     pub fn constant_parser<F>(mut self, f: F) -> Self
     where
         F: Fn(&[String]) -> Option<String> + 'static,

@@ -82,7 +82,6 @@ fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {
             "FReleaser",
             "LARGE_INT",
         ])
-        .skip_interface_trait("FUnknown")
         .constant_parser(parse_iid)
         .include_path(&sdk_dir)
         .source(source)
