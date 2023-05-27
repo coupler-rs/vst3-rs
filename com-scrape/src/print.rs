@@ -38,38 +38,32 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         }
     }
 
-    fn indent(&mut self) -> io::Result<()> {
-        for _ in 0..self.indent_level {
-            write!(self.sink, "    ")?;
-        }
-
-        Ok(())
+    fn indent(&self) -> String {
+        "    ".repeat(self.indent_level)
     }
 
     pub fn print_namespace(&mut self, namespace: &Namespace) -> io::Result<()> {
         self.push_unnamed_records("");
 
+        let indent = self.indent();
+
         for typedef in &namespace.typedefs {
-            self.indent()?;
-            write!(self.sink, "pub type {} = ", typedef.name)?;
+            let name = &typedef.name;
+
+            write!(self.sink, "{indent}pub type {name} = ")?;
             self.print_type(&typedef.type_)?;
             writeln!(self.sink, ";")?;
 
             if !typedef.inner.is_empty() {
-                self.indent()?;
-                writeln!(self.sink, "pub mod {}_ {{", typedef.name)?;
+                writeln!(self.sink, "{indent}pub mod {name}_ {{")?;
+                writeln!(self.sink, "{indent}    #[allow(unused_imports)]")?;
+                writeln!(self.sink, "{indent}    use super::*;")?;
+
                 self.indent_level += 1;
-
-                self.indent()?;
-                writeln!(self.sink, "#[allow(unused_imports)]")?;
-                self.indent()?;
-                writeln!(self.sink, "use super::*;")?;
-
                 self.print_namespace(&typedef.inner)?;
-
                 self.indent_level -= 1;
-                self.indent()?;
-                writeln!(self.sink, "}}")?;
+
+                writeln!(self.sink, "{indent}}}")?;
             }
         }
 
@@ -78,37 +72,32 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         }
 
         for constant in &namespace.constants {
-            self.indent()?;
-            write!(self.sink, "pub const {}: ", constant.name)?;
+            let name = &constant.name;
+            write!(self.sink, "{indent}pub const {name}: ")?;
             self.print_type(&constant.type_)?;
             match constant.value {
-                Value::Signed(value) => writeln!(self.sink, " = {:?};", value)?,
-                Value::Unsigned(value) => writeln!(self.sink, " = {:?};", value)?,
-                Value::Float(value) => writeln!(self.sink, " = {:?};", value)?,
+                Value::Signed(value) => writeln!(self.sink, " = {value:?};")?,
+                Value::Unsigned(value) => writeln!(self.sink, " = {value:?};")?,
+                Value::Float(value) => writeln!(self.sink, " = {value:?};")?,
             }
         }
 
         for constant in &namespace.unparsed_constants {
-            self.indent()?;
-            writeln!(self.sink, "{}", constant)?;
+            let indent = self.indent();
+            writeln!(self.sink, "{indent}{constant}")?;
         }
 
         for (name, child) in &namespace.children {
             if !child.is_empty() {
-                self.indent()?;
-                writeln!(self.sink, "pub mod {} {{", name)?;
+                writeln!(self.sink, "{indent}pub mod {name} {{")?;
+                writeln!(self.sink, "{indent}    #[allow(unused_imports)]")?;
+                writeln!(self.sink, "{indent}    use super::*;")?;
+
                 self.indent_level += 1;
-
-                self.indent()?;
-                writeln!(self.sink, "#[allow(unused_imports)]")?;
-                self.indent()?;
-                writeln!(self.sink, "use super::*;")?;
-
                 self.print_namespace(child)?;
-
                 self.indent_level -= 1;
-                self.indent()?;
-                writeln!(self.sink, "}}")?;
+
+                writeln!(self.sink, "{indent}}}")?;
             }
         }
 
@@ -122,45 +111,34 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
         let needs_module = !record.inner.is_empty();
 
+        let name = &record.name;
+
         if needs_module {
-            self.indent()?;
-            writeln!(self.sink, "mod __{}_wrapper {{", record.name)?;
+            let indent = self.indent();
+
+            writeln!(self.sink, "{indent}mod __{name}_wrapper {{")?;
+            writeln!(self.sink, "{indent}    #[allow(unused_imports)]")?;
+            writeln!(self.sink, "{indent}    use super::*;")?;
+            writeln!(self.sink, "{indent}    #[allow(unused_imports)]")?;
+            writeln!(self.sink, "{indent}    use super::{name}_::*;")?;
+
             self.indent_level += 1;
-
-            self.indent()?;
-            writeln!(self.sink, "#[allow(unused_imports)]")?;
-            self.indent()?;
-            writeln!(self.sink, "use super::*;")?;
-
-            self.indent()?;
-            writeln!(self.sink, "#[allow(unused_imports)]")?;
-            self.indent()?;
-            writeln!(self.sink, "use super::{}_::*;", record.name)?;
-
             self.print_record_body(record)?;
             self.print_interface(record)?;
-
             self.indent_level -= 1;
-            self.indent()?;
-            writeln!(self.sink, "}}")?;
 
-            self.indent()?;
-            writeln!(self.sink, "pub use __{}_wrapper::*;", record.name)?;
+            writeln!(self.sink, "{indent}}}")?;
+            writeln!(self.sink, "{indent}pub use __{name}_wrapper::*;")?;
 
-            self.indent()?;
-            writeln!(self.sink, "pub mod {}_ {{", record.name)?;
+            writeln!(self.sink, "{indent}pub mod {name}_ {{")?;
+            writeln!(self.sink, "{indent}    #[allow(unused_imports)]")?;
+            writeln!(self.sink, "{indent}    use super::*;")?;
+
             self.indent_level += 1;
-
-            self.indent()?;
-            writeln!(self.sink, "#[allow(unused_imports)]")?;
-            self.indent()?;
-            writeln!(self.sink, "use super::*;")?;
-
             self.print_namespace(&record.inner)?;
-
             self.indent_level -= 1;
-            self.indent()?;
-            writeln!(self.sink, "}}")?;
+
+            writeln!(self.sink, "{indent}}}")?;
         } else {
             self.print_record_body(record)?;
             self.print_interface(record)?;
@@ -172,93 +150,76 @@ impl<'a, W: Write> RustPrinter<'a, W> {
     }
 
     fn print_record_body(&mut self, record: &Record) -> io::Result<()> {
-        self.indent()?;
-        writeln!(self.sink, "#[repr(C)]")?;
-        self.indent()?;
-        writeln!(self.sink, "#[derive(Copy, Clone)]")?;
+        let indent = self.indent();
+        let name = &record.name;
+        let record_kind = match record.kind {
+            RecordKind::Struct => "struct",
+            RecordKind::Union => "union",
+        };
 
-        self.indent()?;
-        match record.kind {
-            RecordKind::Struct => {
-                writeln!(self.sink, "pub struct {} {{", record.name)?;
-            }
-            RecordKind::Union => {
-                writeln!(self.sink, "pub union {} {{", record.name)?;
-            }
-        }
-        self.indent_level += 1;
+        writeln!(self.sink, "{indent}#[repr(C)]")?;
+        writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
+        writeln!(self.sink, "{indent}pub {record_kind} {name} {{")?;
 
         if !record.virtual_methods.is_empty() {
-            self.indent()?;
-            writeln!(self.sink, "pub vtbl: *const {}Vtbl,", record.name)?;
+            writeln!(self.sink, "{indent}    pub vtbl: *const {name}Vtbl,")?;
         }
 
         let mut anon_counter = 0;
         for field in &record.fields {
-            self.indent()?;
+            let field_name = &field.name;
             if field.name.is_empty() {
-                write!(self.sink, "pub __field{anon_counter}: ")?;
+                write!(self.sink, "{indent}    pub __field{anon_counter}: ")?;
                 anon_counter += 1;
             } else if self.reserved.contains(&*field.name) {
-                write!(self.sink, "pub r#{}: ", field.name)?;
+                write!(self.sink, "{indent}    pub r#{field_name}: ")?;
             } else {
-                write!(self.sink, "pub {}: ", field.name)?;
+                write!(self.sink, "{indent}    pub {field_name}: ")?;
             }
-
             self.print_type(&field.type_)?;
             writeln!(self.sink, ",")?;
         }
 
-        self.indent_level -= 1;
-        self.indent()?;
-        writeln!(self.sink, "}}")?;
-
-        self.indent()?;
-        writeln!(self.sink, "unsafe impl Send for {} {{}}", record.name)?;
-        self.indent()?;
-        writeln!(self.sink, "unsafe impl Sync for {} {{}}", record.name)?;
+        writeln!(self.sink, "{indent}}}")?;
+        writeln!(self.sink, "{indent}unsafe impl Send for {name} {{}}")?;
+        writeln!(self.sink, "{indent}unsafe impl Sync for {name} {{}}")?;
 
         Ok(())
     }
 
     fn print_interface(&mut self, record: &Record) -> io::Result<()> {
         if !record.virtual_methods.is_empty() {
-            self.indent()?;
-            writeln!(self.sink, "#[repr(C)]")?;
-            self.indent()?;
-            writeln!(self.sink, "#[derive(Copy, Clone)]")?;
-            self.indent()?;
-            writeln!(self.sink, "pub struct {}Vtbl {{", record.name)?;
-            self.indent_level += 1;
+            let indent = self.indent();
+            let name = &record.name;
+
+            writeln!(self.sink, "{indent}#[repr(C)]")?;
+            writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
+            writeln!(self.sink, "{indent}pub struct {name}Vtbl {{")?;
 
             if record.bases.len() > 1 {
                 return Err(io::Error::new(
                     ErrorKind::Other,
-                    format!("type {} has more than one base class", record.name),
+                    format!("type {name} has more than one base class"),
                 ));
             }
             if let Some(base) = record.bases.first() {
-                self.indent()?;
-                writeln!(self.sink, "pub base: {base}Vtbl,")?;
+                writeln!(self.sink, "{indent}    pub base: {base}Vtbl,")?;
             }
 
             for method in &record.virtual_methods {
-                self.indent()?;
+                let method_name = &method.name;
                 writeln!(
                     self.sink,
-                    "pub {}: unsafe extern \"system\" fn(",
-                    method.name
+                    "{indent}    pub {method_name}: unsafe extern \"system\" fn("
                 )?;
-                self.indent_level += 1;
 
-                self.indent()?;
-                writeln!(self.sink, "this: *mut {},", record.name)?;
+                writeln!(self.sink, "{indent}        this: *mut {name},")?;
 
+                self.indent_level += 2;
                 self.print_args(method)?;
+                self.indent_level -= 2;
 
-                self.indent_level -= 1;
-                self.indent()?;
-                write!(self.sink, ")")?;
+                write!(self.sink, "{indent}    )")?;
                 if let Type::Void = method.result_type {
                 } else {
                     write!(self.sink, " -> ")?;
@@ -267,124 +228,88 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, ",")?;
             }
 
-            self.indent_level -= 1;
-            self.indent()?;
-            writeln!(self.sink, "}}")?;
+            writeln!(self.sink, "{indent}}}")?;
 
-            self.indent()?;
-            writeln!(self.sink, "#[repr(transparent)]")?;
-            self.indent()?;
-            writeln!(self.sink, "#[derive(Copy, Clone)]")?;
-            self.indent()?;
-            writeln!(self.sink, "pub struct {0}Ptr(pub *mut {0});", record.name)?;
+            writeln!(self.sink, "{indent}#[repr(transparent)]")?;
+            writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
+            writeln!(self.sink, "{indent}pub struct {name}Ptr(pub *mut {name});")?;
 
             if let Some(base) = record.bases.first() {
-                self.indent()?;
+                writeln!(self.sink, "{indent}impl ::std::ops::Deref for {name}Ptr {{")?;
+                writeln!(self.sink, "{indent}    type Target = {base}Ptr;")?;
+                writeln!(self.sink, "{indent}    fn deref(&self) -> &Self::Target {{")?;
                 writeln!(
                     self.sink,
-                    "impl ::std::ops::Deref for {}Ptr {{",
-                    record.name
+                    "{indent}        unsafe {{ ::std::mem::transmute(self) }}"
                 )?;
-                self.indent()?;
-                writeln!(self.sink, "    type Target = {}Ptr;", base)?;
-                self.indent()?;
-                writeln!(self.sink, "    fn deref(&self) -> &Self::Target {{")?;
-                self.indent()?;
-                writeln!(
-                    self.sink,
-                    "        unsafe {{ ::std::mem::transmute(self) }}"
-                )?;
-                self.indent()?;
-                writeln!(self.sink, "    }}")?;
-                self.indent()?;
-                writeln!(self.sink, "}}")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}}}")?;
             }
 
-            self.indent()?;
-            writeln!(self.sink, "impl {}Ptr {{", record.name)?;
-            self.indent_level += 1;
+            writeln!(self.sink, "{indent}impl {name}Ptr {{")?;
 
             for method in &record.virtual_methods {
-                self.indent()?;
-                writeln!(self.sink, "pub unsafe fn {}(", method.name)?;
-                self.indent_level += 1;
+                let method_name = &method.name;
 
-                self.indent()?;
-                writeln!(self.sink, "&self,")?;
+                writeln!(self.sink, "{indent}    pub unsafe fn {method_name}(")?;
+                writeln!(self.sink, "{indent}        &self,")?;
 
+                self.indent_level += 2;
                 self.print_args(method)?;
+                self.indent_level -= 2;
 
-                self.indent_level -= 1;
-                self.indent()?;
-                write!(self.sink, ")")?;
+                write!(self.sink, "{indent}    )")?;
                 if let Type::Void = method.result_type {
                 } else {
                     write!(self.sink, " -> ")?;
                     self.print_type(&method.result_type)?;
                 }
                 writeln!(self.sink, " {{")?;
-                self.indent_level += 1;
-
-                self.indent()?;
-                writeln!(self.sink, "((*(*self.0).vtbl).{})(", method.name)?;
-                self.indent_level += 1;
-
-                self.indent()?;
-                writeln!(self.sink, "self.0,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}        ((*(*self.0).vtbl).{method_name})("
+                )?;
+                writeln!(self.sink, "{indent}            self.0,")?;
 
                 let mut unnamed_counter = 0;
                 for arg in &method.arguments {
-                    self.indent()?;
+                    let arg_name = &arg.name;
                     if arg.name.is_empty() {
-                        write!(self.sink, "_{unnamed_counter}")?;
+                        writeln!(self.sink, "{indent}            _{unnamed_counter},")?;
                         unnamed_counter += 1;
+                    } else if self.reserved.contains(&*arg.name) {
+                        writeln!(self.sink, "{indent}            r#{arg_name},")?;
                     } else {
-                        if self.reserved.contains(&*arg.name) {
-                            write!(self.sink, "r#{}", arg.name)?;
-                        } else {
-                            write!(self.sink, "{}", arg.name)?;
-                        }
+                        writeln!(self.sink, "{indent}            {arg_name},")?;
                     }
-                    writeln!(self.sink, ",")?;
                 }
 
-                self.indent_level -= 1;
-                self.indent()?;
-                writeln!(self.sink, ")")?;
-
-                self.indent_level -= 1;
-                self.indent()?;
-                writeln!(self.sink, "}}")?;
+                writeln!(self.sink, "{indent}        )")?;
+                writeln!(self.sink, "{indent}    }}")?;
             }
 
-            self.indent_level -= 1;
-            self.indent()?;
-            writeln!(self.sink, "}}")?;
+            writeln!(self.sink, "{indent}}}")?;
 
             if !self.options.skip_interface_traits.contains(&record.name) {
-                self.indent()?;
-                write!(self.sink, "pub trait {}Trait", record.name)?;
+                write!(self.sink, "{indent}pub trait {name}Trait")?;
                 if let Some(base) = record.bases.first() {
                     if !self.options.skip_interface_traits.contains(base) {
                         write!(self.sink, ": {base}Trait")?;
                     }
                 }
                 writeln!(self.sink, " {{")?;
-                self.indent_level += 1;
 
                 for method in &record.virtual_methods {
-                    self.indent()?;
-                    writeln!(self.sink, "unsafe fn {}(", method.name)?;
-                    self.indent_level += 1;
+                    let method_name = &method.name;
 
-                    self.indent()?;
-                    writeln!(self.sink, "&self,")?;
+                    writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
+                    writeln!(self.sink, "{indent}        &self,")?;
 
+                    self.indent_level += 2;
                     self.print_args(method)?;
+                    self.indent_level -= 2;
 
-                    self.indent_level -= 1;
-                    self.indent()?;
-                    write!(self.sink, ")")?;
+                    write!(self.sink, "{indent}    )")?;
                     if let Type::Void = method.result_type {
                     } else {
                         write!(self.sink, " -> ")?;
@@ -393,9 +318,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     writeln!(self.sink, ";")?;
                 }
 
-                self.indent_level -= 1;
-                self.indent()?;
-                writeln!(self.sink, "}}")?;
+                writeln!(self.sink, "{indent}}}")?;
             }
         }
 
@@ -405,17 +328,17 @@ impl<'a, W: Write> RustPrinter<'a, W> {
     fn print_args(&mut self, method: &Method) -> io::Result<()> {
         let mut unnamed_counter = 0;
 
+        let indent = self.indent();
+
         for arg in &method.arguments {
-            self.indent()?;
+            let arg_name = &arg.name;
             if arg.name.is_empty() {
-                write!(self.sink, "_{unnamed_counter}: ")?;
+                write!(self.sink, "{indent}_{unnamed_counter}: ")?;
                 unnamed_counter += 1;
+            } else if self.reserved.contains(&*arg.name) {
+                write!(self.sink, "{indent}r#{arg_name}: ")?;
             } else {
-                if self.reserved.contains(&*arg.name) {
-                    write!(self.sink, "r#{}: ", arg.name)?;
-                } else {
-                    write!(self.sink, "{}: ", arg.name)?;
-                }
+                write!(self.sink, "{indent}{arg_name}: ")?;
             }
             self.print_type(&arg.type_)?;
             writeln!(self.sink, ",")?;
@@ -447,7 +370,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 _ => {
                     return Err(io::Error::new(
                         ErrorKind::Other,
-                        format!("unexpected size {} for unsigned integer", size),
+                        format!("unexpected size {size} for unsigned integer"),
                     ))
                 }
             },
@@ -459,7 +382,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 _ => {
                     return Err(io::Error::new(
                         ErrorKind::Other,
-                        format!("unexpected size {} for signed integer", size),
+                        format!("unexpected size {size} for signed integer"),
                     ))
                 }
             },
@@ -473,7 +396,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 }
                 self.print_type(pointee)?;
             }
-            Type::Record(name) => write!(self.sink, "{}", name)?,
+            Type::Record(name) => write!(self.sink, "{name}")?,
             Type::UnnamedRecord(record) => {
                 let scope = self.unnamed_record_scope_mut();
                 let name = scope.next_name();
@@ -481,9 +404,9 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 record.name = name.clone();
                 scope.add_record(record);
 
-                write!(self.sink, "{}", name)?;
+                write!(self.sink, "{name}")?;
             }
-            Type::Typedef(name) => write!(self.sink, "{}", name)?,
+            Type::Typedef(name) => write!(self.sink, "{name}")?,
             Type::Array(size, elem) => {
                 write!(self.sink, "[")?;
                 self.print_type(elem)?;
