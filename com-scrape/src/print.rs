@@ -90,7 +90,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
         for constant in &namespace.unparsed_constants {
             self.indent()?;
-            write!(self.sink, "{}", constant)?;
+            writeln!(self.sink, "{}", constant)?;
         }
 
         for (name, child) in &namespace.children {
