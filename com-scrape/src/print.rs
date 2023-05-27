@@ -193,8 +193,21 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let name = &record.name;
 
             writeln!(self.sink, "{indent}impl Interface for {name} {{")?;
-            writeln!(self.sink, "{indent}    type Ptr = {name}Ptr;")?;
             writeln!(self.sink, "{indent}}}")?;
+
+            writeln!(
+                self.sink,
+                "{indent}unsafe impl ::com_scrape_types::Inherits<{name}> for {name} {{}}"
+            )?;
+            let mut bases = &record.bases;
+            while let Some(base) = bases.first() {
+                let base_name = &base.name;
+                writeln!(
+                    self.sink,
+                    "{indent}unsafe impl ::com_scrape_types::Inherits<{base_name}> for {name} {{}}"
+                )?;
+                bases = &base.bases;
+            }
 
             writeln!(self.sink, "{indent}#[repr(C)]")?;
             writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
@@ -235,86 +248,6 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}}}")?;
 
-            writeln!(self.sink, "{indent}#[repr(transparent)]")?;
-            writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
-            writeln!(self.sink, "{indent}pub struct {name}Ptr(*mut {name});")?;
-
-            writeln!(
-                self.sink,
-                "{indent}impl InterfacePtr<{name}> for {name}Ptr {{"
-            )?;
-            writeln!(self.sink, "{indent}    #[inline]")?;
-            writeln!(
-                self.sink,
-                "{indent}    fn from_raw(ptr: *mut {name}) -> Self {{"
-            )?;
-            writeln!(self.sink, "{indent}        Self(ptr)")?;
-            writeln!(self.sink, "{indent}    }}")?;
-            writeln!(self.sink, "{indent}    #[inline]")?;
-            writeln!(self.sink, "{indent}    fn into_raw(self) -> *mut {name} {{")?;
-            writeln!(self.sink, "{indent}        self.0")?;
-            writeln!(self.sink, "{indent}    }}")?;
-            writeln!(self.sink, "{indent}}}")?;
-
-            if let Some(base) = record.bases.first() {
-                let base_name = &base.name;
-                writeln!(self.sink, "{indent}impl ::std::ops::Deref for {name}Ptr {{")?;
-                writeln!(self.sink, "{indent}    type Target = {base_name}Ptr;")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    fn deref(&self) -> &Self::Target {{")?;
-                writeln!(
-                    self.sink,
-                    "{indent}        unsafe {{ ::std::mem::transmute(self) }}"
-                )?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}}}")?;
-            }
-
-            writeln!(self.sink, "{indent}impl {name}Ptr {{")?;
-
-            for method in &record.virtual_methods {
-                let method_name = &method.name;
-
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    pub unsafe fn {method_name}(")?;
-                writeln!(self.sink, "{indent}        &self,")?;
-
-                self.indent_level += 2;
-                self.print_args(method)?;
-                self.indent_level -= 2;
-
-                write!(self.sink, "{indent}    )")?;
-                if let Type::Void = method.result_type {
-                } else {
-                    write!(self.sink, " -> ")?;
-                    self.print_type(&method.result_type)?;
-                }
-                writeln!(self.sink, " {{")?;
-                writeln!(
-                    self.sink,
-                    "{indent}        ((*(*self.0).vtbl).{method_name})("
-                )?;
-                writeln!(self.sink, "{indent}            self.0,")?;
-
-                let mut unnamed_counter = 0;
-                for arg in &method.arguments {
-                    let arg_name = &arg.name;
-                    if arg.name.is_empty() {
-                        writeln!(self.sink, "{indent}            _{unnamed_counter},")?;
-                        unnamed_counter += 1;
-                    } else if self.reserved.contains(&*arg.name) {
-                        writeln!(self.sink, "{indent}            r#{arg_name},")?;
-                    } else {
-                        writeln!(self.sink, "{indent}            {arg_name},")?;
-                    }
-                }
-
-                writeln!(self.sink, "{indent}        )")?;
-                writeln!(self.sink, "{indent}    }}")?;
-            }
-
-            writeln!(self.sink, "{indent}}}")?;
-
             write!(self.sink, "{indent}pub trait {name}Trait")?;
             if let Some(base) = record.bases.first() {
                 let base_name = &base.name;
@@ -339,6 +272,62 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     self.print_type(&method.result_type)?;
                 }
                 writeln!(self.sink, ";")?;
+            }
+
+            writeln!(self.sink, "{indent}}}")?;
+
+            writeln!(self.sink, "{indent}impl<P> {name}Trait for P")?;
+            writeln!(self.sink, "{indent}where")?;
+            writeln!(self.sink, "{indent}    P: ::com_scrape_types::SmartPtr,")?;
+            writeln!(self.sink, "{indent}    P::Target: Inherits<{name}>,")?;
+            let mut bases = &record.bases;
+            while let Some(base) = bases.first() {
+                let base_name = &base.name;
+                writeln!(self.sink, "{indent}    P::Target: Inherits<{base_name}>,")?;
+                bases = &base.bases;
+            }
+            writeln!(self.sink, "{indent}{{")?;
+
+            for method in &record.virtual_methods {
+                let method_name = &method.name;
+
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
+                writeln!(self.sink, "{indent}        &self,")?;
+
+                self.indent_level += 2;
+                self.print_args(method)?;
+                self.indent_level -= 2;
+
+                write!(self.sink, "{indent}    )")?;
+                if let Type::Void = method.result_type {
+                } else {
+                    write!(self.sink, " -> ")?;
+                    self.print_type(&method.result_type)?;
+                }
+                writeln!(self.sink, " {{")?;
+                writeln!(
+                    self.sink,
+                    "{indent}        let ptr = self.ptr() as *mut {name};"
+                )?;
+                writeln!(self.sink, "{indent}        ((*(*ptr).vtbl).{method_name})(")?;
+                writeln!(self.sink, "{indent}            ptr,")?;
+
+                let mut unnamed_counter = 0;
+                for arg in &method.arguments {
+                    let arg_name = &arg.name;
+                    if arg.name.is_empty() {
+                        writeln!(self.sink, "{indent}            _{unnamed_counter},")?;
+                        unnamed_counter += 1;
+                    } else if self.reserved.contains(&*arg.name) {
+                        writeln!(self.sink, "{indent}            r#{arg_name},")?;
+                    } else {
+                        writeln!(self.sink, "{indent}            {arg_name},")?;
+                    }
+                }
+
+                writeln!(self.sink, "{indent}        )")?;
+                writeln!(self.sink, "{indent}    }}")?;
             }
 
             writeln!(self.sink, "{indent}}}")?;
