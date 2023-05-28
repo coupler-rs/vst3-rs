@@ -1,4 +1,3 @@
-use std::ffi::c_void;
 use std::marker::PhantomData;
 use std::mem;
 use std::ptr::NonNull;
@@ -16,7 +15,7 @@ pub trait SmartPtr {
 pub unsafe trait Interface {
     const IID: Guid;
 
-    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void>;
+    unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I>;
     unsafe fn add_ref(this: *mut Self);
     unsafe fn release(this: *mut Self);
 }
@@ -90,10 +89,7 @@ impl<'a, I: Interface> ComRef<'a, I> {
 
     #[inline]
     pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
-        unsafe {
-            I::query_interface(self.as_mut_ptr(), &J::IID)
-                .and_then(|ptr| ComPtr::from_raw(ptr as *mut J))
-        }
+        unsafe { I::query_interface::<J>(self.as_mut_ptr()).and_then(|ptr| ComPtr::from_raw(ptr)) }
     }
 }
 
@@ -167,10 +163,7 @@ impl<I: Interface> ComPtr<I> {
 
     #[inline]
     pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
-        unsafe {
-            I::query_interface(self.as_mut_ptr(), &J::IID)
-                .and_then(|ptr| ComPtr::from_raw(ptr as *mut J))
-        }
+        unsafe { I::query_interface::<J>(self.as_mut_ptr()).and_then(|ptr| ComPtr::from_raw(ptr)) }
     }
 }
 
@@ -206,13 +199,13 @@ mod tests {
     unsafe impl Interface for IUnknown {
         const IID: Guid = *b"aaaaaaaaaaaaaaaa";
 
-        unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
+        unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
             let ptr = this as *mut IUnknown;
             let mut obj = ::std::ptr::null_mut();
-            let result = ((*(*ptr).vtbl).query_interface)(ptr, iid, &mut obj);
+            let result = ((*(*ptr).vtbl).query_interface)(ptr, &I::IID, &mut obj);
 
             if result == 0 {
-                Some(obj as *mut c_void)
+                Some(obj as *mut I)
             } else {
                 None
             }
@@ -270,8 +263,8 @@ mod tests {
     unsafe impl Interface for IMyInterface {
         const IID: Guid = *b"bbbbbbbbbbbbbbbb";
 
-        unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
-            IUnknown::query_interface(this as *mut IUnknown, iid)
+        unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
+            IUnknown::query_interface::<I>(this as *mut IUnknown)
         }
 
         unsafe fn add_ref(this: *mut Self) {
@@ -345,7 +338,7 @@ mod tests {
     unsafe impl Interface for IOtherInterface {
         const IID: Guid = *b"cccccccccccccccc";
 
-        unsafe fn query_interface(_this: *mut Self, _iid: &Guid) -> Option<*mut c_void> {
+        unsafe fn query_interface<I: Interface>(_this: *mut Self) -> Option<*mut I> {
             unimplemented!()
         }
 

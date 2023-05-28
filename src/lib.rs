@@ -2,9 +2,6 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-use std::ffi::c_void;
-use std::ptr;
-
 use Steinberg::{int8, kResultOk, FUnknown, TUID};
 
 pub use com_scrape_types::*;
@@ -15,11 +12,8 @@ macro_rules! impl_interface {
             const IID: ::com_scrape_types::Guid = crate::tuid_as_guid($iid);
 
             #[inline]
-            unsafe fn query_interface(
-                this: *mut Self,
-                iid: &Guid,
-            ) -> Option<*mut ::std::ffi::c_void> {
-                crate::FUnknown_query_interface(this as *mut crate::Steinberg::FUnknown, iid)
+            unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
+                crate::FUnknown_query_interface(this as *mut crate::Steinberg::FUnknown)
             }
 
             #[inline]
@@ -36,13 +30,13 @@ macro_rules! impl_interface {
 }
 
 #[inline]
-unsafe fn FUnknown_query_interface(this: *mut FUnknown, iid: &Guid) -> Option<*mut c_void> {
+unsafe fn FUnknown_query_interface<I: Interface>(this: *mut FUnknown) -> Option<*mut I> {
     let ptr = this as *mut FUnknown;
-    let mut obj = ptr::null_mut();
-    let result = ((*(*ptr).vtbl).queryInterface)(ptr, iid.as_ptr() as *const TUID, &mut obj);
+    let mut obj = std::ptr::null_mut();
+    let result = ((*(*ptr).vtbl).queryInterface)(ptr, I::IID.as_ptr() as *const TUID, &mut obj);
 
     if result == kResultOk {
-        Some(obj as *mut c_void)
+        Some(obj as *mut I)
     } else {
         None
     }
