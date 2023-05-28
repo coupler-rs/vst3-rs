@@ -7,8 +7,10 @@ pub use com_scrape_types::*;
 use Steinberg::{int8, TUID};
 
 macro_rules! impl_interface {
-    ($name:ident) => {
+    ($name:ident, $iid:ident) => {
         impl ::com_scrape_types::Interface for $name {
+            const IID: ::com_scrape_types::Guid = crate::tuid_as_guid($iid);
+
             #[inline]
             unsafe fn query_interface(
                 this: *mut Self,
@@ -42,6 +44,27 @@ macro_rules! impl_interface {
             }
         }
     };
+}
+
+const fn tuid_as_guid(tuid: TUID) -> Guid {
+    [
+        tuid[0] as u8,
+        tuid[1] as u8,
+        tuid[2] as u8,
+        tuid[3] as u8,
+        tuid[4] as u8,
+        tuid[5] as u8,
+        tuid[6] as u8,
+        tuid[7] as u8,
+        tuid[8] as u8,
+        tuid[9] as u8,
+        tuid[10] as u8,
+        tuid[11] as u8,
+        tuid[12] as u8,
+        tuid[13] as u8,
+        tuid[14] as u8,
+        tuid[15] as u8,
+    ]
 }
 
 #[cfg(target_os = "windows")]

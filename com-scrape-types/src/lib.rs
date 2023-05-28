@@ -14,6 +14,8 @@ pub trait SmartPtr {
 }
 
 pub trait Interface {
+    const IID: Guid;
+
     unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void>;
     unsafe fn add_ref(this: *mut Self);
     unsafe fn release(this: *mut Self);

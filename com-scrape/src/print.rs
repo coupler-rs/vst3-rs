@@ -192,7 +192,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let indent = self.indent();
             let name = &record.name;
 
-            writeln!(self.sink, "{indent}impl_interface!({name});")?;
+            writeln!(self.sink, "{indent}impl_interface!({name}, {name}_iid);")?;
 
             writeln!(
                 self.sink,
