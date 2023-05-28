@@ -11,7 +11,7 @@ pub use com_scrape_types::*;
 
 macro_rules! impl_interface {
     ($name:ident, $iid:ident) => {
-        impl ::com_scrape_types::Interface for $name {
+        unsafe impl ::com_scrape_types::Interface for $name {
             const IID: ::com_scrape_types::Guid = crate::tuid_as_guid($iid);
 
             #[inline]

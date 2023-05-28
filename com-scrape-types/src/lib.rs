@@ -13,7 +13,7 @@ pub trait SmartPtr {
     fn ptr(&self) -> *mut Self::Target;
 }
 
-pub trait Interface {
+pub unsafe trait Interface {
     const IID: Guid;
 
     unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void>;
@@ -203,7 +203,7 @@ mod tests {
         unsafe fn release(&self) -> c_ulong;
     }
 
-    impl Interface for IUnknown {
+    unsafe impl Interface for IUnknown {
         const IID: Guid = *b"aaaaaaaaaaaaaaaa";
 
         unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
@@ -267,7 +267,7 @@ mod tests {
         unsafe fn my_method(&self);
     }
 
-    impl Interface for IMyInterface {
+    unsafe impl Interface for IMyInterface {
         const IID: Guid = *b"bbbbbbbbbbbbbbbb";
 
         unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
@@ -342,7 +342,7 @@ mod tests {
 
     trait IOtherInterfaceTrait {}
 
-    impl Interface for IOtherInterface {
+    unsafe impl Interface for IOtherInterface {
         const IID: Guid = *b"cccccccccccccccc";
 
         unsafe fn query_interface(_this: *mut Self, _iid: &Guid) -> Option<*mut c_void> {
