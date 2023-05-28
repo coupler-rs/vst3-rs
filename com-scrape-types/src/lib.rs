@@ -87,6 +87,14 @@ impl<'a, I: Interface> ComRef<'a, I> {
             ComPtr::from_raw_unchecked(self.as_mut_ptr())
         }
     }
+
+    #[inline]
+    pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
+        unsafe {
+            I::query_interface(self.as_mut_ptr(), &J::IID)
+                .and_then(|ptr| ComPtr::from_raw(ptr as *mut J))
+        }
+    }
 }
 
 pub struct ComPtr<I: Interface> {
@@ -156,6 +164,14 @@ impl<I: Interface> ComPtr<I> {
     pub fn as_com_ref<'a>(&'a self) -> ComRef<'a, I> {
         unsafe { ComRef::from_raw_unchecked(self.as_mut_ptr()) }
     }
+
+    #[inline]
+    pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
+        unsafe {
+            I::query_interface(self.as_mut_ptr(), &J::IID)
+                .and_then(|ptr| ComPtr::from_raw(ptr as *mut J))
+        }
+    }
 }
 
 #[cfg(test)]
@@ -188,6 +204,8 @@ mod tests {
     }
 
     impl Interface for IUnknown {
+        const IID: Guid = *b"aaaaaaaaaaaaaaaa";
+
         unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
             let ptr = this as *mut IUnknown;
             let mut obj = ::std::ptr::null_mut();
@@ -235,6 +253,37 @@ mod tests {
     }
 
     #[repr(C)]
+    struct IMyInterface {
+        vtbl: *const IMyInterfaceVtbl,
+    }
+
+    #[repr(C)]
+    struct IMyInterfaceVtbl {
+        base: IUnknownVtbl,
+        my_method: unsafe extern "system" fn(this: *mut IMyInterface),
+    }
+
+    trait IMyInterfaceTrait {
+        unsafe fn my_method(&self);
+    }
+
+    impl Interface for IMyInterface {
+        const IID: Guid = *b"bbbbbbbbbbbbbbbb";
+
+        unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
+            IUnknown::query_interface(this as *mut IUnknown, iid)
+        }
+
+        unsafe fn add_ref(this: *mut Self) {
+            IUnknown::add_ref(this as *mut IUnknown)
+        }
+
+        unsafe fn release(this: *mut Self) {
+            IUnknown::release(this as *mut IUnknown)
+        }
+    }
+
+    #[repr(C)]
     struct MyClass {
         unknown: IUnknown,
         count: Cell<c_ulong>,
@@ -259,7 +308,13 @@ mod tests {
             iid: *const Guid,
             obj: *mut *mut c_void,
         ) -> c_long {
-            0
+            if let IUnknown::IID | IMyInterface::IID = *iid {
+                Self::add_ref(this);
+                *obj = this as *mut c_void;
+                0
+            } else {
+                1
+            }
         }
 
         unsafe extern "system" fn add_ref(this: *mut IUnknown) -> c_ulong {
@@ -275,8 +330,36 @@ mod tests {
         }
     }
 
+    #[repr(C)]
+    struct IOtherInterface {
+        vtbl: *const IOtherInterfaceVtbl,
+    }
+
+    #[repr(C)]
+    struct IOtherInterfaceVtbl {
+        base: IUnknownVtbl,
+    }
+
+    trait IOtherInterfaceTrait {}
+
+    impl Interface for IOtherInterface {
+        const IID: Guid = *b"cccccccccccccccc";
+
+        unsafe fn query_interface(_this: *mut Self, _iid: &Guid) -> Option<*mut c_void> {
+            unimplemented!()
+        }
+
+        unsafe fn add_ref(_this: *mut Self) {
+            unimplemented!()
+        }
+
+        unsafe fn release(_this: *mut Self) {
+            unimplemented!()
+        }
+    }
+
     #[test]
-    fn test() {
+    fn reference_counting() {
         let obj = MyClass::new();
 
         let com_ptr_1 =
@@ -304,5 +387,43 @@ mod tests {
 
         drop(com_ptr_3);
         assert_eq!(obj.count.get(), 0);
+    }
+
+    #[test]
+    fn cast_com_ref() {
+        let obj = MyClass::new();
+
+        let com_ref = unsafe { ComRef::from_raw(&obj as *const MyClass as *mut IUnknown) }.unwrap();
+
+        let unknown = com_ref.cast::<IUnknown>();
+        assert!(unknown.is_some());
+        assert_eq!(obj.count.get(), 2);
+
+        let my_interface = com_ref.cast::<IMyInterface>();
+        assert!(my_interface.is_some());
+        assert_eq!(obj.count.get(), 3);
+
+        let other_interface = com_ref.cast::<IOtherInterface>();
+        assert!(other_interface.is_none());
+        assert_eq!(obj.count.get(), 3);
+    }
+
+    #[test]
+    fn cast_com_ptr() {
+        let obj = MyClass::new();
+
+        let com_ptr = unsafe { ComPtr::from_raw(&obj as *const MyClass as *mut IUnknown) }.unwrap();
+
+        let unknown = com_ptr.cast::<IUnknown>();
+        assert!(unknown.is_some());
+        assert_eq!(obj.count.get(), 2);
+
+        let my_interface = com_ptr.cast::<IMyInterface>();
+        assert!(my_interface.is_some());
+        assert_eq!(obj.count.get(), 3);
+
+        let other_interface = com_ptr.cast::<IOtherInterface>();
+        assert!(other_interface.is_none());
+        assert_eq!(obj.count.get(), 3);
     }
 }
