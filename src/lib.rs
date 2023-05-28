@@ -2,9 +2,12 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
-pub use com_scrape_types::*;
+use std::ffi::c_void;
+use std::ptr;
 
-use Steinberg::{int8, TUID};
+use Steinberg::{int8, kResultOk, FUnknown, TUID};
+
+pub use com_scrape_types::*;
 
 macro_rules! impl_interface {
     ($name:ident, $iid:ident) => {
@@ -16,34 +19,45 @@ macro_rules! impl_interface {
                 this: *mut Self,
                 iid: &Guid,
             ) -> Option<*mut ::std::ffi::c_void> {
-                let ptr = this as *mut FUnknown;
-                let mut obj = ::std::ptr::null_mut();
-                let result = ((*(*ptr).vtbl).queryInterface)(
-                    ptr,
-                    iid.as_ptr() as *const crate::Steinberg::TUID,
-                    &mut obj,
-                );
-
-                if result == crate::Steinberg::kResultOk {
-                    Some(obj as *mut ::std::ffi::c_void)
-                } else {
-                    None
-                }
+                crate::FUnknown_query_interface(this as *mut crate::Steinberg::FUnknown, iid)
             }
 
             #[inline]
             unsafe fn add_ref(this: *mut Self) {
-                let ptr = this as *mut FUnknown;
-                ((*(*ptr).vtbl).addRef)(ptr);
+                crate::FUnknown_add_ref(this as *mut crate::Steinberg::FUnknown)
             }
 
             #[inline]
             unsafe fn release(this: *mut Self) {
-                let ptr = this as *mut FUnknown;
-                ((*(*ptr).vtbl).release)(ptr);
+                crate::FUnknown_release(this as *mut crate::Steinberg::FUnknown)
             }
         }
     };
+}
+
+#[inline]
+unsafe fn FUnknown_query_interface(this: *mut FUnknown, iid: &Guid) -> Option<*mut c_void> {
+    let ptr = this as *mut FUnknown;
+    let mut obj = ptr::null_mut();
+    let result = ((*(*ptr).vtbl).queryInterface)(ptr, iid.as_ptr() as *const TUID, &mut obj);
+
+    if result == kResultOk {
+        Some(obj as *mut c_void)
+    } else {
+        None
+    }
+}
+
+#[inline]
+unsafe fn FUnknown_add_ref(this: *mut FUnknown) {
+    let ptr = this as *mut FUnknown;
+    ((*(*ptr).vtbl).addRef)(ptr);
+}
+
+#[inline]
+unsafe fn FUnknown_release(this: *mut FUnknown) {
+    let ptr = this as *mut FUnknown;
+    ((*(*ptr).vtbl).release)(ptr);
 }
 
 const fn tuid_as_guid(tuid: TUID) -> Guid {
