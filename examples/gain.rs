@@ -8,7 +8,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use std::{ptr, slice};
 
-use vst3_bindgen::{uid, ComPtr, Steinberg::Vst::*, Steinberg::*};
+use vst3_bindgen::{uid, ComPtr, ComRef, Steinberg::Vst::*, Steinberg::*};
 
 macro_rules! offset_of {
     ($struct:ty, $field:ident) => {{
@@ -419,11 +419,11 @@ impl GainProcessor {
 
         let process_data = &*data;
 
-        if let Some(param_changes) = ComPtr::from_raw(process_data.inputParameterChanges) {
+        if let Some(param_changes) = ComRef::from_raw(process_data.inputParameterChanges) {
             let param_count = param_changes.getParameterCount();
             for param_index in 0..param_count {
                 if let Some(param_queue) =
-                    ComPtr::from_raw(param_changes.getParameterData(param_index))
+                    ComRef::from_raw(param_changes.getParameterData(param_index))
                 {
                     let param_id = param_queue.getParameterId();
                     let point_count = param_queue.getPointCount();
@@ -880,11 +880,7 @@ impl Factory {
 
         if let Some(instance) = instance {
             let instance = ComPtr::from_raw_unchecked(instance);
-
-            let result = instance.queryInterface(iid as *mut TUID, obj);
-            instance.release();
-
-            result
+            instance.queryInterface(iid as *mut TUID, obj)
         } else {
             kInvalidArgument
         }
