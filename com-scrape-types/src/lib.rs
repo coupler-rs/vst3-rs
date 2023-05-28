@@ -1,4 +1,7 @@
+use std::ffi::c_void;
 use std::ptr::NonNull;
+
+pub type Guid = [u8; 16];
 
 pub unsafe trait Inherits<I> {}
 
@@ -8,13 +11,17 @@ pub trait SmartPtr {
     fn ptr(&self) -> *mut Self::Target;
 }
 
-pub trait Interface {}
+pub trait Interface {
+    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void>;
+    unsafe fn add_ref(this: *mut Self);
+    unsafe fn release(this: *mut Self);
+}
 
-pub struct ComPtr<I> {
+pub struct ComPtr<I: Interface> {
     ptr: NonNull<I>,
 }
 
-impl<I> SmartPtr for ComPtr<I> {
+impl<I: Interface> SmartPtr for ComPtr<I> {
     type Target = I;
 
     fn ptr(&self) -> *mut I {
