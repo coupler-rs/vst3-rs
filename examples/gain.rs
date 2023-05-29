@@ -2,6 +2,7 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
+use std::cell::Cell;
 use std::ffi::{c_char, c_void, CString};
 use std::str::FromStr;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -528,7 +529,7 @@ impl GainProcessor {
 #[repr(C)]
 struct GainController {
     edit_controller: IEditController,
-    gain: f64,
+    gain: Cell<f64>,
 }
 
 impl GainController {
@@ -562,7 +563,7 @@ impl GainController {
                     createView: GainController::createView,
                 },
             },
-            gain: 1.0,
+            gain: Cell::new(1.0),
         }))
     }
 
@@ -753,7 +754,7 @@ impl GainController {
         let controller = &*((this as *mut c_void).offset(-offset_of!(Self, edit_controller))
             as *const GainController);
         match id {
-            0 => controller.gain,
+            0 => controller.gain.get(),
             _ => 0.0,
         }
     }
@@ -767,7 +768,7 @@ impl GainController {
             as *mut GainController);
         match id {
             0 => {
-                controller.gain = value;
+                controller.gain.set(value);
                 kResultOk
             }
             _ => kInvalidArgument,
