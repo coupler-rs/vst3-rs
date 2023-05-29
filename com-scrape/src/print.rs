@@ -21,7 +21,7 @@ impl UnnamedRecordScope {
 
 pub struct RustPrinter<'a, W> {
     sink: W,
-    _options: &'a GeneratorOptions,
+    options: &'a GeneratorOptions,
     reserved: HashSet<&'static str>,
     indent_level: usize,
     unnamed_records: Vec<UnnamedRecordScope>,
@@ -31,7 +31,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
     pub fn new(sink: W, options: &'a GeneratorOptions) -> RustPrinter<'a, W> {
         RustPrinter {
             sink,
-            _options: options,
+            options: options,
             reserved: HashSet::from(["type"]),
             indent_level: 0,
             unnamed_records: Vec::new(),
@@ -192,8 +192,6 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let indent = self.indent();
             let name = &record.name;
 
-            writeln!(self.sink, "{indent}impl_interface!({name}, {name}_iid);")?;
-
             writeln!(
                 self.sink,
                 "{indent}unsafe impl ::com_scrape_types::Inherits<{name}> for {name} {{}}"
@@ -207,6 +205,38 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 )?;
                 bases = &base.bases;
             }
+
+            let iid_generator = self.options.iid_generator.as_ref().ok_or_else(|| {
+                io::Error::new(ErrorKind::Other, "no value provided for iid_generator")
+            })?;
+            let iid_string = iid_generator(name);
+            let query_interface_fn = self.options.query_interface_fn.as_ref().ok_or_else(|| {
+                io::Error::new(ErrorKind::Other, "no value provided for query_interface_fn")
+            })?;
+            let add_ref_fn = self.options.add_ref_fn.as_ref().ok_or_else(|| {
+                io::Error::new(ErrorKind::Other, "no value provided for add_ref_fn")
+            })?;
+            let release_fn = self.options.release_fn.as_ref().ok_or_else(|| {
+                io::Error::new(ErrorKind::Other, "no value provided for release_fn")
+            })?;
+            #[rustfmt::skip]
+            {
+                writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Interface for {name} {{")?;
+                writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {{")?;
+                writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void)")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn add_ref(this: *mut Self) {{")?;
+                writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut c_void)")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn release(this: *mut Self) {{")?;
+                writeln!(self.sink, "{indent}        {release_fn}(this as *mut c_void)")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}}}")?;
+            };
 
             writeln!(self.sink, "{indent}#[repr(C)]")?;
             writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;

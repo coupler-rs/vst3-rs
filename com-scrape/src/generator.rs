@@ -8,19 +8,25 @@ use crate::parse::*;
 use crate::print::*;
 
 pub struct GeneratorOptions {
-    pub skip_types: HashSet<String>,
-    pub skip_interface_traits: HashSet<String>,
     pub include_paths: Vec<PathBuf>,
+    pub skip_types: HashSet<String>,
     pub constant_parser: Option<Box<dyn Fn(&[String]) -> Option<String>>>,
+    pub iid_generator: Option<Box<dyn Fn(&str) -> String>>,
+    pub query_interface_fn: Option<String>,
+    pub add_ref_fn: Option<String>,
+    pub release_fn: Option<String>,
 }
 
 impl Default for GeneratorOptions {
     fn default() -> GeneratorOptions {
         GeneratorOptions {
-            skip_types: HashSet::new(),
-            skip_interface_traits: HashSet::new(),
             include_paths: Vec::new(),
+            skip_types: HashSet::new(),
             constant_parser: None,
+            iid_generator: None,
+            query_interface_fn: None,
+            add_ref_fn: None,
+            release_fn: None,
         }
     }
 }
@@ -36,6 +42,11 @@ impl Generator {
             options: GeneratorOptions::default(),
             source: String::new(),
         }
+    }
+
+    pub fn include_path<T: AsRef<Path>>(mut self, path: T) -> Self {
+        self.options.include_paths.push(path.as_ref().to_path_buf());
+        self
     }
 
     pub fn skip_type<T: AsRef<str>>(mut self, type_: T) -> Self {
@@ -58,8 +69,26 @@ impl Generator {
         self
     }
 
-    pub fn include_path<T: AsRef<Path>>(mut self, path: T) -> Self {
-        self.options.include_paths.push(path.as_ref().to_path_buf());
+    pub fn iid_generator<F>(mut self, f: F) -> Self
+    where
+        F: Fn(&str) -> String + 'static,
+    {
+        self.options.iid_generator = Some(Box::new(f));
+        self
+    }
+
+    pub fn query_interface_fn<T: AsRef<str>>(mut self, f: T) -> Self {
+        self.options.query_interface_fn = Some(f.as_ref().to_string());
+        self
+    }
+
+    pub fn add_ref_fn<T: AsRef<str>>(mut self, f: T) -> Self {
+        self.options.add_ref_fn = Some(f.as_ref().to_string());
+        self
+    }
+
+    pub fn release_fn<T: AsRef<str>>(mut self, f: T) -> Self {
+        self.options.release_fn = Some(f.as_ref().to_string());
         self
     }
 

@@ -2,57 +2,11 @@
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
 
+use std::ffi::c_void;
+
 use Steinberg::{int8, kResultOk, FUnknown, TUID};
 
 pub use com_scrape_types::*;
-
-macro_rules! impl_interface {
-    ($name:ident, $iid:ident) => {
-        unsafe impl ::com_scrape_types::Interface for $name {
-            const IID: ::com_scrape_types::Guid = crate::tuid_as_guid($iid);
-
-            #[inline]
-            unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
-                crate::FUnknown_query_interface(this as *mut crate::Steinberg::FUnknown)
-            }
-
-            #[inline]
-            unsafe fn add_ref(this: *mut Self) {
-                crate::FUnknown_add_ref(this as *mut crate::Steinberg::FUnknown)
-            }
-
-            #[inline]
-            unsafe fn release(this: *mut Self) {
-                crate::FUnknown_release(this as *mut crate::Steinberg::FUnknown)
-            }
-        }
-    };
-}
-
-#[inline]
-unsafe fn FUnknown_query_interface<I: Interface>(this: *mut FUnknown) -> Option<*mut I> {
-    let ptr = this as *mut FUnknown;
-    let mut obj = std::ptr::null_mut();
-    let result = ((*(*ptr).vtbl).queryInterface)(ptr, I::IID.as_ptr() as *const TUID, &mut obj);
-
-    if result == kResultOk {
-        Some(obj as *mut I)
-    } else {
-        None
-    }
-}
-
-#[inline]
-unsafe fn FUnknown_add_ref(this: *mut FUnknown) {
-    let ptr = this as *mut FUnknown;
-    ((*(*ptr).vtbl).addRef)(ptr);
-}
-
-#[inline]
-unsafe fn FUnknown_release(this: *mut FUnknown) {
-    let ptr = this as *mut FUnknown;
-    ((*(*ptr).vtbl).release)(ptr);
-}
 
 const fn tuid_as_guid(tuid: TUID) -> Guid {
     [
@@ -73,6 +27,31 @@ const fn tuid_as_guid(tuid: TUID) -> Guid {
         tuid[14] as u8,
         tuid[15] as u8,
     ]
+}
+
+#[inline]
+unsafe fn FUnknown_query_interface<I: Interface>(this: *mut c_void) -> Option<*mut I> {
+    let ptr = this as *mut FUnknown;
+    let mut obj = std::ptr::null_mut();
+    let result = ((*(*ptr).vtbl).queryInterface)(ptr, I::IID.as_ptr() as *const TUID, &mut obj);
+
+    if result == kResultOk {
+        Some(obj as *mut I)
+    } else {
+        None
+    }
+}
+
+#[inline]
+unsafe fn FUnknown_add_ref(this: *mut c_void) {
+    let ptr = this as *mut FUnknown;
+    ((*(*ptr).vtbl).addRef)(ptr);
+}
+
+#[inline]
+unsafe fn FUnknown_release(this: *mut c_void) {
+    let ptr = this as *mut FUnknown;
+    ((*(*ptr).vtbl).release)(ptr);
 }
 
 #[cfg(target_os = "windows")]

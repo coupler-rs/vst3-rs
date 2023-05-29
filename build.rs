@@ -83,6 +83,10 @@ fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {
             "LARGE_INT",
         ])
         .constant_parser(parse_iid)
+        .iid_generator(|name| format!("crate::tuid_as_guid({name}_iid)"))
+        .query_interface_fn("crate::FUnknown_query_interface")
+        .add_ref_fn("crate::FUnknown_add_ref")
+        .release_fn("crate::FUnknown_release")
         .include_path(&sdk_dir)
         .source(source)
         .generate(sink)?;
