@@ -12,6 +12,8 @@ pub unsafe trait Inherits<I> {}
 pub unsafe trait Interface {
     const IID: Guid;
 
+    fn inherits(iid: &Guid) -> bool;
+
     unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I>;
     unsafe fn add_ref(this: *mut Self);
     unsafe fn release(this: *mut Self);

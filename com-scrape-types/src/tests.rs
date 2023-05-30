@@ -28,6 +28,10 @@ trait IUnknownTrait {
 unsafe impl Interface for IUnknown {
     const IID: Guid = *b"aaaaaaaaaaaaaaaa";
 
+    fn inherits(iid: &Guid) -> bool {
+        iid == &Self::IID
+    }
+
     unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
         let ptr = this as *mut IUnknown;
         let mut obj = ::std::ptr::null_mut();
@@ -92,6 +96,10 @@ trait IMyInterfaceTrait {
 unsafe impl Interface for IMyInterface {
     const IID: Guid = *b"bbbbbbbbbbbbbbbb";
 
+    fn inherits(iid: &Guid) -> bool {
+        iid == &Self::IID || IUnknown::inherits(iid)
+    }
+
     unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
         IUnknown::query_interface::<I>(this as *mut IUnknown)
     }
@@ -133,7 +141,7 @@ impl MyClass {
         iid: *const Guid,
         obj: *mut *mut c_void,
     ) -> c_long {
-        if let IUnknown::IID | IMyInterface::IID = *iid {
+        if IMyInterface::inherits(&*iid) {
             Self::add_ref(this);
             *obj = this as *mut c_void;
             0
@@ -171,6 +179,10 @@ trait IOtherInterfaceTrait {}
 
 unsafe impl Interface for IOtherInterface {
     const IID: Guid = *b"cccccccccccccccc";
+
+    fn inherits(iid: &Guid) -> bool {
+        iid == &Self::IID
+    }
 
     unsafe fn query_interface<I: Interface>(_this: *mut Self) -> Option<*mut I> {
         unimplemented!()

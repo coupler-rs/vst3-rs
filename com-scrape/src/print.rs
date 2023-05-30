@@ -192,6 +192,13 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let indent = self.indent();
             let name = &record.name;
 
+            if record.bases.len() > 1 {
+                return Err(io::Error::new(
+                    ErrorKind::Other,
+                    format!("type {name} has more than one base class"),
+                ));
+            }
+
             writeln!(
                 self.sink,
                 "{indent}unsafe impl ::com_scrape_types::Inherits<{name}> for {name} {{}}"
@@ -224,6 +231,15 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Interface for {name} {{")?;
                 writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
                 writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    fn inherits(iid: &Guid) -> bool {{")?;
+                write!(self.sink, "{indent}        iid == &Self::IID")?;
+                if let Some(base) = bases.first() {
+                    let base_name = &base.name;
+                    write!(self.sink, " || {base_name}::inherits(iid)")?;
+                }
+                writeln!(self.sink, "")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
                 writeln!(self.sink, "{indent}    unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {{")?;
                 writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void)")?;
                 writeln!(self.sink, "{indent}    }}")?;
@@ -242,12 +258,6 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
             writeln!(self.sink, "{indent}pub struct {name}Vtbl {{")?;
 
-            if record.bases.len() > 1 {
-                return Err(io::Error::new(
-                    ErrorKind::Other,
-                    format!("type {name} has more than one base class"),
-                ));
-            }
             if let Some(base) = record.bases.first() {
                 let base_name = &base.name;
                 writeln!(self.sink, "{indent}    pub base: {base_name}Vtbl,")?;
