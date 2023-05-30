@@ -1,5 +1,8 @@
 mod ptr;
 
+#[cfg(test)]
+mod tests;
+
 pub use ptr::{ComPtr, ComRef, SmartPtr};
 
 pub type Guid = [u8; 16];
