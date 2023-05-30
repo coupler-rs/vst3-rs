@@ -107,18 +107,21 @@ unsafe impl Interface for IMyInterface {
 
 #[repr(C)]
 struct MyClass {
-    unknown: IUnknown,
+    my_interface: IMyInterface,
     count: Cell<c_ulong>,
 }
 
 impl MyClass {
     fn new() -> MyClass {
         MyClass {
-            unknown: IUnknown {
-                vtbl: &IUnknownVtbl {
-                    query_interface: Self::query_interface,
-                    add_ref: Self::add_ref,
-                    release: Self::release,
+            my_interface: IMyInterface {
+                vtbl: &IMyInterfaceVtbl {
+                    base: IUnknownVtbl {
+                        query_interface: Self::query_interface,
+                        add_ref: Self::add_ref,
+                        release: Self::release,
+                    },
+                    my_method: Self::my_method,
                 },
             },
             count: Cell::new(1),
@@ -150,6 +153,8 @@ impl MyClass {
         obj.count.set(obj.count.get() - 1);
         obj.count.get()
     }
+
+    unsafe extern "system" fn my_method(_this: *mut IMyInterface) {}
 }
 
 #[repr(C)]
