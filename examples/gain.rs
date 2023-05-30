@@ -881,7 +881,8 @@ impl Factory {
 
         if let Some(instance) = instance {
             let instance = ComPtr::from_raw_unchecked(instance);
-            instance.queryInterface(iid as *mut TUID, obj)
+            let ptr = instance.as_mut_ptr();
+            ((*(*ptr).vtbl).queryInterface)(ptr, iid as *mut TUID, obj)
         } else {
             kInvalidArgument
         }

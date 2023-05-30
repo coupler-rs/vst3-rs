@@ -10,6 +10,7 @@ use crate::print::*;
 pub struct GeneratorOptions {
     pub include_paths: Vec<PathBuf>,
     pub skip_types: HashSet<String>,
+    pub skip_interface_traits: HashSet<String>,
     pub constant_parser: Option<Box<dyn Fn(&[String]) -> Option<String>>>,
     pub iid_generator: Option<Box<dyn Fn(&str) -> String>>,
     pub query_interface_fn: Option<String>,
@@ -22,6 +23,7 @@ impl Default for GeneratorOptions {
         GeneratorOptions {
             include_paths: Vec::new(),
             skip_types: HashSet::new(),
+            skip_interface_traits: HashSet::new(),
             constant_parser: None,
             iid_generator: None,
             query_interface_fn: None,
@@ -58,6 +60,20 @@ impl Generator {
         self.options
             .skip_types
             .extend(types.as_ref().iter().map(|s| s.to_string()));
+        self
+    }
+
+    pub fn skip_interface_trait<T: AsRef<str>>(mut self, interface: T) -> Self {
+        self.options
+            .skip_interface_traits
+            .insert(interface.as_ref().to_string());
+        self
+    }
+
+    pub fn skip_interface_traits<'a, T: AsRef<[&'a str]>>(mut self, interfaces: T) -> Self {
+        self.options
+            .skip_interface_traits
+            .extend(interfaces.as_ref().iter().map(|s| s.to_string()));
         self
     }
 

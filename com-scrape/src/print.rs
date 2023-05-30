@@ -277,95 +277,104 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}}}")?;
 
-            write!(self.sink, "{indent}pub trait {name}Trait")?;
-            if let Some(base) = record.bases.first() {
-                let base_name = &base.name;
-                write!(self.sink, ": {base_name}Trait")?;
-            }
-            writeln!(self.sink, " {{")?;
-
-            for method in &record.virtual_methods {
-                let method_name = &method.name;
-
-                writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
-                writeln!(self.sink, "{indent}        &self,")?;
-
-                self.indent_level += 2;
-                self.print_args(method)?;
-                self.indent_level -= 2;
-
-                write!(self.sink, "{indent}    )")?;
-                if let Type::Void = method.result_type {
-                } else {
-                    write!(self.sink, " -> ")?;
-                    self.print_type(&method.result_type)?;
-                }
-                writeln!(self.sink, ";")?;
-            }
-
-            writeln!(self.sink, "{indent}}}")?;
-
-            writeln!(self.sink, "{indent}impl<P> {name}Trait for P")?;
-            writeln!(self.sink, "{indent}where")?;
-            writeln!(self.sink, "{indent}    P: ::com_scrape_types::SmartPtr,")?;
-            writeln!(
-                self.sink,
-                "{indent}    P::Target: ::com_scrape_types::Inherits<{name}>,"
-            )?;
-            let mut bases = &record.bases;
-            while let Some(base) = bases.first() {
-                let base_name = &base.name;
-                writeln!(
-                    self.sink,
-                    "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,"
-                )?;
-                bases = &base.bases;
-            }
-            writeln!(self.sink, "{indent}{{")?;
-
-            for method in &record.virtual_methods {
-                let method_name = &method.name;
-
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
-                writeln!(self.sink, "{indent}        &self,")?;
-
-                self.indent_level += 2;
-                self.print_args(method)?;
-                self.indent_level -= 2;
-
-                write!(self.sink, "{indent}    )")?;
-                if let Type::Void = method.result_type {
-                } else {
-                    write!(self.sink, " -> ")?;
-                    self.print_type(&method.result_type)?;
+            if !self.options.skip_interface_traits.contains(&record.name) {
+                write!(self.sink, "{indent}pub trait {name}Trait")?;
+                let mut bases = &record.bases;
+                while let Some(base) = bases.first() {
+                    if !self.options.skip_interface_traits.contains(&base.name) {
+                        let base_name = &base.name;
+                        write!(self.sink, ": {base_name}Trait")?;
+                        break;
+                    }
+                    bases = &base.bases;
                 }
                 writeln!(self.sink, " {{")?;
-                writeln!(
-                    self.sink,
-                    "{indent}        let ptr = self.ptr() as *mut {name};"
-                )?;
-                writeln!(self.sink, "{indent}        ((*(*ptr).vtbl).{method_name})(")?;
-                writeln!(self.sink, "{indent}            ptr,")?;
 
-                let mut unnamed_counter = 0;
-                for arg in &method.arguments {
-                    let arg_name = &arg.name;
-                    if arg.name.is_empty() {
-                        writeln!(self.sink, "{indent}            _{unnamed_counter},")?;
-                        unnamed_counter += 1;
-                    } else if self.reserved.contains(&*arg.name) {
-                        writeln!(self.sink, "{indent}            r#{arg_name},")?;
+                for method in &record.virtual_methods {
+                    let method_name = &method.name;
+
+                    writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
+                    writeln!(self.sink, "{indent}        &self,")?;
+
+                    self.indent_level += 2;
+                    self.print_args(method)?;
+                    self.indent_level -= 2;
+
+                    write!(self.sink, "{indent}    )")?;
+                    if let Type::Void = method.result_type {
                     } else {
-                        writeln!(self.sink, "{indent}            {arg_name},")?;
+                        write!(self.sink, " -> ")?;
+                        self.print_type(&method.result_type)?;
                     }
+                    writeln!(self.sink, ";")?;
                 }
 
-                writeln!(self.sink, "{indent}        )")?;
-                writeln!(self.sink, "{indent}    }}")?;
-            }
+                writeln!(self.sink, "{indent}}}")?;
 
-            writeln!(self.sink, "{indent}}}")?;
+                writeln!(self.sink, "{indent}impl<P> {name}Trait for P")?;
+                writeln!(self.sink, "{indent}where")?;
+                writeln!(self.sink, "{indent}    P: ::com_scrape_types::SmartPtr,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}    P::Target: ::com_scrape_types::Inherits<{name}>,"
+                )?;
+                let mut bases = &record.bases;
+                while let Some(base) = bases.first() {
+                    if !self.options.skip_interface_traits.contains(&base.name) {
+                        let base_name = &base.name;
+                        writeln!(
+                            self.sink,
+                            "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,"
+                        )?;
+                    }
+                    bases = &base.bases;
+                }
+                writeln!(self.sink, "{indent}{{")?;
+
+                for method in &record.virtual_methods {
+                    let method_name = &method.name;
+
+                    writeln!(self.sink, "{indent}    #[inline]")?;
+                    writeln!(self.sink, "{indent}    unsafe fn {method_name}(")?;
+                    writeln!(self.sink, "{indent}        &self,")?;
+
+                    self.indent_level += 2;
+                    self.print_args(method)?;
+                    self.indent_level -= 2;
+
+                    write!(self.sink, "{indent}    )")?;
+                    if let Type::Void = method.result_type {
+                    } else {
+                        write!(self.sink, " -> ")?;
+                        self.print_type(&method.result_type)?;
+                    }
+                    writeln!(self.sink, " {{")?;
+                    writeln!(
+                        self.sink,
+                        "{indent}        let ptr = self.ptr() as *mut {name};"
+                    )?;
+                    writeln!(self.sink, "{indent}        ((*(*ptr).vtbl).{method_name})(")?;
+                    writeln!(self.sink, "{indent}            ptr,")?;
+
+                    let mut unnamed_counter = 0;
+                    for arg in &method.arguments {
+                        let arg_name = &arg.name;
+                        if arg.name.is_empty() {
+                            writeln!(self.sink, "{indent}            _{unnamed_counter},")?;
+                            unnamed_counter += 1;
+                        } else if self.reserved.contains(&*arg.name) {
+                            writeln!(self.sink, "{indent}            r#{arg_name},")?;
+                        } else {
+                            writeln!(self.sink, "{indent}            {arg_name},")?;
+                        }
+                    }
+
+                    writeln!(self.sink, "{indent}        )")?;
+                    writeln!(self.sink, "{indent}    }}")?;
+                }
+
+                writeln!(self.sink, "{indent}}}")?;
+            }
         }
 
         Ok(())

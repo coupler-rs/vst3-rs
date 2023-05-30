@@ -82,6 +82,7 @@ fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {
             "FReleaser",
             "LARGE_INT",
         ])
+        .skip_interface_trait("FUnknown")
         .constant_parser(parse_iid)
         .iid_generator(|name| format!("crate::tuid_as_guid({name}_iid)"))
         .query_interface_fn("crate::FUnknown_query_interface")
