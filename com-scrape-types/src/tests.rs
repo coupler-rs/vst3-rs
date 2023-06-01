@@ -1,7 +1,7 @@
 use std::cell::Cell;
 use std::ffi::{c_long, c_ulong, c_void};
 
-use crate::{ComPtr, ComRef, Guid, Inherits, Interface, SmartPtr};
+use crate::{ComPtr, ComRef, Guid, Inherits, Interface};
 
 #[repr(C)]
 struct IUnknown {
@@ -17,12 +17,6 @@ struct IUnknownVtbl {
     ) -> c_long,
     add_ref: unsafe extern "system" fn(this: *mut IUnknown) -> c_ulong,
     release: unsafe extern "system" fn(this: *mut IUnknown) -> c_ulong,
-}
-
-trait IUnknownTrait {
-    unsafe fn query_interface(&self, iid: *const Guid, obj: *mut *mut c_void) -> c_long;
-    unsafe fn add_ref(&self) -> c_ulong;
-    unsafe fn release(&self) -> c_ulong;
 }
 
 unsafe impl Interface for IUnknown {
@@ -56,27 +50,6 @@ unsafe impl Interface for IUnknown {
 }
 
 unsafe impl Inherits<IUnknown> for IUnknown {}
-
-impl<P> IUnknownTrait for P
-where
-    P: SmartPtr,
-    P::Target: Inherits<IUnknown>,
-{
-    unsafe fn query_interface(&self, iid: *const Guid, obj: *mut *mut c_void) -> c_long {
-        let ptr = self.ptr() as *mut IUnknown;
-        ((*(*ptr).vtbl).query_interface)(ptr, iid, obj)
-    }
-
-    unsafe fn add_ref(&self) -> c_ulong {
-        let ptr = self.ptr() as *mut IUnknown;
-        ((*(*ptr).vtbl).add_ref)(ptr)
-    }
-
-    unsafe fn release(&self) -> c_ulong {
-        let ptr = self.ptr() as *mut IUnknown;
-        ((*(*ptr).vtbl).release)(ptr)
-    }
-}
 
 #[repr(C)]
 struct IMyInterface {
