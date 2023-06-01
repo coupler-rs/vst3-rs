@@ -1,7 +1,8 @@
 use std::cell::Cell;
 use std::ffi::{c_long, c_ulong, c_void};
+use std::ptr;
 
-use crate::{ComPtr, ComRef, Guid, Inherits, Interface};
+use crate::{ComPtr, ComRef, Guid, Inherits, Interface, Unknown};
 
 #[repr(C)]
 struct IUnknown {
@@ -19,33 +20,32 @@ struct IUnknownVtbl {
     release: unsafe extern "system" fn(this: *mut IUnknown) -> c_ulong,
 }
 
-unsafe impl Interface for IUnknown {
-    const IID: Guid = *b"aaaaaaaaaaaaaaaa";
-
-    fn inherits(iid: &Guid) -> bool {
-        iid == &Self::IID
-    }
-
-    unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
-        let ptr = this as *mut IUnknown;
-        let mut obj = ::std::ptr::null_mut();
-        let result = ((*(*ptr).vtbl).query_interface)(ptr, &I::IID, &mut obj);
+impl Unknown for IUnknown {
+    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
+        let mut obj = ptr::null_mut();
+        let result = ((*(*this).vtbl).query_interface)(this, iid, &mut obj);
 
         if result == 0 {
-            Some(obj as *mut I)
+            Some(obj)
         } else {
             None
         }
     }
 
-    unsafe fn add_ref(this: *mut Self) {
-        let ptr = this as *mut IUnknown;
-        ((*(*ptr).vtbl).add_ref)(ptr);
+    unsafe fn add_ref(this: *mut Self) -> usize {
+        ((*(*this).vtbl).add_ref)(this) as usize
     }
 
-    unsafe fn release(this: *mut Self) {
-        let ptr = this as *mut IUnknown;
-        ((*(*ptr).vtbl).release)(ptr);
+    unsafe fn release(this: *mut Self) -> usize {
+        ((*(*this).vtbl).release)(this) as usize
+    }
+}
+
+unsafe impl Interface for IUnknown {
+    const IID: Guid = *b"aaaaaaaaaaaaaaaa";
+
+    fn inherits(iid: &Guid) -> bool {
+        iid == &Self::IID
     }
 }
 
@@ -66,23 +66,25 @@ trait IMyInterfaceTrait {
     unsafe fn my_method(&self);
 }
 
+impl Unknown for IMyInterface {
+    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
+        IUnknown::query_interface(this as *mut IUnknown, iid)
+    }
+
+    unsafe fn add_ref(this: *mut Self) -> usize {
+        IUnknown::add_ref(this as *mut IUnknown) as usize
+    }
+
+    unsafe fn release(this: *mut Self) -> usize {
+        IUnknown::release(this as *mut IUnknown) as usize
+    }
+}
+
 unsafe impl Interface for IMyInterface {
     const IID: Guid = *b"bbbbbbbbbbbbbbbb";
 
     fn inherits(iid: &Guid) -> bool {
         iid == &Self::IID || IUnknown::inherits(iid)
-    }
-
-    unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {
-        IUnknown::query_interface::<I>(this as *mut IUnknown)
-    }
-
-    unsafe fn add_ref(this: *mut Self) {
-        IUnknown::add_ref(this as *mut IUnknown)
-    }
-
-    unsafe fn release(this: *mut Self) {
-        IUnknown::release(this as *mut IUnknown)
     }
 }
 
@@ -150,23 +152,25 @@ struct IOtherInterfaceVtbl {
 
 trait IOtherInterfaceTrait {}
 
+impl Unknown for IOtherInterface {
+    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
+        IUnknown::query_interface(this as *mut IUnknown, iid)
+    }
+
+    unsafe fn add_ref(this: *mut Self) -> usize {
+        IUnknown::add_ref(this as *mut IUnknown) as usize
+    }
+
+    unsafe fn release(this: *mut Self) -> usize {
+        IUnknown::release(this as *mut IUnknown) as usize
+    }
+}
+
 unsafe impl Interface for IOtherInterface {
     const IID: Guid = *b"cccccccccccccccc";
 
     fn inherits(iid: &Guid) -> bool {
         iid == &Self::IID
-    }
-
-    unsafe fn query_interface<I: Interface>(_this: *mut Self) -> Option<*mut I> {
-        unimplemented!()
-    }
-
-    unsafe fn add_ref(_this: *mut Self) {
-        unimplemented!()
-    }
-
-    unsafe fn release(_this: *mut Self) {
-        unimplemented!()
     }
 }
 

@@ -79,7 +79,13 @@ impl<'a, I: Interface> ComRef<'a, I> {
 
     #[inline]
     pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
-        unsafe { I::query_interface::<J>(self.as_mut_ptr()).and_then(|ptr| ComPtr::from_raw(ptr)) }
+        unsafe {
+            if let Some(ptr) = I::query_interface(self.as_mut_ptr(), &J::IID) {
+                ComPtr::from_raw(ptr as *mut J)
+            } else {
+                None
+            }
+        }
     }
 }
 
@@ -153,6 +159,12 @@ impl<I: Interface> ComPtr<I> {
 
     #[inline]
     pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
-        unsafe { I::query_interface::<J>(self.as_mut_ptr()).and_then(|ptr| ComPtr::from_raw(ptr)) }
+        unsafe {
+            if let Some(ptr) = I::query_interface(self.as_mut_ptr(), &J::IID) {
+                ComPtr::from_raw(ptr as *mut J)
+            } else {
+                None
+            }
+        }
     }
 }

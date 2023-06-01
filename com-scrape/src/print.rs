@@ -228,6 +228,21 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             })?;
             #[rustfmt::skip]
             {
+                writeln!(self.sink, "{indent}impl ::com_scrape_types::Unknown for {name} {{")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {{")?;
+                writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void, iid)")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn add_ref(this: *mut Self) -> usize {{")?;
+                writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut c_void)")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}    #[inline]")?;
+                writeln!(self.sink, "{indent}    unsafe fn release(this: *mut Self) -> usize {{")?;
+                writeln!(self.sink, "{indent}        {release_fn}(this as *mut c_void)")?;
+                writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}}}")?;
+
                 writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Interface for {name} {{")?;
                 writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
                 writeln!(self.sink, "{indent}    #[inline]")?;
@@ -238,18 +253,6 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     write!(self.sink, " || {base_name}::inherits(iid)")?;
                 }
                 writeln!(self.sink, "")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn query_interface<I: Interface>(this: *mut Self) -> Option<*mut I> {{")?;
-                writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void)")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn add_ref(this: *mut Self) {{")?;
-                writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut c_void)")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn release(this: *mut Self) {{")?;
-                writeln!(self.sink, "{indent}        {release_fn}(this as *mut c_void)")?;
                 writeln!(self.sink, "{indent}    }}")?;
                 writeln!(self.sink, "{indent}}}")?;
             };

@@ -30,28 +30,28 @@ const fn tuid_as_guid(tuid: TUID) -> Guid {
 }
 
 #[inline]
-unsafe fn FUnknown_query_interface<I: Interface>(this: *mut c_void) -> Option<*mut I> {
+unsafe fn FUnknown_query_interface(this: *mut c_void, iid: &Guid) -> Option<*mut c_void> {
     let ptr = this as *mut FUnknown;
     let mut obj = std::ptr::null_mut();
-    let result = ((*(*ptr).vtbl).queryInterface)(ptr, I::IID.as_ptr() as *const TUID, &mut obj);
+    let result = ((*(*ptr).vtbl).queryInterface)(ptr, iid.as_ptr() as *const TUID, &mut obj);
 
     if result == kResultOk {
-        Some(obj as *mut I)
+        Some(obj)
     } else {
         None
     }
 }
 
 #[inline]
-unsafe fn FUnknown_add_ref(this: *mut c_void) {
+unsafe fn FUnknown_add_ref(this: *mut c_void) -> usize {
     let ptr = this as *mut FUnknown;
-    ((*(*ptr).vtbl).addRef)(ptr);
+    ((*(*ptr).vtbl).addRef)(ptr) as usize
 }
 
 #[inline]
-unsafe fn FUnknown_release(this: *mut c_void) {
+unsafe fn FUnknown_release(this: *mut c_void) -> usize {
     let ptr = this as *mut FUnknown;
-    ((*(*ptr).vtbl).release)(ptr);
+    ((*(*ptr).vtbl).release)(ptr) as usize
 }
 
 #[cfg(target_os = "windows")]
