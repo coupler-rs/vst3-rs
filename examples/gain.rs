@@ -6,20 +6,9 @@ use std::cell::Cell;
 use std::ffi::{c_char, c_void, CString};
 use std::str::FromStr;
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::sync::Arc;
 use std::{ptr, slice};
 
-use vst3_bindgen::{uid, ComPtr, ComRef, Steinberg::Vst::*, Steinberg::*};
-
-macro_rules! offset_of {
-    ($struct:ty, $field:ident) => {{
-        let dummy = std::mem::MaybeUninit::<$struct>::uninit();
-        let base = dummy.as_ptr();
-        let field = std::ptr::addr_of!((*base).$field);
-
-        (field as *const c_void).offset_from(base as *const c_void)
-    }};
-}
+use vst3_bindgen::{impl_class, uid, ComRef, ComWrapper, Steinberg::Vst::*, Steinberg::*};
 
 fn copy_cstring(src: &str, dst: &mut [c_char]) {
     let c_string = CString::new(src).unwrap_or_else(|_| CString::default());
@@ -62,173 +51,43 @@ unsafe fn len_wstring(string: *const TChar) -> usize {
 
 const PLUGIN_NAME: &'static str = "Gain (vst3-bindgen example plugin)";
 
-#[repr(C)]
 struct GainProcessor {
-    component: IComponent,
-    audio_processor: IAudioProcessor,
-    process_context_requirements: IProcessContextRequirements,
     gain: AtomicU64,
 }
+
+impl_class!(GainProcessor: IComponent + IAudioProcessor + IProcessContextRequirements);
 
 impl GainProcessor {
     const CID: TUID = uid(0x6E332252, 0x54224A00, 0xAA69301A, 0xF318797D);
 
-    fn createInstance() -> *const GainProcessor {
-        Arc::into_raw(Arc::new(GainProcessor {
-            component: IComponent {
-                vtbl: &IComponentVtbl {
-                    base: IPluginBaseVtbl {
-                        base: FUnknownVtbl {
-                            queryInterface: GainProcessor::component_queryInterface,
-                            addRef: GainProcessor::component_addRef,
-                            release: GainProcessor::component_release,
-                        },
-                        initialize: GainProcessor::component_initialize,
-                        terminate: GainProcessor::component_terminate,
-                    },
-                    getControllerClassId: GainProcessor::getControllerClassId,
-                    setIoMode: GainProcessor::setIoMode,
-                    getBusCount: GainProcessor::getBusCount,
-                    getBusInfo: GainProcessor::getBusInfo,
-                    getRoutingInfo: GainProcessor::getRoutingInfo,
-                    activateBus: GainProcessor::activateBus,
-                    setActive: GainProcessor::setActive,
-                    setState: GainProcessor::setState,
-                    getState: GainProcessor::getState,
-                },
-            },
-            audio_processor: IAudioProcessor {
-                vtbl: &IAudioProcessorVtbl {
-                    base: FUnknownVtbl {
-                        queryInterface: GainProcessor::audio_processor_queryInterface,
-                        addRef: GainProcessor::audio_processor_addRef,
-                        release: GainProcessor::audio_processor_release,
-                    },
-                    setBusArrangements: GainProcessor::setBusArrangements,
-                    getBusArrangement: GainProcessor::getBusArrangement,
-                    canProcessSampleSize: GainProcessor::canProcessSampleSize,
-                    getLatencySamples: GainProcessor::getLatencySamples,
-                    setupProcessing: GainProcessor::setupProcessing,
-                    setProcessing: GainProcessor::setProcessing,
-                    process: GainProcessor::process,
-                    getTailSamples: GainProcessor::getTailSamples,
-                },
-            },
-            process_context_requirements: IProcessContextRequirements {
-                vtbl: &IProcessContextRequirementsVtbl {
-                    base: FUnknownVtbl {
-                        queryInterface: GainProcessor::process_context_requirements_queryInterface,
-                        addRef: GainProcessor::process_context_requirements_addRef,
-                        release: GainProcessor::process_context_requirements_release,
-                    },
-                    getProcessContextRequirements: GainProcessor::getProcessContextRequirements,
-                },
-            },
+    fn new() -> GainProcessor {
+        GainProcessor {
             gain: AtomicU64::new(1.0f64.to_bits()),
-        }))
-    }
-
-    unsafe fn queryInterface(
-        this: *mut GainProcessor,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        let iid = *iid;
-
-        if iid == FUnknown_iid || iid == IPluginBase_iid || iid == IComponent_iid {
-            Self::addRef(this);
-            *obj = (this as *mut c_void).offset(offset_of!(Self, component)) as *mut c_void;
-            return kResultOk;
         }
-
-        if iid == IAudioProcessor_iid {
-            Self::addRef(this);
-            *obj = (this as *mut c_void).offset(offset_of!(Self, audio_processor)) as *mut c_void;
-            return kResultOk;
-        }
-
-        if iid == IProcessContextRequirements_iid {
-            Self::addRef(this);
-            *obj = (this as *mut c_void).offset(offset_of!(Self, process_context_requirements))
-                as *mut c_void;
-            return kResultOk;
-        }
-
-        kNoInterface
     }
+}
 
-    unsafe fn addRef(this: *mut GainProcessor) -> u32 {
-        let arc = Arc::from_raw(this);
-        let result = Arc::strong_count(&arc) + 1;
-        let _ = Arc::into_raw(arc);
-
-        Arc::increment_strong_count(this);
-
-        result as u32
-    }
-
-    unsafe fn release(this: *mut GainProcessor) -> u32 {
-        let arc = Arc::from_raw(this);
-        let result = Arc::strong_count(&arc) - 1;
-        let _ = Arc::into_raw(arc);
-
-        Arc::decrement_strong_count(this);
-
-        result as u32
-    }
-
-    unsafe extern "system" fn component_queryInterface(
-        this: *mut FUnknown,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        Self::queryInterface(
-            (this as *mut c_void).offset(-offset_of!(Self, component)) as *mut GainProcessor,
-            iid,
-            obj,
-        )
-    }
-
-    unsafe extern "system" fn component_addRef(this: *mut FUnknown) -> u32 {
-        Self::addRef(
-            (this as *mut c_void).offset(-offset_of!(Self, component)) as *mut GainProcessor
-        )
-    }
-
-    unsafe extern "system" fn component_release(this: *mut FUnknown) -> u32 {
-        Self::release(
-            (this as *mut c_void).offset(-offset_of!(Self, component)) as *mut GainProcessor
-        )
-    }
-
-    unsafe extern "system" fn component_initialize(
-        _this: *mut IPluginBase,
-        _context: *mut FUnknown,
-    ) -> tresult {
+impl IPluginBaseTrait for GainProcessor {
+    unsafe fn initialize(&self, _context: *mut FUnknown) -> tresult {
         kResultOk
     }
 
-    unsafe extern "system" fn component_terminate(_this: *mut IPluginBase) -> tresult {
+    unsafe fn terminate(&self) -> tresult {
         kResultOk
     }
+}
 
-    unsafe extern "system" fn getControllerClassId(
-        _this: *mut IComponent,
-        class_id: *mut TUID,
-    ) -> tresult {
+impl IComponentTrait for GainProcessor {
+    unsafe fn getControllerClassId(&self, class_id: *mut TUID) -> tresult {
         *class_id = GainController::CID;
         kResultOk
     }
 
-    unsafe extern "system" fn setIoMode(_this: *mut IComponent, _mode: IoMode) -> tresult {
+    unsafe fn setIoMode(&self, _mode: IoMode) -> tresult {
         kResultOk
     }
 
-    unsafe extern "system" fn getBusCount(
-        _this: *mut IComponent,
-        mediaType: MediaType,
-        dir: BusDirection,
-    ) -> i32 {
+    unsafe fn getBusCount(&self, mediaType: MediaType, dir: BusDirection) -> i32 {
         match mediaType as BusDirections {
             MediaTypes_::kAudio => match dir as BusDirections {
                 BusDirections_::kInput => 1,
@@ -240,8 +99,8 @@ impl GainProcessor {
         }
     }
 
-    unsafe extern "system" fn getBusInfo(
-        _this: *mut IComponent,
+    unsafe fn getBusInfo(
+        &self,
         mediaType: MediaType,
         dir: BusDirection,
         index: i32,
@@ -286,16 +145,16 @@ impl GainProcessor {
         }
     }
 
-    unsafe extern "system" fn getRoutingInfo(
-        _this: *mut IComponent,
+    unsafe fn getRoutingInfo(
+        &self,
         _in_info: *mut RoutingInfo,
         _out_info: *mut RoutingInfo,
     ) -> tresult {
         kNotImplemented
     }
 
-    unsafe extern "system" fn activateBus(
-        _this: *mut IComponent,
+    unsafe fn activateBus(
+        &self,
         _media_type: MediaType,
         _dir: BusDirection,
         _index: i32,
@@ -304,44 +163,22 @@ impl GainProcessor {
         kResultOk
     }
 
-    unsafe extern "system" fn setActive(_this: *mut IComponent, _state: TBool) -> tresult {
+    unsafe fn setActive(&self, _state: TBool) -> tresult {
         kResultOk
     }
 
-    unsafe extern "system" fn setState(_this: *mut IComponent, _state: *mut IBStream) -> tresult {
+    unsafe fn setState(&self, _state: *mut IBStream) -> tresult {
         kResultOk
     }
 
-    unsafe extern "system" fn getState(_this: *mut IComponent, _state: *mut IBStream) -> tresult {
+    unsafe fn getState(&self, _state: *mut IBStream) -> tresult {
         kResultOk
     }
+}
 
-    unsafe extern "system" fn audio_processor_queryInterface(
-        this: *mut FUnknown,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        Self::queryInterface(
-            (this as *mut c_void).offset(-offset_of!(Self, audio_processor)) as *mut GainProcessor,
-            iid,
-            obj,
-        )
-    }
-
-    unsafe extern "system" fn audio_processor_addRef(this: *mut FUnknown) -> u32 {
-        Self::addRef(
-            (this as *mut c_void).offset(-offset_of!(Self, audio_processor)) as *mut GainProcessor,
-        )
-    }
-
-    unsafe extern "system" fn audio_processor_release(this: *mut FUnknown) -> u32 {
-        Self::release(
-            (this as *mut c_void).offset(-offset_of!(Self, audio_processor)) as *mut GainProcessor,
-        )
-    }
-
-    unsafe extern "system" fn setBusArrangements(
-        _this: *mut IAudioProcessor,
+impl IAudioProcessorTrait for GainProcessor {
+    unsafe fn setBusArrangements(
+        &self,
         inputs: *mut SpeakerArrangement,
         num_ins: i32,
         outputs: *mut SpeakerArrangement,
@@ -358,8 +195,8 @@ impl GainProcessor {
         kResultTrue
     }
 
-    unsafe extern "system" fn getBusArrangement(
-        _this: *mut IAudioProcessor,
+    unsafe fn getBusArrangement(
+        &self,
         dir: BusDirection,
         index: i32,
         arr: *mut SpeakerArrangement,
@@ -385,10 +222,7 @@ impl GainProcessor {
         }
     }
 
-    unsafe extern "system" fn canProcessSampleSize(
-        _this: *mut IAudioProcessor,
-        symbolic_sample_size: i32,
-    ) -> tresult {
+    unsafe fn canProcessSampleSize(&self, symbolic_sample_size: i32) -> tresult {
         match symbolic_sample_size as SymbolicSampleSizes {
             SymbolicSampleSizes_::kSample32 => kResultOk as i32,
             SymbolicSampleSizes_::kSample64 => kNotImplemented as i32,
@@ -396,28 +230,19 @@ impl GainProcessor {
         }
     }
 
-    unsafe extern "system" fn getLatencySamples(_this: *mut IAudioProcessor) -> u32 {
+    unsafe fn getLatencySamples(&self) -> u32 {
         0
     }
 
-    unsafe extern "system" fn setupProcessing(
-        _this: *mut IAudioProcessor,
-        _setup: *mut ProcessSetup,
-    ) -> tresult {
+    unsafe fn setupProcessing(&self, _setup: *mut ProcessSetup) -> tresult {
         kResultOk
     }
 
-    unsafe extern "system" fn setProcessing(_this: *mut IAudioProcessor, _state: TBool) -> tresult {
+    unsafe fn setProcessing(&self, _state: TBool) -> tresult {
         kResultOk
     }
 
-    unsafe extern "system" fn process(
-        this: *mut IAudioProcessor,
-        data: *mut ProcessData,
-    ) -> tresult {
-        let processor = &mut *((this as *mut c_void).offset(-offset_of!(Self, audio_processor))
-            as *mut GainProcessor);
-
+    unsafe fn process(&self, data: *mut ProcessData) -> tresult {
         let process_data = &*data;
 
         if let Some(param_changes) = ComRef::from_raw(process_data.inputParameterChanges) {
@@ -440,7 +265,7 @@ impl GainProcessor {
                             );
 
                             if result == kResultTrue {
-                                processor.gain.store(value.to_bits(), Ordering::Relaxed);
+                                self.gain.store(value.to_bits(), Ordering::Relaxed);
                             }
                         }
                         _ => {}
@@ -449,7 +274,7 @@ impl GainProcessor {
             }
         }
 
-        let gain = f64::from_bits(processor.gain.load(Ordering::Relaxed)) as f32;
+        let gain = f64::from_bits(self.gain.load(Ordering::Relaxed)) as f32;
 
         let num_samples = process_data.numSamples as usize;
 
@@ -488,186 +313,61 @@ impl GainProcessor {
         kResultOk
     }
 
-    unsafe extern "system" fn getTailSamples(_this: *mut IAudioProcessor) -> u32 {
-        0
-    }
-
-    pub unsafe extern "system" fn process_context_requirements_queryInterface(
-        this: *mut FUnknown,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        Self::queryInterface(
-            (this as *mut c_void).offset(-offset_of!(Self, process_context_requirements))
-                as *mut GainProcessor,
-            iid,
-            obj,
-        )
-    }
-
-    pub unsafe extern "system" fn process_context_requirements_addRef(this: *mut FUnknown) -> u32 {
-        Self::addRef(
-            (this as *mut c_void).offset(-offset_of!(Self, process_context_requirements))
-                as *mut GainProcessor,
-        )
-    }
-
-    pub unsafe extern "system" fn process_context_requirements_release(this: *mut FUnknown) -> u32 {
-        Self::release(
-            (this as *mut c_void).offset(-offset_of!(Self, process_context_requirements))
-                as *mut GainProcessor,
-        )
-    }
-
-    pub unsafe extern "system" fn getProcessContextRequirements(
-        _this: *mut IProcessContextRequirements,
-    ) -> u32 {
+    unsafe fn getTailSamples(&self) -> u32 {
         0
     }
 }
 
-#[repr(C)]
+impl IProcessContextRequirementsTrait for GainProcessor {
+    unsafe fn getProcessContextRequirements(&self) -> u32 {
+        0
+    }
+}
+
 struct GainController {
-    edit_controller: IEditController,
     gain: Cell<f64>,
 }
+
+impl_class!(GainController: IEditController);
 
 impl GainController {
     const CID: TUID = uid(0x1BA8A477, 0xEE0A4A2D, 0x80F50D14, 0x13D2EAA0);
 
-    fn createInstance() -> *const GainController {
-        Arc::into_raw(Arc::new(GainController {
-            edit_controller: IEditController {
-                vtbl: &IEditControllerVtbl {
-                    base: IPluginBaseVtbl {
-                        base: FUnknownVtbl {
-                            queryInterface: GainController::edit_controller_queryInterface,
-                            addRef: GainController::edit_controller_addRef,
-                            release: GainController::edit_controller_release,
-                        },
-                        initialize: GainController::edit_controller_initialize,
-                        terminate: GainController::edit_controller_terminate,
-                    },
-                    setComponentState: GainController::setComponentState,
-                    setState: GainController::edit_controller_setState,
-                    getState: GainController::edit_controller_getState,
-                    getParameterCount: GainController::getParameterCount,
-                    getParameterInfo: GainController::getParameterInfo,
-                    getParamStringByValue: GainController::getParamStringByValue,
-                    getParamValueByString: GainController::getParamValueByString,
-                    normalizedParamToPlain: GainController::normalizedParamToPlain,
-                    plainParamToNormalized: GainController::plainParamToNormalized,
-                    getParamNormalized: GainController::getParamNormalized,
-                    setParamNormalized: GainController::setParamNormalized,
-                    setComponentHandler: GainController::setComponentHandler,
-                    createView: GainController::createView,
-                },
-            },
+    fn new() -> GainController {
+        GainController {
             gain: Cell::new(1.0),
-        }))
-    }
-
-    unsafe fn queryInterface(
-        this: *mut GainController,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        let iid = *iid;
-
-        if iid == FUnknown_iid || iid == IEditController_iid {
-            Self::addRef(this);
-            *obj = (this as *mut c_void).offset(offset_of!(Self, edit_controller)) as *mut c_void;
-            return kResultOk;
         }
-
-        kNoInterface
     }
+}
 
-    unsafe fn addRef(this: *mut GainController) -> u32 {
-        let arc = Arc::from_raw(this as *const GainController);
-        let result = Arc::strong_count(&arc) + 1;
-        let _ = Arc::into_raw(arc);
-
-        Arc::increment_strong_count(this as *const GainController);
-
-        result as u32
-    }
-
-    unsafe fn release(this: *mut GainController) -> u32 {
-        let arc = Arc::from_raw(this as *const GainController);
-        let result = Arc::strong_count(&arc) - 1;
-        let _ = Arc::into_raw(arc);
-
-        Arc::decrement_strong_count(this as *const GainController);
-
-        result as u32
-    }
-
-    pub unsafe extern "system" fn edit_controller_queryInterface(
-        this: *mut FUnknown,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        Self::queryInterface(
-            (this as *mut c_void).offset(-offset_of!(Self, edit_controller)) as *mut GainController,
-            iid,
-            obj,
-        )
-    }
-
-    pub unsafe extern "system" fn edit_controller_addRef(this: *mut FUnknown) -> u32 {
-        Self::addRef(
-            (this as *mut c_void).offset(-offset_of!(Self, edit_controller)) as *mut GainController,
-        )
-    }
-
-    pub unsafe extern "system" fn edit_controller_release(this: *mut FUnknown) -> u32 {
-        Self::release(
-            (this as *mut c_void).offset(-offset_of!(Self, edit_controller)) as *mut GainController,
-        )
-    }
-
-    pub unsafe extern "system" fn edit_controller_initialize(
-        _this: *mut IPluginBase,
-        _context: *mut FUnknown,
-    ) -> tresult {
+impl IPluginBaseTrait for GainController {
+    unsafe fn initialize(&self, _context: *mut FUnknown) -> tresult {
         kResultOk
     }
 
-    pub unsafe extern "system" fn edit_controller_terminate(_this: *mut IPluginBase) -> tresult {
+    unsafe fn terminate(&self) -> tresult {
         kResultOk
     }
+}
 
-    pub unsafe extern "system" fn setComponentState(
-        _this: *mut IEditController,
-        _state: *mut IBStream,
-    ) -> tresult {
+impl IEditControllerTrait for GainController {
+    unsafe fn setComponentState(&self, _state: *mut IBStream) -> tresult {
         kNotImplemented
     }
 
-    pub unsafe extern "system" fn edit_controller_setState(
-        _this: *mut IEditController,
-        _state: *mut IBStream,
-    ) -> tresult {
+    unsafe fn setState(&self, _state: *mut IBStream) -> tresult {
         kResultOk
     }
 
-    pub unsafe extern "system" fn edit_controller_getState(
-        _this: *mut IEditController,
-        _state: *mut IBStream,
-    ) -> tresult {
+    unsafe fn getState(&self, _state: *mut IBStream) -> tresult {
         kResultOk
     }
 
-    pub unsafe extern "system" fn getParameterCount(_this: *mut IEditController) -> i32 {
+    unsafe fn getParameterCount(&self) -> i32 {
         1
     }
 
-    pub unsafe extern "system" fn getParameterInfo(
-        _this: *mut IEditController,
-        param_index: i32,
-        info: *mut ParameterInfo,
-    ) -> tresult {
+    unsafe fn getParameterInfo(&self, param_index: i32, info: *mut ParameterInfo) -> tresult {
         match param_index {
             0 => {
                 let info = &mut *info;
@@ -687,8 +387,8 @@ impl GainController {
         }
     }
 
-    pub unsafe extern "system" fn getParamStringByValue(
-        _this: *mut IEditController,
+    unsafe fn getParamStringByValue(
+        &self,
         id: u32,
         value_normalized: f64,
         string: *mut String128,
@@ -705,8 +405,8 @@ impl GainController {
         }
     }
 
-    pub unsafe extern "system" fn getParamValueByString(
-        _this: *mut IEditController,
+    unsafe fn getParamValueByString(
+        &self,
         id: u32,
         string: *mut TChar,
         value_normalized: *mut f64,
@@ -728,103 +428,52 @@ impl GainController {
         }
     }
 
-    pub unsafe extern "system" fn normalizedParamToPlain(
-        _this: *mut IEditController,
-        id: u32,
-        value_normalized: f64,
-    ) -> f64 {
+    unsafe fn normalizedParamToPlain(&self, id: u32, value_normalized: f64) -> f64 {
         match id {
             0 => value_normalized,
             _ => 0.0,
         }
     }
 
-    pub unsafe extern "system" fn plainParamToNormalized(
-        _this: *mut IEditController,
-        id: u32,
-        plain_value: f64,
-    ) -> f64 {
+    unsafe fn plainParamToNormalized(&self, id: u32, plain_value: f64) -> f64 {
         match id {
             0 => plain_value,
             _ => 0.0,
         }
     }
 
-    pub unsafe extern "system" fn getParamNormalized(this: *mut IEditController, id: u32) -> f64 {
-        let controller = &*((this as *mut c_void).offset(-offset_of!(Self, edit_controller))
-            as *const GainController);
+    unsafe fn getParamNormalized(&self, id: u32) -> f64 {
         match id {
-            0 => controller.gain.get(),
+            0 => self.gain.get(),
             _ => 0.0,
         }
     }
 
-    pub unsafe extern "system" fn setParamNormalized(
-        this: *mut IEditController,
-        id: u32,
-        value: f64,
-    ) -> tresult {
-        let controller = &mut *((this as *mut c_void).offset(-offset_of!(Self, edit_controller))
-            as *mut GainController);
+    unsafe fn setParamNormalized(&self, id: u32, value: f64) -> tresult {
         match id {
             0 => {
-                controller.gain.set(value);
+                self.gain.set(value);
                 kResultOk
             }
             _ => kInvalidArgument,
         }
     }
 
-    pub unsafe extern "system" fn setComponentHandler(
-        _this: *mut IEditController,
-        _handler: *mut IComponentHandler,
-    ) -> tresult {
+    unsafe fn setComponentHandler(&self, _handler: *mut IComponentHandler) -> tresult {
         kResultOk
     }
 
-    pub unsafe extern "system" fn createView(
-        _this: *mut IEditController,
-        _name: *const c_char,
-    ) -> *mut IPlugView {
+    unsafe fn createView(&self, _name: *const c_char) -> *mut IPlugView {
         ptr::null_mut()
     }
 }
 
-#[repr(C)]
-struct Factory {
-    vtbl: *const IPluginFactoryVtbl,
-}
+struct Factory {}
 
-unsafe impl Sync for Factory {}
+impl_class!(Factory: IPluginFactory);
 
-impl Factory {
-    unsafe extern "system" fn queryInterface(
-        this: *mut FUnknown,
-        iid: *const TUID,
-        obj: *mut *mut c_void,
-    ) -> tresult {
-        let iid = *iid;
-
-        if iid == FUnknown_iid || iid == IPluginFactory_iid {
-            *obj = this as *mut c_void;
-            return kResultOk;
-        }
-
-        kNoInterface
-    }
-
-    unsafe extern "system" fn addRef(_this: *mut FUnknown) -> u32 {
-        1
-    }
-
-    unsafe extern "system" fn release(_this: *mut FUnknown) -> u32 {
-        1
-    }
-
-    unsafe extern "system" fn getFactoryInfo(
-        _this: *mut IPluginFactory,
-        info: *mut PFactoryInfo,
-    ) -> tresult {
+impl IPluginFactoryTrait for Factory {
+    unsafe fn getFactoryInfo(&self, info: *mut PFactoryInfo) -> tresult {
         let info = &mut *info;
 
         copy_cstring("Vendor", &mut info.vendor);
@@ -835,15 +484,11 @@ impl Factory {
         kResultOk
     }
 
-    unsafe extern "system" fn countClasses(_this: *mut IPluginFactory) -> i32 {
+    unsafe fn countClasses(&self) -> i32 {
         2
     }
 
-    unsafe extern "system" fn getClassInfo(
-        _this: *mut IPluginFactory,
-        index: i32,
-        info: *mut PClassInfo,
-    ) -> tresult {
+    unsafe fn getClassInfo(&self, index: i32, info: *mut PClassInfo) -> tresult {
         match index {
             0 => {
                 let info = &mut *info;
@@ -867,20 +512,27 @@ impl Factory {
         }
     }
 
-    unsafe extern "system" fn createInstance(
-        _this: *mut IPluginFactory,
+    unsafe fn createInstance(
+        &self,
         cid: FIDString,
         iid: FIDString,
         obj: *mut *mut c_void,
     ) -> tresult {
         let instance = match *(cid as *const TUID) {
-            GainProcessor::CID => Some(GainProcessor::createInstance() as *mut FUnknown),
-            GainController::CID => Some(GainController::createInstance() as *mut FUnknown),
+            GainProcessor::CID => Some(
+                ComWrapper::new(GainProcessor::new())
+                    .into_com_ptr::<IAudioProcessor>()
+                    .upcast::<FUnknown>(),
+            ),
+            GainController::CID => Some(
+                ComWrapper::new(GainController::new())
+                    .into_com_ptr::<IEditController>()
+                    .upcast::<FUnknown>(),
+            ),
             _ => None,
         };
 
         if let Some(instance) = instance {
-            let instance = ComPtr::from_raw_unchecked(instance);
             let ptr = instance.as_mut_ptr();
             ((*(*ptr).vtbl).queryInterface)(ptr, iid as *mut TUID, obj)
         } else {
@@ -888,20 +540,6 @@ impl Factory {
         }
     }
 }
-
-static PLUGIN_FACTORY: Factory = Factory {
-    vtbl: &IPluginFactoryVtbl {
-        base: FUnknownVtbl {
-            queryInterface: Factory::queryInterface,
-            addRef: Factory::addRef,
-            release: Factory::release,
-        },
-        getFactoryInfo: Factory::getFactoryInfo,
-        countClasses: Factory::countClasses,
-        getClassInfo: Factory::getClassInfo,
-        createInstance: Factory::createInstance,
-    },
-};
 
 #[cfg(target_os = "windows")]
 #[no_mangle]
@@ -941,5 +579,7 @@ extern "system" fn ModuleExit() -> bool {
 
 #[no_mangle]
 extern "system" fn GetPluginFactory() -> *mut IPluginFactory {
-    &PLUGIN_FACTORY as *const Factory as *mut IPluginFactory
+    ComWrapper::new(Factory {})
+        .into_com_ptr::<IPluginFactory>()
+        .into_raw()
 }
