@@ -4,6 +4,64 @@ use std::sync::Arc;
 
 use super::{ComPtr, ComRef, Interface, Unknown};
 
+#[doc(hidden)]
+#[macro_export]
+macro_rules! impl_class_inner {
+    ($class:ident: $($interface:ident),* $(,)?) => {
+        const _: () = {
+            enum __Offsets { $($interface,)* __Len }
+
+            impl $crate::Unknown for $class {
+                #[inline]
+                unsafe fn query_interface(this: *mut Self, iid: &$crate::Guid) -> Option<*mut ::std::ffi::c_void> {
+                    $(
+                        if <$interface as $crate::Interface>::inherits(iid) {
+                            $crate::Unknown::add_ref(this);
+                            let ptr = $crate::ComWrapper::<$class>::interface_from_data::<$interface>(this);
+                            return Some(ptr as *mut ::std::ffi::c_void);
+                        }
+                    )*
+
+                    None
+                }
+
+                #[inline]
+                unsafe fn add_ref(this: *mut Self) -> usize {
+                    $crate::ComWrapper::add_ref(this)
+                }
+
+                #[inline]
+                unsafe fn release(this: *mut Self) -> usize {
+                    $crate::ComWrapper::release(this)
+                }
+            }
+
+            unsafe impl $crate::Class for $class {
+                type Header = [*mut (); __Offsets::__Len as usize];
+
+                const HEADER: Self::Header = [
+                    $(
+                        &$interface::make_vtbl::<$class, $interface>() as *const _ as *mut (),
+                    )*
+                ];
+            }
+
+            $(
+                unsafe impl $crate::Implements<$interface> for $class {
+                    const OFFSET: isize = __Offsets::$interface as isize * ::std::mem::size_of::<*mut ()>() as isize;
+                }
+            )*
+        };
+    }
+}
+
+#[macro_export]
+macro_rules! impl_class {
+    ($class:ident: $interface:ident $(+ $interfaces:ident)* $(+)?) => {
+        $crate::impl_class_inner!($class: $interface, $($interfaces),*);
+    }
+}
+
 macro_rules! offset_of {
     ($struct:ty, $field:ident) => {{
         use ::std::ffi::c_void;

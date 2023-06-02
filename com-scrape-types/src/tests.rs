@@ -487,3 +487,82 @@ fn com_wrapper() {
     assert_eq!(dropped.get(), true);
 }
 
+struct MyClass3 {
+    x: u32,
+    y: u32,
+    dropped: Rc<Cell<bool>>,
+}
+
+impl_class!(MyClass3: IMyInterface + IOtherInterface);
+
+impl Drop for MyClass3 {
+    fn drop(&mut self) {
+        self.dropped.set(true);
+    }
+}
+
+impl IMyInterfaceTrait for MyClass3 {
+    fn my_method(&self) -> u32 {
+        self.x
+    }
+}
+
+impl IOtherInterfaceTrait for MyClass3 {
+    fn other_method(&self) -> u32 {
+        self.y
+    }
+}
+
+#[test]
+fn impl_class_macro() {
+    assert_eq!(MyClass3::HEADER.len(), 2);
+    assert_eq!(
+        <MyClass3 as Implements<IMyInterface>>::OFFSET,
+        0 * mem::size_of::<*mut ()>() as isize,
+    );
+    assert_eq!(
+        <MyClass3 as Implements<IOtherInterface>>::OFFSET,
+        1 * mem::size_of::<*mut ()>() as isize,
+    );
+
+    let dropped = Rc::new(Cell::new(false));
+    let obj = ComWrapper::new(MyClass3 {
+        x: 1,
+        y: 2,
+        dropped: dropped.clone(),
+    });
+
+    let com_ref_1 = obj.as_com_ref::<IMyInterface>();
+    assert_eq!(com_ref_1.my_method(), 1);
+
+    let com_ref_2 = obj.as_com_ref::<IOtherInterface>();
+    assert_eq!(com_ref_2.other_method(), 2);
+
+    let com_ptr_1 = com_ref_2
+        .upcast::<IUnknown>()
+        .cast::<IMyInterface>()
+        .unwrap();
+    assert_eq!(com_ptr_1.my_method(), 1);
+
+    let com_ptr_2 = com_ref_1
+        .upcast::<IUnknown>()
+        .cast::<IOtherInterface>()
+        .unwrap();
+    assert_eq!(com_ptr_2.other_method(), 2);
+
+    assert_eq!(dropped.get(), false);
+
+    let com_ptr_3 = obj.to_com_ptr::<IMyInterface>();
+    assert_eq!(com_ptr_3.my_method(), 1);
+
+    let com_ptr_4 = obj.into_com_ptr::<IOtherInterface>();
+    assert_eq!(com_ptr_4.other_method(), 2);
+
+    drop(com_ptr_1);
+    drop(com_ptr_2);
+    drop(com_ptr_3);
+    assert_eq!(dropped.get(), false);
+
+    drop(com_ptr_4);
+    assert_eq!(dropped.get(), true);
+}
