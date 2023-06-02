@@ -2,7 +2,7 @@ use std::cell::Cell;
 use std::ffi::{c_long, c_ulong, c_void};
 use std::ptr;
 
-use crate::{ComPtr, ComRef, Guid, Inherits, Interface, Unknown};
+use crate::*;
 
 #[repr(C)]
 struct IUnknown {
@@ -59,11 +59,24 @@ struct IMyInterface {
 #[repr(C)]
 struct IMyInterfaceVtbl {
     base: IUnknownVtbl,
-    my_method: unsafe extern "system" fn(this: *mut IMyInterface),
+    my_method: unsafe extern "system" fn(this: *mut IMyInterface) -> u32,
 }
 
 trait IMyInterfaceTrait {
-    unsafe fn my_method(&self);
+    fn my_method(&self) -> u32;
+}
+
+impl<P> IMyInterfaceTrait for P
+where
+    P: SmartPtr,
+    P::Target: Inherits<IMyInterface>,
+{
+    fn my_method(&self) -> u32 {
+        unsafe {
+            let ptr = self.ptr() as *mut IMyInterface;
+            ((*(*ptr).vtbl).my_method)(ptr)
+        }
+    }
 }
 
 impl Unknown for IMyInterface {
@@ -87,6 +100,62 @@ unsafe impl Interface for IMyInterface {
         iid == &Self::IID || IUnknown::inherits(iid)
     }
 }
+
+unsafe impl Inherits<IUnknown> for IMyInterface {}
+unsafe impl Inherits<IMyInterface> for IMyInterface {}
+
+#[repr(C)]
+struct IOtherInterface {
+    vtbl: *const IOtherInterfaceVtbl,
+}
+
+#[repr(C)]
+struct IOtherInterfaceVtbl {
+    base: IUnknownVtbl,
+    other_method: unsafe extern "system" fn(this: *mut IOtherInterface) -> u32,
+}
+
+trait IOtherInterfaceTrait {
+    fn other_method(&self) -> u32;
+}
+
+impl<P> IOtherInterfaceTrait for P
+where
+    P: SmartPtr,
+    P::Target: Inherits<IOtherInterface>,
+{
+    fn other_method(&self) -> u32 {
+        unsafe {
+            let ptr = self.ptr() as *mut IOtherInterface;
+            ((*(*ptr).vtbl).other_method)(ptr)
+        }
+    }
+}
+
+impl Unknown for IOtherInterface {
+    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
+        IUnknown::query_interface(this as *mut IUnknown, iid)
+    }
+
+    unsafe fn add_ref(this: *mut Self) -> usize {
+        IUnknown::add_ref(this as *mut IUnknown) as usize
+    }
+
+    unsafe fn release(this: *mut Self) -> usize {
+        IUnknown::release(this as *mut IUnknown) as usize
+    }
+}
+
+unsafe impl Interface for IOtherInterface {
+    const IID: Guid = *b"cccccccccccccccc";
+
+    fn inherits(iid: &Guid) -> bool {
+        iid == &Self::IID
+    }
+}
+
+unsafe impl Inherits<IUnknown> for IOtherInterface {}
+unsafe impl Inherits<IOtherInterface> for IOtherInterface {}
 
 #[repr(C)]
 struct MyClass {
@@ -137,40 +206,8 @@ impl MyClass {
         obj.count.get()
     }
 
-    unsafe extern "system" fn my_method(_this: *mut IMyInterface) {}
-}
-
-#[repr(C)]
-struct IOtherInterface {
-    vtbl: *const IOtherInterfaceVtbl,
-}
-
-#[repr(C)]
-struct IOtherInterfaceVtbl {
-    base: IUnknownVtbl,
-}
-
-trait IOtherInterfaceTrait {}
-
-impl Unknown for IOtherInterface {
-    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
-        IUnknown::query_interface(this as *mut IUnknown, iid)
-    }
-
-    unsafe fn add_ref(this: *mut Self) -> usize {
-        IUnknown::add_ref(this as *mut IUnknown) as usize
-    }
-
-    unsafe fn release(this: *mut Self) -> usize {
-        IUnknown::release(this as *mut IUnknown) as usize
-    }
-}
-
-unsafe impl Interface for IOtherInterface {
-    const IID: Guid = *b"cccccccccccccccc";
-
-    fn inherits(iid: &Guid) -> bool {
-        iid == &Self::IID
+    unsafe extern "system" fn my_method(_this: *mut IMyInterface) -> u32 {
+        0
     }
 }
 
