@@ -4,7 +4,7 @@
 
 use std::ffi::c_void;
 
-use Steinberg::{int8, kResultOk, FUnknown, TUID};
+use Steinberg::{int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnknownVtbl, TUID};
 
 pub use com_scrape_types::*;
 
@@ -52,6 +52,56 @@ unsafe fn FUnknown_add_ref(this: *mut c_void) -> usize {
 unsafe fn FUnknown_release(this: *mut c_void) -> usize {
     let ptr = this as *mut FUnknown;
     ((*(*ptr).vtbl).release)(ptr) as usize
+}
+
+impl FUnknown {
+    pub const fn make_vtbl<C, I>() -> FUnknownVtbl
+    where
+        I: Interface,
+        C: Class + Implements<I>,
+    {
+        unsafe extern "system" fn queryInterface<C, I>(
+            this: *mut FUnknown,
+            _iid: *const TUID,
+            obj: *mut *mut c_void,
+        ) -> tresult
+        where
+            I: Interface,
+            C: Class + Implements<I>,
+        {
+            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+            if let Some(result) = C::query_interface(ptr, &*(_iid as *const Guid)) {
+                *obj = result;
+                kResultOk
+            } else {
+                kNoInterface
+            }
+        }
+
+        unsafe extern "system" fn addRef<C, I>(this: *mut FUnknown) -> uint32
+        where
+            I: Interface,
+            C: Class + Implements<I>,
+        {
+            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+            C::add_ref(ptr) as uint32
+        }
+
+        unsafe extern "system" fn release<C, I>(this: *mut FUnknown) -> uint32
+        where
+            I: Interface,
+            C: Class + Implements<I>,
+        {
+            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+            C::release(ptr) as uint32
+        }
+
+        FUnknownVtbl {
+            queryInterface: queryInterface::<C, I>,
+            addRef: addRef::<C, I>,
+            release: release::<C, I>,
+        }
+    }
 }
 
 #[cfg(target_os = "windows")]

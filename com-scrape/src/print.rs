@@ -369,23 +369,83 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     writeln!(self.sink, "{indent}        ((*(*ptr).vtbl).{method_name})(")?;
                     writeln!(self.sink, "{indent}            ptr,")?;
 
-                    let mut unnamed_counter = 0;
-                    for arg in &method.arguments {
-                        let arg_name = &arg.name;
-                        if arg.name.is_empty() {
-                            writeln!(self.sink, "{indent}            _{unnamed_counter},")?;
-                            unnamed_counter += 1;
-                        } else if self.reserved.contains(&*arg.name) {
-                            writeln!(self.sink, "{indent}            r#{arg_name},")?;
-                        } else {
-                            writeln!(self.sink, "{indent}            {arg_name},")?;
-                        }
-                    }
+                    self.indent_level += 3;
+                    self.print_arg_names(&method)?;
+                    self.indent_level -= 3;
 
                     writeln!(self.sink, "{indent}        )")?;
                     writeln!(self.sink, "{indent}    }}")?;
                 }
 
+                writeln!(self.sink, "{indent}}}")?;
+
+                writeln!(self.sink, "{indent}impl {name} {{")?;
+                writeln!(
+                    self.sink,
+                    "{indent}    pub const fn make_vtbl<C, I>() -> {name}Vtbl"
+                )?;
+                writeln!(self.sink, "{indent}    where")?;
+                writeln!(self.sink, "{indent}        I: Interface,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}        C: {name}Trait + Class + Implements<I>,"
+                )?;
+                // writeln!(self.sink, "{indent}        I: Inherits<{name}>,")?;
+                writeln!(self.sink, "{indent}    {{")?;
+
+                #[rustfmt::skip]
+                for method in &record.virtual_methods {
+                    let method_name = &method.name;
+
+                    writeln!(self.sink, "{indent}        unsafe extern \"system\" fn {method_name}<C, I>(")?;
+                    writeln!(self.sink, "{indent}            this: *mut {name},")?;
+
+                    self.indent_level += 3;
+                    self.print_args(method)?;
+                    self.indent_level -= 3;
+
+                    write!(self.sink, "{indent}        )")?;
+                    if let Type::Void = method.result_type {
+                    } else {
+                        write!(self.sink, " -> ")?;
+                        self.print_type(&method.result_type)?;
+                    }
+                    writeln!(self.sink, "")?;
+                    writeln!(self.sink, "{indent}        where")?;
+                    writeln!(self.sink, "{indent}            I: Interface,")?;
+                    writeln!(self.sink, "{indent}            C: {name}Trait + Class + Implements<I>,")?;
+                    writeln!(self.sink, "{indent}        {{")?;
+                    writeln!(self.sink, "{indent}            let ptr = ::com_scrape_types::ComWrapper::<C>::data_from_interface::<I>(this as *mut I);")?;
+                    writeln!(self.sink, "{indent}            (*ptr).{method_name}(")?;
+
+                    self.indent_level += 4;
+                    self.print_arg_names(method)?;
+                    self.indent_level -= 4;
+
+                    writeln!(self.sink, "{indent}            )")?;
+                    writeln!(self.sink, "{indent}        }}")?;
+                };
+
+                writeln!(self.sink, "{indent}        {name}Vtbl {{")?;
+                if let Some(base) = record.bases.first() {
+                    let base_name = &base.name;
+                    writeln!(
+                        self.sink,
+                        "{indent}            base: {base_name}::make_vtbl::<C, I>(),"
+                    )?;
+                }
+
+                for method in &record.virtual_methods {
+                    let method_name = &method.name;
+                    writeln!(
+                        self.sink,
+                        "{indent}            {method_name}: {method_name}::<C, I>,"
+                    )?;
+                }
+
+                writeln!(self.sink, "{indent}        }}")?;
+
+                writeln!(self.sink, "{indent}    }}")?;
                 writeln!(self.sink, "{indent}}}")?;
             }
         }
@@ -410,6 +470,26 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             }
             self.print_type(&arg.type_)?;
             writeln!(self.sink, ",")?;
+        }
+
+        Ok(())
+    }
+
+    fn print_arg_names(&mut self, method: &Method) -> io::Result<()> {
+        let mut unnamed_counter = 0;
+
+        let indent = self.indent();
+
+        for arg in &method.arguments {
+            let arg_name = &arg.name;
+            if arg.name.is_empty() {
+                writeln!(self.sink, "{indent}_{unnamed_counter},")?;
+                unnamed_counter += 1;
+            } else if self.reserved.contains(&*arg.name) {
+                writeln!(self.sink, "{indent}r#{arg_name},")?;
+            } else {
+                writeln!(self.sink, "{indent}{arg_name},")?;
+            }
         }
 
         Ok(())
