@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::env;
 use std::error::Error;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -6,6 +7,18 @@ use std::path::{Path, PathBuf};
 use crate::clang::*;
 use crate::parse::*;
 use crate::print::*;
+
+const HOST_TARGET: &'static str = include_str!(concat!(env!("OUT_DIR"), "/host-target.txt"));
+
+// Some target triples are different between rustc and clang.
+// See https://github.com/rust-lang/rust-bindgen/blob/05ebcace15a8784e5a5b1001a3b755b866fac901/bindgen/lib.rs#L670
+fn rust_to_clang_target(rust_target: &str) -> String {
+    if rust_target.starts_with("aarch64-apple-") {
+        return "arm64-apple-".to_owned() + &rust_target["aarch64-apple-".len()..];
+    }
+
+    rust_target.to_owned()
+}
 
 pub struct GeneratorOptions {
     pub include_paths: Vec<PathBuf>,
@@ -114,7 +127,19 @@ impl Generator {
     }
 
     pub fn generate<W: Write>(&self, sink: W) -> Result<(), Box<dyn Error>> {
-        let unit = TranslationUnit::new(&self.source, &self.options.include_paths).unwrap();
+        let mut clang_target = None;
+        if let Ok(target) = env::var("TARGET") {
+            if target != HOST_TARGET {
+                clang_target = Some(rust_to_clang_target(&target));
+            }
+        }
+
+        let unit = TranslationUnit::new(
+            &self.source,
+            &self.options.include_paths,
+            clang_target.as_deref(),
+        )
+        .unwrap();
 
         let namespace = Namespace::parse(&unit.cursor(), &self.options)?;
 

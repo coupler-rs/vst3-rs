@@ -24,18 +24,30 @@ pub struct TranslationUnit {
 }
 
 impl TranslationUnit {
-    pub fn new(source: &str, include_paths: &[PathBuf]) -> Result<TranslationUnit, Box<dyn Error>> {
-        let mut paths = Vec::new();
+    pub fn new(
+        source: &str,
+        include_paths: &[PathBuf],
+        target: Option<&str>,
+    ) -> Result<TranslationUnit, Box<dyn Error>> {
+        let mut paths_cstrs = Vec::new();
         for include_path in include_paths {
-            paths.push(CString::new(include_path.to_str().unwrap()).unwrap());
+            paths_cstrs.push(CString::new(include_path.to_str().unwrap()).unwrap());
+        }
+
+        let mut target_cstr = None;
+        if let Some(target) = target {
+            target_cstr = Some(CString::new(target).unwrap());
         }
 
         unsafe {
             let index = clang_createIndex(0, 0);
 
             let mut args = vec![c_str!("-x"), c_str!("c++")];
-            for path in &paths {
-                args.extend_from_slice(&[c_str!("-I"), path.as_ptr() as *const c_char]);
+            for path in &paths_cstrs {
+                args.extend_from_slice(&[c_str!("-I"), path.as_ptr()]);
+            }
+            if let Some(target) = &target_cstr {
+                args.extend_from_slice(&[c_str!("-target"), target.as_ptr()]);
             }
 
             let filename = c_str!("header.h");
