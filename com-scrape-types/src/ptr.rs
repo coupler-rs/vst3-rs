@@ -2,7 +2,7 @@ use std::marker::PhantomData;
 use std::mem;
 use std::ptr::NonNull;
 
-use super::Interface;
+use super::{Inherits, Interface};
 
 pub trait SmartPtr {
     type Target;
@@ -75,6 +75,14 @@ impl<'a, I: Interface> ComRef<'a, I> {
 
             ComPtr::from_raw_unchecked(self.as_mut_ptr())
         }
+    }
+
+    #[inline]
+    pub fn upcast<J: Interface>(self) -> ComRef<'a, J>
+    where
+        I: Inherits<J>,
+    {
+        unsafe { ComRef::from_raw_unchecked(self.into_raw() as *mut J) }
     }
 
     #[inline]
@@ -155,6 +163,14 @@ impl<I: Interface> ComPtr<I> {
     #[inline]
     pub fn as_com_ref<'a>(&'a self) -> ComRef<'a, I> {
         unsafe { ComRef::from_raw_unchecked(self.as_mut_ptr()) }
+    }
+
+    #[inline]
+    pub fn upcast<J: Interface>(self) -> ComPtr<J>
+    where
+        I: Inherits<J>,
+    {
+        unsafe { ComPtr::from_raw_unchecked(self.into_raw() as *mut J) }
     }
 
     #[inline]
