@@ -1,0 +1,38 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      master
+
+env:
+  VST3_SDK_DIR: vst3sdk
+
+jobs:
+  docs:
+    name: Generate and publish documentation
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Check out VST3 SDK
+        uses: actions/checkout@v3
+        with:
+          repository: coupler-rs/vst3_pluginterfaces
+          path: vst3sdk/pluginterfaces
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install libclang
+        run: |
+          sudo apt-get update
+          sudo apt-get install llvm-dev libclang-dev clang
+      - name: Generate documentation
+        run: cargo doc --no-deps
+      - name: Add index.html
+        run: |
+          echo '<meta charset="utf-8"><meta http-equiv="refresh" content="0; url=vst3_bindgen">' > target/doc/index.html
+      - name: Publish documentation
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: target/doc
