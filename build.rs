@@ -104,6 +104,8 @@ fn main() {
         process::exit(1);
     };
 
+    println!("cargo:rerun-if-changed={}", vst3_sdk_dir);
+
     if let Err(err) = generate(&vst3_sdk_dir) {
         eprintln!("{}", err);
         process::exit(1);
