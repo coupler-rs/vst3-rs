@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kEast","kNoDirection","kNorth","kNorthEast","kNorthWest","kNumberOfDirections","kSouth","kSouthEast","kSouthWest","kWest"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kCanAutomate","kIsBypass","kIsHidden","kIsList","kIsProgramChange","kIsReadOnly","kIsWrapAround","kNoFlags"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["EventFlags_","EventTypes_"],"type":["EventFlags","EventTypes"]};

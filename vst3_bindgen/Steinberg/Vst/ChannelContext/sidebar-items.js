@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["IInfoListener_iid"],"mod":["ChannelPluginLocation_"],"struct":["IInfoListener","IInfoListenerVtbl"],"trait":["IInfoListenerTrait"],"type":["ChannelPluginLocation","ColorComponent","ColorSpec"]};

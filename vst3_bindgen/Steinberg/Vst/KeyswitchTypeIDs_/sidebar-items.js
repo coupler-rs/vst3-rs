@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kKeyRangeTypeID","kNoteOnKeyswitchTypeID","kOnReleaseKeyswitchTypeID","kOnTheFlyKeyswitchTypeID"]};

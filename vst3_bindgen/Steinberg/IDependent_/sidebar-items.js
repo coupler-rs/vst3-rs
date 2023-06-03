@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["ChangeMessage_"],"type":["ChangeMessage"]};

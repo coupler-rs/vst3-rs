@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kBrightnessTypeID","kCustomEnd","kCustomStart","kExpressionTypeID","kInvalidTypeID","kPanTypeID","kPhonemeTypeID","kTextTypeID","kTuningTypeID","kVibratoTypeID","kVolumeTypeID"]};

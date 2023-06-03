@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kIoChanged","kIoTitlesChanged","kKeyswitchChanged","kLatencyChanged","kMidiCCAssignmentChanged","kNoteExpressionChanged","kParamTitlesChanged","kParamValuesChanged","kPrefetchableSupportChanged","kReloadComponent","kRoutingInfoChanged"]};

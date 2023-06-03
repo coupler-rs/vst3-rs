@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["DataTypes_"],"type":["DataTypes"]};

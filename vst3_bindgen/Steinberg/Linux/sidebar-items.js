@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["IEventHandler_iid","IRunLoop_iid","ITimerHandler_iid"],"struct":["IEventHandler","IEventHandlerVtbl","IRunLoop","IRunLoopVtbl","ITimerHandler","ITimerHandlerVtbl"],"trait":["IEventHandlerTrait","IRunLoopTrait","ITimerHandlerTrait"],"type":["FileDescriptor","TimerInterval"]};

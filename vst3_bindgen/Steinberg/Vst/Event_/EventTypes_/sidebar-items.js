@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kChordEvent","kDataEvent","kLegacyMIDICCOutEvent","kNoteExpressionTextEvent","kNoteExpressionValueEvent","kNoteOffEvent","kNoteOnEvent","kPolyPressureEvent","kScaleEvent"]};

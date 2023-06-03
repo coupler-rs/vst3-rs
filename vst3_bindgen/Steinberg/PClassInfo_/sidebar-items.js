@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kCategorySize","kNameSize"],"mod":["ClassCardinality_"],"type":["ClassCardinality"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kSample32","kSample64"]};

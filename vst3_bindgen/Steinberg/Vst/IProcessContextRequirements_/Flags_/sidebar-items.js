@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kNeedBarPositionMusic","kNeedChord","kNeedContinousTimeSamples","kNeedCycleMusic","kNeedFrameRate","kNeedProjectTimeMusic","kNeedSamplesToNextClock","kNeedSystemTime","kNeedTempo","kNeedTimeSignature","kNeedTransportState"]};
