@@ -146,6 +146,10 @@ impl<'a> Cursor<'a> {
         unsafe { StringRef::from_raw(clang_getCursorSpelling(self.cursor)) }
     }
 
+    pub fn is_anonymous(&self) -> bool {
+        unsafe { clang_Cursor_isAnonymous(self.cursor) != 0 }
+    }
+
     pub fn location(&self) -> Location<'a> {
         unsafe { Location::from_raw(clang_getCursorLocation(self.cursor)) }
     }

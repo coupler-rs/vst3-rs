@@ -73,7 +73,7 @@ pub struct Base {
 
 #[derive(Clone, Debug)]
 pub struct Field {
-    pub name: String,
+    pub name: Option<String>,
     pub type_: Type,
 }
 
@@ -162,13 +162,13 @@ impl<'a> Parser<'a> {
 
         match cursor.kind() {
             CursorKind::Namespace => {
-                let name = cursor.name();
-                let name_str = name.to_str().unwrap();
-
                 // Skip the contents of unnamed namespaces
-                if name_str.is_empty() {
+                if cursor.is_anonymous() {
                     return Ok(());
                 }
+
+                let name = cursor.name();
+                let name_str = name.to_str().unwrap();
 
                 if !namespace.children.contains_key(name_str) {
                     namespace
@@ -192,9 +192,6 @@ impl<'a> Parser<'a> {
                 });
             }
             CursorKind::EnumDecl => {
-                let name = cursor.name();
-                let name_str = name.to_str().unwrap();
-
                 let int_type =
                     self.parse_type(cursor.enum_integer_type().unwrap(), cursor.location())?;
 
@@ -237,9 +234,12 @@ impl<'a> Parser<'a> {
                     Ok(())
                 })?;
 
-                if name_str.is_empty() {
+                if cursor.is_anonymous() {
                     namespace.constants.extend(constants);
                 } else {
+                    let name = cursor.name();
+                    let name_str = name.to_str().unwrap();
+
                     let mut inner = Namespace::new();
                     inner.constants.extend(constants);
 
@@ -286,7 +286,7 @@ impl<'a> Parser<'a> {
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
                 if cursor.is_definition() {
                     // Skip unnamed records here, as parse_type will take care of them
-                    if !cursor.name().to_str().unwrap().is_empty() {
+                    if !cursor.is_anonymous() {
                         let record = self.parse_record(cursor.type_().unwrap())?;
                         namespace.records.push(record);
                     }
@@ -313,12 +313,15 @@ impl<'a> Parser<'a> {
             match cursor.kind() {
                 // Check for UnionDecl to handle anonymous unions
                 CursorKind::FieldDecl | CursorKind::UnionDecl => {
+                    let name = if cursor.is_anonymous() {
+                        None
+                    } else {
+                        Some(cursor.name().to_str().unwrap().to_string())
+                    };
+
                     let type_ = self.parse_type(cursor.type_().unwrap(), cursor.location())?;
 
-                    fields.push(Field {
-                        name: cursor.name().to_str().unwrap().to_string(),
-                        type_,
-                    });
+                    fields.push(Field { name, type_ });
                 }
                 CursorKind::CxxMethod => {
                     if cursor.is_virtual() {
@@ -441,10 +444,10 @@ impl<'a> Parser<'a> {
             }
             TypeKind::Record => {
                 let decl = type_.declaration();
-                let name = decl.name().to_str().unwrap().to_string();
-                if name.is_empty() {
+                if decl.is_anonymous() {
                     Ok(Type::UnnamedRecord(self.parse_record(type_)?))
                 } else {
+                    let name = decl.name().to_str().unwrap().to_string();
                     Ok(Type::Record(name))
                 }
                 // name = format!("__type{}", namespace.unnamed_record_counter);

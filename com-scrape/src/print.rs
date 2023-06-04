@@ -167,14 +167,15 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
         let mut anon_counter = 0;
         for field in &record.fields {
-            let field_name = &field.name;
-            if field.name.is_empty() {
+            if let Some(field_name) = &field.name {
+                if self.reserved.contains(&**field_name) {
+                    write!(self.sink, "{indent}    pub r#{field_name}: ")?;
+                } else {
+                    write!(self.sink, "{indent}    pub {field_name}: ")?;
+                }
+            } else {
                 write!(self.sink, "{indent}    pub __field{anon_counter}: ")?;
                 anon_counter += 1;
-            } else if self.reserved.contains(&*field.name) {
-                write!(self.sink, "{indent}    pub r#{field_name}: ")?;
-            } else {
-                write!(self.sink, "{indent}    pub {field_name}: ")?;
             }
             self.print_type(&field.type_)?;
             writeln!(self.sink, ",")?;
