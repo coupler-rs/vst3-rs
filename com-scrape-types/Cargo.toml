@@ -1,4 +1,8 @@
 [package]
 name = "com-scrape-types"
 version = "0.1.0"
+authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
+description = "Support code for bindings generated with com-scrape"
+repository = "https://github.com/coupler-rs/vst3-bindgen"
+license = "MIT OR Apache-2.0"
