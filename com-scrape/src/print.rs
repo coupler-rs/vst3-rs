@@ -75,10 +75,14 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let name = &constant.name;
             write!(self.sink, "{indent}pub const {name}: ")?;
             self.print_type(&constant.type_)?;
-            match constant.value {
+            match &constant.value {
                 Value::Signed(value) => writeln!(self.sink, " = {value:?};")?,
                 Value::Unsigned(value) => writeln!(self.sink, " = {value:?};")?,
                 Value::Float(value) => writeln!(self.sink, " = {value:?};")?,
+                Value::Str(value) => writeln!(
+                    self.sink,
+                    " = b\"{value}\\0\".as_ptr() as *const ::std::ffi::c_char;"
+                )?,
             }
         }
 

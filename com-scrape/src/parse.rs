@@ -136,6 +136,7 @@ pub enum Value {
     Signed(i64),
     Unsigned(u64),
     Float(f64),
+    Str(String),
 }
 
 struct Parser<'a> {
@@ -253,13 +254,23 @@ impl<'a> Parser<'a> {
             CursorKind::VarDecl => {
                 let type_ = cursor.type_().unwrap();
                 if type_.is_const() {
-                    if let Some(eval_result) = cursor.evaluate() {
-                        let value = match eval_result {
-                            EvalResult::Unsigned(value) => Value::Unsigned(value),
-                            EvalResult::Signed(value) => Value::Signed(value),
-                            EvalResult::Float(value) => Value::Float(value),
-                        };
+                    let eval_result = cursor.evaluate();
+                    let value = match eval_result.kind() {
+                        EvalResultKind::Int => {
+                            if eval_result.is_unsigned_int() {
+                                Some(Value::Unsigned(eval_result.as_unsigned()))
+                            } else {
+                                Some(Value::Signed(eval_result.as_long_long()))
+                            }
+                        }
+                        EvalResultKind::Float => Some(Value::Float(eval_result.as_double())),
+                        EvalResultKind::StrLiteral => Some(Value::Str(
+                            eval_result.as_str().unwrap().to_str().unwrap().to_string(),
+                        )),
+                        EvalResultKind::Other => None,
+                    };
 
+                    if let Some(value) = value {
                         let type_ = self.parse_type(type_, cursor.location())?;
                         namespace.constants.push(Constant {
                             name: cursor.name().to_str().unwrap().to_string(),

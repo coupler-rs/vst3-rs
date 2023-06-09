@@ -243,30 +243,8 @@ impl<'a> Cursor<'a> {
         unsafe { clang_CXXMethod_isVirtual(self.cursor) != 0 }
     }
 
-    pub fn evaluate(&self) -> Option<EvalResult> {
-        unsafe {
-            let result = clang_Cursor_Evaluate(self.cursor);
-
-            let result_type = clang_EvalResult_getKind(result);
-            #[allow(non_upper_case_globals)]
-            let value = match result_type {
-                CXEval_Int => {
-                    if clang_EvalResult_isUnsignedInt(result) != 0 {
-                        EvalResult::Unsigned(clang_EvalResult_getAsUnsigned(result))
-                    } else {
-                        EvalResult::Signed(clang_EvalResult_getAsLongLong(result))
-                    }
-                }
-                CXEval_Float => EvalResult::Float(clang_EvalResult_getAsDouble(result)),
-                _ => {
-                    return None;
-                }
-            };
-
-            clang_EvalResult_dispose(result);
-
-            Some(value)
-        }
+    pub fn evaluate(&self) -> EvalResult<'a> {
+        unsafe { EvalResult::from_raw(clang_Cursor_Evaluate(self.cursor)) }
     }
 
     pub fn tokens(&self) -> Tokens<'a> {
@@ -616,10 +594,72 @@ impl<'a> Drop for StringRef<'a> {
     }
 }
 
-pub enum EvalResult {
-    Unsigned(c_ulonglong),
-    Signed(c_longlong),
-    Float(f64),
+pub enum EvalResultKind {
+    Int,
+    Float,
+    StrLiteral,
+    Other,
+}
+
+pub struct EvalResult<'a> {
+    result: CXEvalResult,
+    _marker: PhantomData<&'a ()>,
+}
+
+impl<'a> EvalResult<'a> {
+    unsafe fn from_raw(result: CXEvalResult) -> EvalResult<'a> {
+        EvalResult {
+            result,
+            _marker: PhantomData,
+        }
+    }
+
+    pub fn kind(&self) -> EvalResultKind {
+        let kind = unsafe { clang_EvalResult_getKind(self.result) };
+
+        #[allow(non_upper_case_globals)]
+        match kind {
+            CXEval_Int => EvalResultKind::Int,
+            CXEval_Float => EvalResultKind::Float,
+            CXEval_StrLiteral => EvalResultKind::StrLiteral,
+            _ => EvalResultKind::Other,
+        }
+    }
+
+    pub fn is_unsigned_int(&self) -> bool {
+        unsafe { clang_EvalResult_isUnsignedInt(self.result) != 0 }
+    }
+
+    pub fn as_unsigned(&self) -> c_ulonglong {
+        unsafe { clang_EvalResult_getAsUnsigned(self.result) }
+    }
+
+    pub fn as_long_long(&self) -> c_longlong {
+        unsafe { clang_EvalResult_getAsLongLong(self.result) }
+    }
+
+    pub fn as_double(&self) -> f64 {
+        unsafe { clang_EvalResult_getAsDouble(self.result) }
+    }
+
+    pub fn as_str(&self) -> Option<&CStr> {
+        unsafe {
+            let ptr = clang_EvalResult_getAsStr(self.result);
+            if !ptr.is_null() {
+                Some(CStr::from_ptr(ptr))
+            } else {
+                None
+            }
+        }
+    }
+}
+
+impl<'a> Drop for EvalResult<'a> {
+    fn drop(&mut self) {
+        unsafe {
+            clang_EvalResult_dispose(self.result);
+        }
+    }
 }
 
 pub struct Tokens<'a> {
