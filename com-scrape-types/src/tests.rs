@@ -53,21 +53,14 @@ unsafe impl Interface for IUnknown {
 unsafe impl Inherits<IUnknown> for IUnknown {}
 
 impl IUnknown {
-    pub const fn make_vtbl<C, I>() -> IUnknownVtbl
-    where
-        I: Interface,
-        C: Class + Implements<I>,
-    {
-        unsafe extern "system" fn query_interface<C, I>(
+    pub const fn make_vtbl<C: Class, const OFFSET: isize>() -> IUnknownVtbl {
+        unsafe extern "system" fn query_interface<C: Class, const OFFSET: isize>(
             this: *mut IUnknown,
             _iid: *const Guid,
             obj: *mut *mut c_void,
-        ) -> c_long
-        where
-            I: Interface,
-            C: Class + Implements<I>,
-        {
-            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+        ) -> c_long {
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
             if let Some(result) = C::query_interface(ptr, &*(_iid as *const Guid)) {
                 *obj = result;
                 0
@@ -76,39 +69,36 @@ impl IUnknown {
             }
         }
 
-        unsafe extern "system" fn add_ref<C, I>(this: *mut IUnknown) -> c_ulong
-        where
-            I: Interface,
-            C: Class + Implements<I>,
-        {
-            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+        unsafe extern "system" fn add_ref<C: Class, const OFFSET: isize>(
+            this: *mut IUnknown,
+        ) -> c_ulong {
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
             C::add_ref(ptr) as c_ulong
         }
 
-        unsafe extern "system" fn release<C, I>(this: *mut IUnknown) -> c_ulong
-        where
-            I: Interface,
-            C: Class + Implements<I>,
-        {
-            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+        unsafe extern "system" fn release<C: Class, const OFFSET: isize>(
+            this: *mut IUnknown,
+        ) -> c_ulong {
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
             C::release(ptr) as c_ulong
         }
 
         IUnknownVtbl {
-            query_interface: query_interface::<C, I>,
-            add_ref: add_ref::<C, I>,
-            release: release::<C, I>,
+            query_interface: query_interface::<C, OFFSET>,
+            add_ref: add_ref::<C, OFFSET>,
+            release: release::<C, OFFSET>,
         }
     }
 }
 
-impl<C, I> Construct<C, I> for IUnknown
+impl<C, const OFFSET: isize> Construct<C, OFFSET> for IUnknown
 where
-    I: Interface,
-    C: Class + Implements<I>,
+    C: Class,
 {
     const OBJ: IUnknown = IUnknown {
-        vtbl: &Self::make_vtbl::<C, I>(),
+        vtbl: &Self::make_vtbl::<C, OFFSET>(),
     };
 }
 
@@ -166,34 +156,32 @@ unsafe impl Inherits<IUnknown> for IMyInterface {}
 unsafe impl Inherits<IMyInterface> for IMyInterface {}
 
 impl IMyInterface {
-    pub const fn make_vtbl<C, I>() -> IMyInterfaceVtbl
+    pub const fn make_vtbl<C, const OFFSET: isize>() -> IMyInterfaceVtbl
     where
-        I: Interface,
-        C: IMyInterfaceTrait + Class + Implements<I>,
+        C: IMyInterfaceTrait + Class,
     {
-        unsafe extern "system" fn my_method<C, I>(this: *mut IMyInterface) -> u32
+        unsafe extern "system" fn my_method<C, const OFFSET: isize>(this: *mut IMyInterface) -> u32
         where
-            I: Interface,
-            C: IMyInterfaceTrait + Class + Implements<I>,
+            C: IMyInterfaceTrait + Class,
         {
-            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
             (*ptr).my_method()
         }
 
         IMyInterfaceVtbl {
-            base: IUnknown::make_vtbl::<C, I>(),
-            my_method: my_method::<C, I>,
+            base: IUnknown::make_vtbl::<C, OFFSET>(),
+            my_method: my_method::<C, OFFSET>,
         }
     }
 }
 
-impl<C, I> Construct<C, I> for IMyInterface
+impl<C, const OFFSET: isize> Construct<C, OFFSET> for IMyInterface
 where
-    I: Interface,
-    C: IMyInterfaceTrait + Class + Implements<I>,
+    C: IMyInterfaceTrait + Class,
 {
     const OBJ: IMyInterface = IMyInterface {
-        vtbl: &Self::make_vtbl::<C, I>(),
+        vtbl: &Self::make_vtbl::<C, OFFSET>(),
     };
 }
 
@@ -251,34 +239,34 @@ unsafe impl Inherits<IUnknown> for IOtherInterface {}
 unsafe impl Inherits<IOtherInterface> for IOtherInterface {}
 
 impl IOtherInterface {
-    pub const fn make_vtbl<C, I>() -> IOtherInterfaceVtbl
+    pub const fn make_vtbl<C, const OFFSET: isize>() -> IOtherInterfaceVtbl
     where
-        I: Interface,
-        C: IOtherInterfaceTrait + Class + Implements<I>,
+        C: IOtherInterfaceTrait + Class,
     {
-        unsafe extern "system" fn other_method<C, I>(this: *mut IOtherInterface) -> u32
+        unsafe extern "system" fn other_method<C, const OFFSET: isize>(
+            this: *mut IOtherInterface,
+        ) -> u32
         where
-            I: Interface,
-            C: IOtherInterfaceTrait + Class + Implements<I>,
+            C: IOtherInterfaceTrait + Class,
         {
-            let ptr = ComWrapper::<C>::data_from_interface::<I>(this as *mut I);
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
             (*ptr).other_method()
         }
 
         IOtherInterfaceVtbl {
-            base: IUnknown::make_vtbl::<C, I>(),
-            other_method: other_method::<C, I>,
+            base: IUnknown::make_vtbl::<C, OFFSET>(),
+            other_method: other_method::<C, OFFSET>,
         }
     }
 }
 
-impl<C, I> Construct<C, I> for IOtherInterface
+impl<C, const OFFSET: isize> Construct<C, OFFSET> for IOtherInterface
 where
-    I: Interface,
-    C: IOtherInterfaceTrait + Class + Implements<I>,
+    C: IOtherInterfaceTrait + Class,
 {
     const OBJ: IOtherInterface = IOtherInterface {
-        vtbl: &Self::make_vtbl::<C, I>(),
+        vtbl: &Self::make_vtbl::<C, OFFSET>(),
     };
 }
 
@@ -432,13 +420,15 @@ impl Unknown for MyClass2 {
     unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {
         if IMyInterface::inherits(iid) {
             Unknown::add_ref(this);
-            let ptr = ComWrapper::<Self>::interface_from_data::<IMyInterface>(this);
+            let header_ptr = ComWrapper::<Self>::header_from_data(this);
+            let ptr = (header_ptr as *mut u8).offset(<Self as Implements<IMyInterface>>::OFFSET);
             return Some(ptr as *mut ::std::ffi::c_void);
         }
 
         if IOtherInterface::inherits(iid) {
             Unknown::add_ref(this);
-            let ptr = ComWrapper::<Self>::interface_from_data::<IOtherInterface>(this);
+            let header_ptr = ComWrapper::<Self>::header_from_data(this);
+            let ptr = (header_ptr as *mut u8).offset(<Self as Implements<IOtherInterface>>::OFFSET);
             return Some(ptr as *mut ::std::ffi::c_void);
         }
 
@@ -465,8 +455,14 @@ unsafe impl Class for MyClass2 {
     type Header = MyClass2Header;
 
     const HEADER: Self::Header = MyClass2Header {
-        my_interface: <IMyInterface as Construct<Self, IMyInterface>>::OBJ,
-        other_interface: <IOtherInterface as Construct<Self, IOtherInterface>>::OBJ,
+        my_interface: <IMyInterface as Construct<
+            Self,
+            { <Self as Implements<IMyInterface>>::OFFSET },
+        >>::OBJ,
+        other_interface: <IOtherInterface as Construct<
+            Self,
+            { <Self as Implements<IOtherInterface>>::OFFSET },
+        >>::OBJ,
     };
 }
 

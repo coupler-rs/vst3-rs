@@ -16,7 +16,8 @@ macro_rules! impl_class_inner {
                     $(
                         if <$interface as $crate::Interface>::inherits(iid) {
                             $crate::Unknown::add_ref(this);
-                            let ptr = $crate::ComWrapper::<$class>::interface_from_data::<$interface>(this);
+                            let header_ptr = ComWrapper::<Self>::header_from_data(this);
+                            let ptr = (header_ptr as *mut u8).offset(<Self as $crate::Implements<$interface>>::OFFSET);
                             return Some(ptr as *mut ::std::ffi::c_void);
                         }
                     )*
@@ -44,7 +45,7 @@ macro_rules! impl_class_inner {
 
                 const HEADER: Self::Header = __Header {
                     $(
-                        $interface: <$interface as $crate::Construct<$class, $interface>>::OBJ,
+                        $interface: <$interface as $crate::Construct<$class, { <Self as $crate::Implements<$interface>>::OFFSET }>>::OBJ,
                     )*
                 };
             }
@@ -80,7 +81,7 @@ macro_rules! offset_of {
     }};
 }
 
-pub trait Construct<C, I> {
+pub trait Construct<C, const OFFSET: isize> {
     const OBJ: Self;
 }
 
@@ -220,26 +221,16 @@ impl<C: Class> ComWrapper<C> {
     }
 
     #[inline]
-    pub unsafe fn data_from_interface<I>(ptr: *mut I) -> *mut C
-    where
-        I: Interface,
-        C: Implements<I>,
-    {
+    pub unsafe fn data_from_header(ptr: *mut C::Header) -> *mut C {
         (ptr as *mut u8)
-            .offset(-<C as Implements<I>>::OFFSET)
             .offset(-offset_of!(ComWrapperInner<C>, header))
             .offset(offset_of!(ComWrapperInner<C>, data)) as *mut C
     }
 
     #[inline]
-    pub unsafe fn interface_from_data<I>(ptr: *mut C) -> *mut I
-    where
-        I: Interface,
-        C: Implements<I>,
-    {
+    pub unsafe fn header_from_data(ptr: *mut C) -> *mut C::Header {
         (ptr as *mut u8)
             .offset(-offset_of!(ComWrapperInner<C>, data))
-            .offset(offset_of!(ComWrapperInner<C>, header))
-            .offset(<C as Implements<I>>::OFFSET) as *mut I
+            .offset(offset_of!(ComWrapperInner<C>, header)) as *mut C::Header
     }
 }
