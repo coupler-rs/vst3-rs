@@ -204,14 +204,16 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 self.sink,
                 "{indent}unsafe impl ::com_scrape_types::Inherits<{name}> for {name} {{}}"
             )?;
-            let mut bases = &record.bases;
-            while let Some(base) = bases.first() {
-                let base_name = &base.name;
-                writeln!(
-                    self.sink,
-                    "{indent}unsafe impl ::com_scrape_types::Inherits<{base_name}> for {name} {{}}"
-                )?;
-                bases = &base.bases;
+            {
+                let mut bases = &record.bases;
+                while let Some(base) = bases.first() {
+                    let base_name = &base.name;
+                    writeln!(
+                        self.sink,
+                        "{indent}unsafe impl ::com_scrape_types::Inherits<{base_name}> for {name} {{}}"
+                    )?;
+                    bases = &base.bases;
+                }
             }
 
             let iid_generator = self.options.iid_generator.as_ref().ok_or_else(|| {
@@ -249,7 +251,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}    #[inline]")?;
                 writeln!(self.sink, "{indent}    fn inherits(iid: &Guid) -> bool {{")?;
                 write!(self.sink, "{indent}        iid == &Self::IID")?;
-                if let Some(base) = bases.first() {
+                if let Some(base) = record.bases.first() {
                     let base_name = &base.name;
                     write!(self.sink, " || {base_name}::inherits(iid)")?;
                 }
@@ -293,14 +295,16 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             if !self.options.skip_interface_traits.contains(&record.name) {
                 write!(self.sink, "{indent}pub trait {name}Trait")?;
-                let mut bases = &record.bases;
-                while let Some(base) = bases.first() {
-                    if !self.options.skip_interface_traits.contains(&base.name) {
-                        let base_name = &base.name;
-                        write!(self.sink, ": {base_name}Trait")?;
-                        break;
+                {
+                    let mut bases = &record.bases;
+                    while let Some(base) = bases.first() {
+                        if !self.options.skip_interface_traits.contains(&base.name) {
+                            let base_name = &base.name;
+                            write!(self.sink, ": {base_name}Trait")?;
+                            break;
+                        }
+                        bases = &base.bases;
                     }
-                    bases = &base.bases;
                 }
                 writeln!(self.sink, " {{")?;
 
@@ -332,16 +336,18 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     self.sink,
                     "{indent}    P::Target: ::com_scrape_types::Inherits<{name}>,"
                 )?;
-                let mut bases = &record.bases;
-                while let Some(base) = bases.first() {
-                    if !self.options.skip_interface_traits.contains(&base.name) {
-                        let base_name = &base.name;
-                        writeln!(
-                            self.sink,
-                            "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,"
-                        )?;
+                {
+                    let mut bases = &record.bases;
+                    while let Some(base) = bases.first() {
+                        if !self.options.skip_interface_traits.contains(&base.name) {
+                            let base_name = &base.name;
+                            writeln!(
+                                self.sink,
+                                "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,"
+                            )?;
+                        }
+                        bases = &base.bases;
                     }
-                    bases = &base.bases;
                 }
                 writeln!(self.sink, "{indent}{{")?;
 
@@ -391,7 +397,6 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     self.sink,
                     "{indent}        C: {name}Trait + Class + Implements<I>,"
                 )?;
-                // writeln!(self.sink, "{indent}        I: Inherits<{name}>,")?;
                 writeln!(self.sink, "{indent}    {{")?;
 
                 #[rustfmt::skip]
