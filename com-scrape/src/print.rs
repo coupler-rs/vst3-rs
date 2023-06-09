@@ -389,17 +389,24 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}impl {name} {{")?;
                 writeln!(
                     self.sink,
-                    "{indent}    const fn make_vtbl<C, const OFFSET: isize>() -> {name}Vtbl"
+                    "{indent}    const fn make_vtbl<C, W, const OFFSET: isize>() -> {name}Vtbl"
                 )?;
                 writeln!(self.sink, "{indent}    where")?;
-                writeln!(self.sink, "{indent}        C: {name}Trait + Class,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}        C: {name}Trait + ::com_scrape_types::Class,"
+                )?;
+                writeln!(
+                    self.sink,
+                    "{indent}        W: ::com_scrape_types::Wrapper<C>,"
+                )?;
                 writeln!(self.sink, "{indent}    {{")?;
 
                 #[rustfmt::skip]
                 for method in &record.virtual_methods {
                     let method_name = &method.name;
 
-                    writeln!(self.sink, "{indent}        unsafe extern \"system\" fn {method_name}<C, const OFFSET: isize>(")?;
+                    writeln!(self.sink, "{indent}        unsafe extern \"system\" fn {method_name}<C, W, const OFFSET: isize>(")?;
                     writeln!(self.sink, "{indent}            this: *mut {name},")?;
 
                     self.indent_level += 3;
@@ -414,10 +421,11 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     }
                     writeln!(self.sink, "")?;
                     writeln!(self.sink, "{indent}        where")?;
-                    writeln!(self.sink, "{indent}            C: {name}Trait + Class,")?;
+                    writeln!(self.sink, "{indent}            C: {name}Trait + ::com_scrape_types::Class,")?;
+                    writeln!(self.sink, "{indent}            W: ::com_scrape_types::Wrapper<C>,")?;
                     writeln!(self.sink, "{indent}        {{")?;
                     writeln!(self.sink, "{indent}            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;")?;
-                    writeln!(self.sink, "{indent}            let ptr = ::com_scrape_types::ComWrapper::<C>::data_from_header(header_ptr);")?;
+                    writeln!(self.sink, "{indent}            let ptr = <W as ::com_scrape_types::Wrapper<C>>::data_from_header(header_ptr);")?;
                     writeln!(self.sink, "{indent}            (*ptr).{method_name}(")?;
 
                     self.indent_level += 4;
@@ -433,7 +441,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     let base_name = &base.name;
                     writeln!(
                         self.sink,
-                        "{indent}            base: {base_name}::make_vtbl::<C, OFFSET>(),"
+                        "{indent}            base: {base_name}::make_vtbl::<C, W, OFFSET>(),"
                     )?;
                 }
 
@@ -441,7 +449,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     let method_name = &method.name;
                     writeln!(
                         self.sink,
-                        "{indent}            {method_name}: {method_name}::<C, OFFSET>,"
+                        "{indent}            {method_name}: {method_name}::<C, W, OFFSET>,"
                     )?;
                 }
 
@@ -452,15 +460,19 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
                 writeln!(
                     self.sink,
-                    "{indent}impl<C, const OFFSET: isize> ::com_scrape_types::Construct<C, OFFSET> for {name}"
+                    "{indent}impl<C, W, const OFFSET: isize> ::com_scrape_types::Construct<C, W, OFFSET> for {name}"
                 )?;
                 writeln!(self.sink, "{indent}where")?;
-                writeln!(self.sink, "{indent}    C: {name}Trait + Class,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}    C: {name}Trait + ::com_scrape_types::Class,"
+                )?;
+                writeln!(self.sink, "{indent}    W: ::com_scrape_types::Wrapper<C>,")?;
                 writeln!(self.sink, "{indent}{{")?;
                 writeln!(self.sink, "{indent}    const OBJ: Self = {name} {{")?;
                 writeln!(
                     self.sink,
-                    "{indent}        vtbl: &Self::make_vtbl::<C, OFFSET>(),"
+                    "{indent}        vtbl: &Self::make_vtbl::<C, W, OFFSET>(),"
                 )?;
                 writeln!(self.sink, "{indent}    }};")?;
                 writeln!(self.sink, "{indent}}}")?;

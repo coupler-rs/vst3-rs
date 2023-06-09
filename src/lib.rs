@@ -55,60 +55,68 @@ unsafe fn FUnknown_release(this: *mut c_void) -> usize {
 }
 
 impl FUnknown {
-    const fn make_vtbl<C, const OFFSET: isize>() -> FUnknownVtbl
+    const fn make_vtbl<C, W, const OFFSET: isize>() -> FUnknownVtbl
     where
         C: Class,
+        W: Wrapper<C>,
     {
-        unsafe extern "system" fn queryInterface<C, const OFFSET: isize>(
+        unsafe extern "system" fn queryInterface<C, W, const OFFSET: isize>(
             this: *mut FUnknown,
             _iid: *const TUID,
             obj: *mut *mut c_void,
         ) -> tresult
         where
             C: Class,
+            W: Wrapper<C>,
         {
             let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
-            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
-            if let Some(result) = C::query_interface(ptr, &*(_iid as *const Guid)) {
-                *obj = result;
+            if let Some(result) = C::query_interface(&*(_iid as *const Guid)) {
+                let ptr = W::data_from_header(header_ptr);
+                W::add_ref(ptr);
+
+                *obj = (header_ptr as *mut u8).offset(result) as *mut c_void;
+
                 kResultOk
             } else {
                 kNoInterface
             }
         }
 
-        unsafe extern "system" fn addRef<C, const OFFSET: isize>(this: *mut FUnknown) -> uint32
+        unsafe extern "system" fn addRef<C, W, const OFFSET: isize>(this: *mut FUnknown) -> uint32
         where
             C: Class,
+            W: Wrapper<C>,
         {
             let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
-            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
-            C::add_ref(ptr) as uint32
+            let ptr = W::data_from_header(header_ptr);
+            W::add_ref(ptr) as uint32
         }
 
-        unsafe extern "system" fn release<C, const OFFSET: isize>(this: *mut FUnknown) -> uint32
+        unsafe extern "system" fn release<C, W, const OFFSET: isize>(this: *mut FUnknown) -> uint32
         where
             C: Class,
+            W: Wrapper<C>,
         {
             let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
-            let ptr = ComWrapper::<C>::data_from_header(header_ptr);
-            C::release(ptr) as uint32
+            let ptr = W::data_from_header(header_ptr);
+            W::release(ptr) as uint32
         }
 
         FUnknownVtbl {
-            queryInterface: queryInterface::<C, OFFSET>,
-            addRef: addRef::<C, OFFSET>,
-            release: release::<C, OFFSET>,
+            queryInterface: queryInterface::<C, W, OFFSET>,
+            addRef: addRef::<C, W, OFFSET>,
+            release: release::<C, W, OFFSET>,
         }
     }
 }
 
-impl<C, const OFFSET: isize> Construct<C, OFFSET> for FUnknown
+impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for FUnknown
 where
     C: Class,
+    W: Wrapper<C>,
 {
     const OBJ: FUnknown = FUnknown {
-        vtbl: &Self::make_vtbl::<C, OFFSET>(),
+        vtbl: &Self::make_vtbl::<C, W, OFFSET>(),
     };
 }
 
