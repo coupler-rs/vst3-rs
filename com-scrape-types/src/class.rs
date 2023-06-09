@@ -21,7 +21,7 @@ macro_rules! impl_class_inner {
                 fn header<W: $crate::Wrapper<Self>>() -> Self::Header {
                     __Header {
                         $(
-                            $interface: <$interface as $crate::Construct<$class, W, { <Self as $crate::Implements<$interface>>::OFFSET }>>::OBJ,
+                            $interface: <$interface as $crate::Construct<$class, W, { unsafe { $crate::offset_of!(__Header, $interface) } }>>::OBJ,
                         )*
                     }
                 }
@@ -30,19 +30,13 @@ macro_rules! impl_class_inner {
                 fn query_interface(iid: &$crate::Guid) -> Option<isize> {
                     $(
                         if <$interface as $crate::Interface>::inherits(iid) {
-                            return Some(<Self as $crate::Implements<$interface>>::OFFSET);
+                            return Some(unsafe { $crate::offset_of!(__Header, $interface) });
                         }
                     )*
 
                     None
                 }
             }
-
-            $(
-                unsafe impl $crate::Implements<$interface> for $class {
-                    const OFFSET: isize = unsafe { $crate::offset_of!(__Header, $interface) };
-                }
-            )*
         };
     }
 }
@@ -85,10 +79,6 @@ pub unsafe trait Class {
 
     fn header<W: Wrapper<Self>>() -> Self::Header;
     fn query_interface(iid: &Guid) -> Option<isize>;
-}
-
-pub unsafe trait Implements<I> {
-    const OFFSET: isize;
 }
 
 #[repr(C)]
@@ -138,7 +128,8 @@ impl<C: Class> Wrapper<C> for ComWrapper<C> {
 
     #[inline]
     unsafe fn add_ref(ptr: *mut C) -> usize {
-        let wrapper_ptr = Self::wrapper_from_data(ptr);
+        let wrapper_ptr = (ptr as *mut u8).offset(-offset_of!(ComWrapperInner<C>, data))
+            as *mut ComWrapperInner<C>;
 
         let arc = Arc::from_raw(wrapper_ptr);
         let result = Arc::strong_count(&arc) + 1;
@@ -151,7 +142,8 @@ impl<C: Class> Wrapper<C> for ComWrapper<C> {
 
     #[inline]
     unsafe fn release(ptr: *mut C) -> usize {
-        let wrapper_ptr = Self::wrapper_from_data(ptr);
+        let wrapper_ptr = (ptr as *mut u8).offset(-offset_of!(ComWrapperInner<C>, data))
+            as *mut ComWrapperInner<C>;
 
         let arc = Arc::from_raw(wrapper_ptr);
         let result = Arc::strong_count(&arc) - 1;
@@ -178,57 +170,32 @@ impl<C: Class> ComWrapper<C> {
     }
 
     #[inline]
-    unsafe fn interface_from_wrapper<I>(ptr: *mut ComWrapperInner<C>) -> *mut I
-    where
-        I: Interface,
-        C: Implements<I>,
-    {
-        (ptr as *mut u8)
-            .offset(offset_of!(ComWrapperInner<C>, header))
-            .offset(<C as Implements<I>>::OFFSET) as *mut I
-    }
-
-    #[inline]
-    pub fn as_com_ref<'a, I>(&'a self) -> ComRef<'a, I>
-    where
-        I: Interface,
-        C: Implements<I>,
-    {
-        unsafe {
-            let wrapper_ptr = Arc::as_ptr(&self.inner) as *mut ComWrapperInner<C>;
-            let interface_ptr = Self::interface_from_wrapper::<I>(wrapper_ptr);
-            ComRef::from_raw_unchecked(interface_ptr)
+    pub fn as_com_ref<'a, I: Interface>(&'a self) -> Option<ComRef<'a, I>> {
+        if let Some(offset) = C::query_interface(&I::IID) {
+            unsafe {
+                let wrapper_ptr = Arc::as_ptr(&self.inner) as *mut ComWrapperInner<C>;
+                let interface_ptr = (wrapper_ptr as *mut u8)
+                    .offset(offset_of!(ComWrapperInner<C>, header))
+                    .offset(offset) as *mut I;
+                Some(ComRef::from_raw_unchecked(interface_ptr))
+            }
+        } else {
+            None
         }
     }
 
     #[inline]
-    pub fn to_com_ptr<I>(&self) -> ComPtr<I>
-    where
-        I: Interface,
-        C: Implements<I>,
-    {
-        unsafe {
-            let wrapper_ptr = Arc::into_raw(self.inner.clone()) as *mut ComWrapperInner<C>;
-            let interface_ptr = Self::interface_from_wrapper::<I>(wrapper_ptr);
-            ComPtr::from_raw_unchecked(interface_ptr)
+    pub fn to_com_ptr<I: Interface>(&self) -> Option<ComPtr<I>> {
+        if let Some(offset) = C::query_interface(&I::IID) {
+            unsafe {
+                let wrapper_ptr = Arc::into_raw(self.inner.clone()) as *mut ComWrapperInner<C>;
+                let interface_ptr = (wrapper_ptr as *mut u8)
+                    .offset(offset_of!(ComWrapperInner<C>, header))
+                    .offset(offset) as *mut I;
+                Some(ComPtr::from_raw_unchecked(interface_ptr))
+            }
+        } else {
+            None
         }
-    }
-
-    #[inline]
-    pub fn into_com_ptr<I>(self) -> ComPtr<I>
-    where
-        I: Interface,
-        C: Implements<I>,
-    {
-        unsafe {
-            let wrapper_ptr = Arc::into_raw(self.inner) as *mut ComWrapperInner<C>;
-            let interface_ptr = Self::interface_from_wrapper::<I>(wrapper_ptr);
-            ComPtr::from_raw_unchecked(interface_ptr)
-        }
-    }
-
-    #[inline]
-    unsafe fn wrapper_from_data(ptr: *mut C) -> *mut ComWrapperInner<C> {
-        (ptr as *mut u8).offset(-offset_of!(ComWrapperInner<C>, data)) as *mut ComWrapperInner<C>
     }
 }

@@ -452,12 +452,12 @@ unsafe impl Class for MyClass2 {
             my_interface: <IMyInterface as Construct<
                 Self,
                 W,
-                { <Self as Implements<IMyInterface>>::OFFSET },
+                { unsafe { offset_of!(MyClass2Header, my_interface) } },
             >>::OBJ,
             other_interface: <IOtherInterface as Construct<
                 Self,
                 W,
-                { <Self as Implements<IOtherInterface>>::OFFSET },
+                { unsafe { offset_of!(MyClass2Header, other_interface) } },
             >>::OBJ,
         }
     }
@@ -465,23 +465,15 @@ unsafe impl Class for MyClass2 {
     #[inline]
     fn query_interface(iid: &Guid) -> Option<isize> {
         if IMyInterface::inherits(iid) {
-            return Some(<Self as Implements<IMyInterface>>::OFFSET);
+            return Some(unsafe { offset_of!(MyClass2Header, my_interface) });
         }
 
         if IOtherInterface::inherits(iid) {
-            return Some(<Self as Implements<IOtherInterface>>::OFFSET);
+            return Some(unsafe { offset_of!(MyClass2Header, other_interface) });
         }
 
         None
     }
-}
-
-unsafe impl Implements<IMyInterface> for MyClass2 {
-    const OFFSET: isize = unsafe { offset_of!(MyClass2Header, my_interface) };
-}
-
-unsafe impl Implements<IOtherInterface> for MyClass2 {
-    const OFFSET: isize = unsafe { offset_of!(MyClass2Header, other_interface) };
 }
 
 #[test]
@@ -493,10 +485,10 @@ fn com_wrapper() {
         dropped: dropped.clone(),
     });
 
-    let com_ref_1 = obj.as_com_ref::<IMyInterface>();
+    let com_ref_1 = obj.as_com_ref::<IMyInterface>().unwrap();
     assert_eq!(com_ref_1.my_method(), 1);
 
-    let com_ref_2 = obj.as_com_ref::<IOtherInterface>();
+    let com_ref_2 = obj.as_com_ref::<IOtherInterface>().unwrap();
     assert_eq!(com_ref_2.other_method(), 2);
 
     let com_ptr_1 = com_ref_2
@@ -513,12 +505,13 @@ fn com_wrapper() {
 
     assert_eq!(dropped.get(), false);
 
-    let com_ptr_3 = obj.to_com_ptr::<IMyInterface>();
+    let com_ptr_3 = obj.to_com_ptr::<IMyInterface>().unwrap();
     assert_eq!(com_ptr_3.my_method(), 1);
 
-    let com_ptr_4 = obj.into_com_ptr::<IOtherInterface>();
+    let com_ptr_4 = obj.to_com_ptr::<IOtherInterface>().unwrap();
     assert_eq!(com_ptr_4.other_method(), 2);
 
+    drop(obj);
     drop(com_ptr_1);
     drop(com_ptr_2);
     drop(com_ptr_3);
@@ -563,10 +556,10 @@ fn impl_class_macro() {
         dropped: dropped.clone(),
     });
 
-    let com_ref_1 = obj.as_com_ref::<IMyInterface>();
+    let com_ref_1 = obj.as_com_ref::<IMyInterface>().unwrap();
     assert_eq!(com_ref_1.my_method(), 1);
 
-    let com_ref_2 = obj.as_com_ref::<IOtherInterface>();
+    let com_ref_2 = obj.as_com_ref::<IOtherInterface>().unwrap();
     assert_eq!(com_ref_2.other_method(), 2);
 
     let com_ptr_1 = com_ref_2
@@ -583,12 +576,13 @@ fn impl_class_macro() {
 
     assert_eq!(dropped.get(), false);
 
-    let com_ptr_3 = obj.to_com_ptr::<IMyInterface>();
+    let com_ptr_3 = obj.to_com_ptr::<IMyInterface>().unwrap();
     assert_eq!(com_ptr_3.my_method(), 1);
 
-    let com_ptr_4 = obj.into_com_ptr::<IOtherInterface>();
+    let com_ptr_4 = obj.to_com_ptr::<IOtherInterface>().unwrap();
     assert_eq!(com_ptr_4.other_method(), 2);
 
+    drop(obj);
     drop(com_ptr_1);
     drop(com_ptr_2);
     drop(com_ptr_3);

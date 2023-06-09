@@ -521,13 +521,13 @@ impl IPluginFactoryTrait for Factory {
         let instance = match *(cid as *const TUID) {
             GainProcessor::CID => Some(
                 ComWrapper::new(GainProcessor::new())
-                    .into_com_ptr::<IAudioProcessor>()
-                    .upcast::<FUnknown>(),
+                    .to_com_ptr::<FUnknown>()
+                    .unwrap(),
             ),
             GainController::CID => Some(
                 ComWrapper::new(GainController::new())
-                    .into_com_ptr::<IEditController>()
-                    .upcast::<FUnknown>(),
+                    .to_com_ptr::<FUnknown>()
+                    .unwrap(),
             ),
             _ => None,
         };
@@ -580,6 +580,7 @@ extern "system" fn ModuleExit() -> bool {
 #[no_mangle]
 extern "system" fn GetPluginFactory() -> *mut IPluginFactory {
     ComWrapper::new(Factory {})
-        .into_com_ptr::<IPluginFactory>()
+        .to_com_ptr::<IPluginFactory>()
+        .unwrap()
         .into_raw()
 }
