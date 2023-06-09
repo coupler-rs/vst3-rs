@@ -13866,7 +13866,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).isPlatformTypeSupported(
                     r#type,
@@ -13881,7 +13881,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).attached(
                     parent,
@@ -13895,7 +13895,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).removed(
                 )
@@ -13908,7 +13908,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).onWheel(
                     distance,
@@ -13924,7 +13924,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).onKeyDown(
                     key,
@@ -13942,7 +13942,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).onKeyUp(
                     key,
@@ -13958,7 +13958,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getSize(
                     size,
@@ -13972,7 +13972,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).onSize(
                     newSize,
@@ -13986,7 +13986,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).onFocus(
                     state,
@@ -14000,7 +14000,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setFrame(
                     frame,
@@ -14013,7 +14013,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).canResize(
                 )
@@ -14026,7 +14026,7 @@
                 </span>C: IPlugViewTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).checkSizeConstraint(
                     rect,
@@ -14139,7 +14139,7 @@
                 </span>C: IPlugFrameTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).resizeView(
                     view,
@@ -14242,7 +14242,7 @@
                     </span>C: IPlugViewContentScaleSupportTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setContentScaleFactor(
                         factor,
@@ -14380,7 +14380,7 @@
                 </span>C: IErrorContextTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).disableErrorUI(
                     state,
@@ -14393,7 +14393,7 @@
                 </span>C: IErrorContextTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).errorMessageShown(
                 )
@@ -14406,7 +14406,7 @@
                 </span>C: IErrorContextTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getErrorMessage(
                     message,
@@ -14500,7 +14500,7 @@
                 </span>C: ICloneableTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).clone(
                 )
@@ -14670,7 +14670,7 @@
                 </span>C: IUpdateHandlerTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).addDependent(
                     object,
@@ -14686,7 +14686,7 @@
                 </span>C: IUpdateHandlerTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).removeDependent(
                     object,
@@ -14702,7 +14702,7 @@
                 </span>C: IUpdateHandlerTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).triggerUpdates(
                     object,
@@ -14718,7 +14718,7 @@
                 </span>C: IUpdateHandlerTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).deferUpdates(
                     object,
@@ -14829,7 +14829,7 @@
                     </span>C: IDependentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).update(
                         changedUnknown,
@@ -14943,7 +14943,7 @@
                 </span>C: IStringResultTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setText(
                     text,
@@ -15127,7 +15127,7 @@
                 </span>C: IStringTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setText8(
                     text,
@@ -15141,7 +15141,7 @@
                 </span>C: IStringTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setText16(
                     text,
@@ -15154,7 +15154,7 @@
                 </span>C: IStringTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getText8(
                 )
@@ -15166,7 +15166,7 @@
                 </span>C: IStringTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getText16(
                 )
@@ -15180,7 +15180,7 @@
                 </span>C: IStringTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).take(
                     s,
@@ -15194,7 +15194,7 @@
                 </span>C: IStringTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).isWideString(
                 )
@@ -15383,7 +15383,7 @@
                     </span>C: IBStreamTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).read(
                         buffer,
@@ -15401,7 +15401,7 @@
                     </span>C: IBStreamTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).write(
                         buffer,
@@ -15419,7 +15419,7 @@
                     </span>C: IBStreamTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).seek(
                         pos,
@@ -15435,7 +15435,7 @@
                     </span>C: IBStreamTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).tell(
                         pos,
@@ -15568,7 +15568,7 @@
                 </span>C: ISizeableStreamTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getStreamSize(
                     size,
@@ -15582,7 +15582,7 @@
                 </span>C: ISizeableStreamTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setStreamSize(
                     size,
@@ -15680,7 +15680,7 @@
                 </span>C: IPluginCompatibilityTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getCompatibilityJSON(
                     stream,
@@ -15824,7 +15824,7 @@
                 </span>C: IPersistentTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getClassID(
                     uid,
@@ -15838,7 +15838,7 @@
                 </span>C: IPersistentTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).saveAttributes(
                     _0,
@@ -15852,7 +15852,7 @@
                 </span>C: IPersistentTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).loadAttributes(
                     _0,
@@ -16155,7 +16155,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).set(
                     attrID,
@@ -16171,7 +16171,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).queue(
                     listID,
@@ -16189,7 +16189,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setBinaryData(
                     attrID,
@@ -16207,7 +16207,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).get(
                     attrID,
@@ -16223,7 +16223,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).unqueue(
                     listID,
@@ -16238,7 +16238,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getQueueItemCount(
                     _0,
@@ -16252,7 +16252,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).resetQueue(
                     attrID,
@@ -16265,7 +16265,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).resetAllQueues(
                 )
@@ -16280,7 +16280,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getBinaryData(
                     attrID,
@@ -16296,7 +16296,7 @@
                 </span>C: IAttributesTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getBinaryDataSize(
                     attrID,
@@ -16418,7 +16418,7 @@
                 </span>C: IAttributes2Trait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).countAttributes(
                 )
@@ -16431,7 +16431,7 @@
                 </span>C: IAttributes2Trait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getAttributeID(
                     index,
@@ -16544,7 +16544,7 @@
                 </span>C: IPluginBaseTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).initialize(
                     context,
@@ -16557,7 +16557,7 @@
                 </span>C: IPluginBaseTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).terminate(
                 )
@@ -16782,7 +16782,7 @@
                 </span>C: IPluginFactoryTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getFactoryInfo(
                     info,
@@ -16795,7 +16795,7 @@
                 </span>C: IPluginFactoryTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).countClasses(
                 )
@@ -16809,7 +16809,7 @@
                 </span>C: IPluginFactoryTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getClassInfo(
                     index,
@@ -16826,7 +16826,7 @@
                 </span>C: IPluginFactoryTrait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).createInstance(
                     cid,
@@ -16964,7 +16964,7 @@
                 </span>C: IPluginFactory2Trait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getClassInfo2(
                     index,
@@ -17119,7 +17119,7 @@
                 </span>C: IPluginFactory3Trait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).getClassInfoUnicode(
                     index,
@@ -17134,7 +17134,7 @@
                 </span>C: IPluginFactory3Trait + ::com_scrape_types::Class,
                 W: ::com_scrape_types::Wrapper&lt;C&gt;,
             {
-                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                 <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                 (<span class="kw-2">*</span>ptr).setHostContext(
                     context,
@@ -17316,7 +17316,7 @@
                     </span>C: IEventHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).onFDIsSet(
                         fd,
@@ -17408,7 +17408,7 @@
                     </span>C: ITimerHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).onTimer(
                     )
@@ -17570,7 +17570,7 @@
                     </span>C: IRunLoopTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).registerEventHandler(
                         handler,
@@ -17585,7 +17585,7 @@
                     </span>C: IRunLoopTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).unregisterEventHandler(
                         handler,
@@ -17600,7 +17600,7 @@
                     </span>C: IRunLoopTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).registerTimer(
                         handler,
@@ -17615,7 +17615,7 @@
                     </span>C: IRunLoopTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).unregisterTimer(
                         handler,
@@ -18113,7 +18113,7 @@
                     </span>C: INoteExpressionControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getNoteExpressionCount(
                         busIndex,
@@ -18131,7 +18131,7 @@
                     </span>C: INoteExpressionControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getNoteExpressionInfo(
                         busIndex,
@@ -18152,7 +18152,7 @@
                     </span>C: INoteExpressionControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getNoteExpressionStringByValue(
                         busIndex,
@@ -18174,7 +18174,7 @@
                     </span>C: INoteExpressionControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getNoteExpressionValueByString(
                         busIndex,
@@ -18328,7 +18328,7 @@
                     </span>C: IKeyswitchControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getKeyswitchCount(
                         busIndex,
@@ -18346,7 +18346,7 @@
                     </span>C: IKeyswitchControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getKeyswitchInfo(
                         busIndex,
@@ -18473,7 +18473,7 @@
                     </span>C: INoteExpressionPhysicalUIMappingTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getPhysicalUIMapping(
                         busIndex,
@@ -18572,7 +18572,7 @@
                     </span>C: IPlugInterfaceSupportTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).isPlugInterfaceSupported(
                         _iid,
@@ -18894,7 +18894,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getControllerClassId(
                         classId,
@@ -18908,7 +18908,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setIoMode(
                         mode,
@@ -18923,7 +18923,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getBusCount(
                         r#type,
@@ -18941,7 +18941,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getBusInfo(
                         r#type,
@@ -18959,7 +18959,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getRoutingInfo(
                         inInfo,
@@ -18977,7 +18977,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).activateBus(
                         r#type,
@@ -18994,7 +18994,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setActive(
                         state,
@@ -19008,7 +19008,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setState(
                         state,
@@ -19022,7 +19022,7 @@
                     </span>C: IComponentTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getState(
                         state,
@@ -19137,7 +19137,7 @@
                     </span>C: IParameterFunctionNameTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParameterIDFromFunctionName(
                         unitID,
@@ -19241,7 +19241,7 @@
                     </span>C: IComponentHandler3Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).createContextMenu(
                         plugView,
@@ -19339,7 +19339,7 @@
                     </span>C: IContextMenuTargetTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).executeMenuItem(
                         tag,
@@ -19562,7 +19562,7 @@
                         </span>C: IContextMenuTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getItemCount(
                         )
@@ -19577,7 +19577,7 @@
                         </span>C: IContextMenuTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getItem(
                             index,
@@ -19594,7 +19594,7 @@
                         </span>C: IContextMenuTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).addItem(
                             item,
@@ -19610,7 +19610,7 @@
                         </span>C: IContextMenuTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).removeItem(
                             item,
@@ -19626,7 +19626,7 @@
                         </span>C: IContextMenuTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).popup(
                             x,
@@ -20022,7 +20022,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).setInt(
                             id,
@@ -20038,7 +20038,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getInt(
                             id,
@@ -20054,7 +20054,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).setFloat(
                             id,
@@ -20070,7 +20070,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getFloat(
                             id,
@@ -20086,7 +20086,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).setString(
                             id,
@@ -20103,7 +20103,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getString(
                             id,
@@ -20121,7 +20121,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).setBinary(
                             id,
@@ -20139,7 +20139,7 @@
                         </span>C: IAttributeListTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getBinary(
                             id,
@@ -20267,7 +20267,7 @@
                     </span>C: IStreamAttributesTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getFileName(
                         name,
@@ -20280,7 +20280,7 @@
                     </span>C: IStreamAttributesTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getAttributes(
                     )
@@ -20377,7 +20377,7 @@
                     </span>C: IPrefetchableSupportTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getPrefetchableSupport(
                         prefetchable,
@@ -20484,7 +20484,7 @@
                     </span>C: IParameterFinderTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).findParameter(
                         xPos,
@@ -20612,7 +20612,7 @@
                     </span>C: IMessageTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getMessageID(
                     )
@@ -20625,7 +20625,7 @@
                     </span>C: IMessageTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setMessageID(
                         id,
@@ -20638,7 +20638,7 @@
                     </span>C: IMessageTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getAttributes(
                     )
@@ -20774,7 +20774,7 @@
                     </span>C: IConnectionPointTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).connect(
                         other,
@@ -20788,7 +20788,7 @@
                     </span>C: IConnectionPointTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).disconnect(
                         other,
@@ -20802,7 +20802,7 @@
                     </span>C: IConnectionPointTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).notify(
                         message,
@@ -21027,7 +21027,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getScreenSize(
                         size,
@@ -21041,7 +21041,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).connectedToHost(
                     )
@@ -21053,7 +21053,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).switchToHost(
                     )
@@ -21066,7 +21066,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).sendRemoteControlEvent(
                         event,
@@ -21080,7 +21080,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getHostIcon(
                         icon,
@@ -21094,7 +21094,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).scheduleEventFromUI(
                         event,
@@ -21108,7 +21108,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).createPresetManager(
                         cid,
@@ -21121,7 +21121,7 @@
                     </span>C: IInterAppAudioHostTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).showSettingsView(
                     )
@@ -21224,7 +21224,7 @@
                     </span>C: IInterAppAudioConnectionNotificationTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).onInterAppAudioConnectionStateChange(
                         newState,
@@ -21361,7 +21361,7 @@
                     </span>C: IInterAppAudioPresetManagerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).runLoadPresetBrowser(
                     )
@@ -21373,7 +21373,7 @@
                     </span>C: IInterAppAudioPresetManagerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).runSavePresetBrowser(
                     )
@@ -21385,7 +21385,7 @@
                     </span>C: IInterAppAudioPresetManagerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).loadNextPreset(
                     )
@@ -21397,7 +21397,7 @@
                     </span>C: IInterAppAudioPresetManagerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).loadPreviousPreset(
                     )
@@ -21689,7 +21689,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setBusArrangements(
                         inputs,
@@ -21708,7 +21708,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getBusArrangement(
                         dir,
@@ -21724,7 +21724,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).canProcessSampleSize(
                         symbolicSampleSize,
@@ -21737,7 +21737,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getLatencySamples(
                     )
@@ -21750,7 +21750,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setupProcessing(
                         setup,
@@ -21764,7 +21764,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setProcessing(
                         state,
@@ -21778,7 +21778,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).process(
                         data,
@@ -21791,7 +21791,7 @@
                     </span>C: IAudioProcessorTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getTailSamples(
                     )
@@ -21904,7 +21904,7 @@
                     </span>C: IAudioPresentationLatencyTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setAudioPresentationLatencySamples(
                         dir,
@@ -22003,7 +22003,7 @@
                         </span>C: IProcessContextRequirementsTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).getProcessContextRequirements(
                         )
@@ -22148,7 +22148,7 @@
                     </span>C: IHostApplicationTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getName(
                         name,
@@ -22164,7 +22164,7 @@
                     </span>C: IHostApplicationTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).createInstance(
                         cid,
@@ -22309,7 +22309,7 @@
                     </span>C: IVst3WrapperMPESupportTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).enableMPEInputProcessing(
                         state,
@@ -22325,7 +22325,7 @@
                     </span>C: IVst3WrapperMPESupportTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setMPEInputDeviceSettings(
                         masterChannel,
@@ -22467,7 +22467,7 @@
                     </span>C: IUnitHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).notifyUnitSelection(
                         unitId,
@@ -22482,7 +22482,7 @@
                     </span>C: IUnitHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).notifyProgramListChange(
                         listId,
@@ -22576,7 +22576,7 @@
                     </span>C: IUnitHandler2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).notifyUnitByBusChange(
                     )
@@ -22936,7 +22936,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getUnitCount(
                     )
@@ -22950,7 +22950,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getUnitInfo(
                         unitIndex,
@@ -22964,7 +22964,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getProgramListCount(
                     )
@@ -22978,7 +22978,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getProgramListInfo(
                         listIndex,
@@ -22995,7 +22995,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getProgramName(
                         listId,
@@ -23014,7 +23014,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getProgramInfo(
                         listId,
@@ -23032,7 +23032,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).hasProgramPitchNames(
                         listId,
@@ -23050,7 +23050,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getProgramPitchName(
                         listId,
@@ -23066,7 +23066,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getSelectedUnit(
                     )
@@ -23079,7 +23079,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).selectUnit(
                         unitId,
@@ -23097,7 +23097,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getUnitByBus(
                         r#type,
@@ -23117,7 +23117,7 @@
                     </span>C: IUnitInfoTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setUnitProgramData(
                         listOrUnitId,
@@ -23281,7 +23281,7 @@
                     </span>C: IProgramListDataTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).programDataSupported(
                         listId,
@@ -23297,7 +23297,7 @@
                     </span>C: IProgramListDataTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getProgramData(
                         listId,
@@ -23315,7 +23315,7 @@
                     </span>C: IProgramListDataTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setProgramData(
                         listId,
@@ -23462,7 +23462,7 @@
                     </span>C: IUnitDataTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).unitDataSupported(
                         unitID,
@@ -23477,7 +23477,7 @@
                     </span>C: IUnitDataTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getUnitData(
                         unitId,
@@ -23493,7 +23493,7 @@
                     </span>C: IUnitDataTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setUnitData(
                         unitId,
@@ -23692,7 +23692,7 @@
                     </span>C: IComponentHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).beginEdit(
                         id,
@@ -23707,7 +23707,7 @@
                     </span>C: IComponentHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).performEdit(
                         id,
@@ -23722,7 +23722,7 @@
                     </span>C: IComponentHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).endEdit(
                         id,
@@ -23736,7 +23736,7 @@
                     </span>C: IComponentHandlerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).restartComponent(
                         flags,
@@ -23885,7 +23885,7 @@
                     </span>C: IComponentHandler2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setDirty(
                         state,
@@ -23899,7 +23899,7 @@
                     </span>C: IComponentHandler2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).requestOpenEditor(
                         name,
@@ -23912,7 +23912,7 @@
                     </span>C: IComponentHandler2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).startGroupEdit(
                     )
@@ -23924,7 +23924,7 @@
                     </span>C: IComponentHandler2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).finishGroupEdit(
                     )
@@ -24038,7 +24038,7 @@
                     </span>C: IComponentHandlerBusActivationTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).requestBusActivation(
                         r#type,
@@ -24195,7 +24195,7 @@
                         </span>C: IProgressTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).start(
                             r#type,
@@ -24212,7 +24212,7 @@
                         </span>C: IProgressTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).update(
                             id,
@@ -24227,7 +24227,7 @@
                         </span>C: IProgressTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).finish(
                             id,
@@ -24598,7 +24598,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setComponentState(
                         state,
@@ -24612,7 +24612,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setState(
                         state,
@@ -24626,7 +24626,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getState(
                         state,
@@ -24639,7 +24639,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParameterCount(
                     )
@@ -24653,7 +24653,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParameterInfo(
                         paramIndex,
@@ -24670,7 +24670,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParamStringByValue(
                         id,
@@ -24688,7 +24688,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParamValueByString(
                         id,
@@ -24705,7 +24705,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).normalizedParamToPlain(
                         id,
@@ -24721,7 +24721,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).plainParamToNormalized(
                         id,
@@ -24736,7 +24736,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParamNormalized(
                         id,
@@ -24751,7 +24751,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setParamNormalized(
                         id,
@@ -24766,7 +24766,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setComponentHandler(
                         handler,
@@ -24780,7 +24780,7 @@
                     </span>C: IEditControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).createView(
                         name,
@@ -24927,7 +24927,7 @@
                     </span>C: IEditController2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).setKnobMode(
                         mode,
@@ -24941,7 +24941,7 @@
                     </span>C: IEditController2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).openHelp(
                         onlyCheck,
@@ -24955,7 +24955,7 @@
                     </span>C: IEditController2Trait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).openAboutBox(
                         onlyCheck,
@@ -25069,7 +25069,7 @@
                     </span>C: IMidiMappingTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getMidiControllerAssignment(
                         busIndex,
@@ -25188,7 +25188,7 @@
                     </span>C: IEditControllerHostEditingTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).beginEditFromHost(
                         paramID,
@@ -25202,7 +25202,7 @@
                     </span>C: IEditControllerHostEditingTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).endEditFromHost(
                         paramID,
@@ -25327,7 +25327,7 @@
                     </span>C: IXmlRepresentationControllerTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getXmlRepresentationStream(
                         info,
@@ -25612,7 +25612,7 @@
                     </span>C: IEventListTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getEventCount(
                     )
@@ -25626,7 +25626,7 @@
                     </span>C: IEventListTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getEvent(
                         index,
@@ -25641,7 +25641,7 @@
                     </span>C: IEventListTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).addEvent(
                         e,
@@ -25745,7 +25745,7 @@
                         </span>C: IAutomationStateTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).setAutomationState(
                             state,
@@ -25867,7 +25867,7 @@
                     </span>C: IMidiLearnTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).onLiveMIDIControllerInput(
                         busIndex,
@@ -26030,7 +26030,7 @@
                     </span>C: IParamValueQueueTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParameterId(
                     )
@@ -26042,7 +26042,7 @@
                     </span>C: IParamValueQueueTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getPointCount(
                     )
@@ -26057,7 +26057,7 @@
                     </span>C: IParamValueQueueTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getPoint(
                         index,
@@ -26075,7 +26075,7 @@
                     </span>C: IParamValueQueueTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).addPoint(
                         sampleOffset,
@@ -26214,7 +26214,7 @@
                     </span>C: IParameterChangesTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParameterCount(
                     )
@@ -26227,7 +26227,7 @@
                     </span>C: IParameterChangesTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).getParameterData(
                         index,
@@ -26242,7 +26242,7 @@
                     </span>C: IParameterChangesTrait + ::com_scrape_types::Class,
                     W: ::com_scrape_types::Wrapper&lt;C&gt;,
                 {
-                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                    <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                     <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                     (<span class="kw-2">*</span>ptr).addParameterData(
                         id,
@@ -26494,7 +26494,7 @@
                         </span>C: IInfoListenerTrait + ::com_scrape_types::Class,
                         W: ::com_scrape_types::Wrapper&lt;C&gt;,
                     {
-                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+                        <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>Header&lt;C&gt;;
                         <span class="kw">let </span>ptr = &lt;W <span class="kw">as </span>::com_scrape_types::Wrapper&lt;C&gt;&gt;::data_from_header(header_ptr);
                         (<span class="kw-2">*</span>ptr).setChannelContextInfos(
                             list,
