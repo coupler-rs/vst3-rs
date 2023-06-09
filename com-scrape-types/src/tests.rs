@@ -1,7 +1,7 @@
 use std::cell::Cell;
 use std::ffi::{c_long, c_ulong, c_void};
+use std::ptr;
 use std::rc::Rc;
-use std::{mem, ptr};
 
 use crate::*;
 
@@ -102,6 +102,16 @@ impl IUnknown {
     }
 }
 
+impl<C, I> Construct<C, I> for IUnknown
+where
+    I: Interface,
+    C: Class + Implements<I>,
+{
+    const OBJ: IUnknown = IUnknown {
+        vtbl: &Self::make_vtbl::<C, I>(),
+    };
+}
+
 #[repr(C)]
 struct IMyInterface {
     vtbl: *const IMyInterfaceVtbl,
@@ -177,6 +187,16 @@ impl IMyInterface {
     }
 }
 
+impl<C, I> Construct<C, I> for IMyInterface
+where
+    I: Interface,
+    C: IMyInterfaceTrait + Class + Implements<I>,
+{
+    const OBJ: IMyInterface = IMyInterface {
+        vtbl: &Self::make_vtbl::<C, I>(),
+    };
+}
+
 #[repr(C)]
 struct IOtherInterface {
     vtbl: *const IOtherInterfaceVtbl,
@@ -250,6 +270,16 @@ impl IOtherInterface {
             other_method: other_method::<C, I>,
         }
     }
+}
+
+impl<C, I> Construct<C, I> for IOtherInterface
+where
+    I: Interface,
+    C: IOtherInterfaceTrait + Class + Implements<I>,
+{
+    const OBJ: IOtherInterface = IOtherInterface {
+        vtbl: &Self::make_vtbl::<C, I>(),
+    };
 }
 
 #[repr(C)]
@@ -426,21 +456,26 @@ impl Unknown for MyClass2 {
     }
 }
 
-unsafe impl Class for MyClass2 {
-    type Header = [*mut (); 2];
+struct MyClass2Header {
+    my_interface: IMyInterface,
+    other_interface: IOtherInterface,
+}
 
-    const HEADER: Self::Header = [
-        &IMyInterface::make_vtbl::<MyClass2, IMyInterface>() as *const _ as *mut (),
-        &IOtherInterface::make_vtbl::<MyClass2, IOtherInterface>() as *const _ as *mut (),
-    ];
+unsafe impl Class for MyClass2 {
+    type Header = MyClass2Header;
+
+    const HEADER: Self::Header = MyClass2Header {
+        my_interface: <IMyInterface as Construct<Self, IMyInterface>>::OBJ,
+        other_interface: <IOtherInterface as Construct<Self, IOtherInterface>>::OBJ,
+    };
 }
 
 unsafe impl Implements<IMyInterface> for MyClass2 {
-    const OFFSET: isize = 0 * mem::size_of::<*mut ()>() as isize;
+    const OFFSET: isize = unsafe { offset_of!(MyClass2Header, my_interface) };
 }
 
 unsafe impl Implements<IOtherInterface> for MyClass2 {
-    const OFFSET: isize = 1 * mem::size_of::<*mut ()>() as isize;
+    const OFFSET: isize = unsafe { offset_of!(MyClass2Header, other_interface) };
 }
 
 #[test]
@@ -515,16 +550,6 @@ impl IOtherInterfaceTrait for MyClass3 {
 
 #[test]
 fn impl_class_macro() {
-    assert_eq!(MyClass3::HEADER.len(), 2);
-    assert_eq!(
-        <MyClass3 as Implements<IMyInterface>>::OFFSET,
-        0 * mem::size_of::<*mut ()>() as isize,
-    );
-    assert_eq!(
-        <MyClass3 as Implements<IOtherInterface>>::OFFSET,
-        1 * mem::size_of::<*mut ()>() as isize,
-    );
-
     let dropped = Rc::new(Cell::new(false));
     let obj = ComWrapper::new(MyClass3 {
         x: 1,

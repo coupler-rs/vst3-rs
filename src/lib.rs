@@ -55,7 +55,7 @@ unsafe fn FUnknown_release(this: *mut c_void) -> usize {
 }
 
 impl FUnknown {
-    pub const fn make_vtbl<C, I>() -> FUnknownVtbl
+    const fn make_vtbl<C, I>() -> FUnknownVtbl
     where
         I: Interface,
         C: Class + Implements<I>,
@@ -102,6 +102,16 @@ impl FUnknown {
             release: release::<C, I>,
         }
     }
+}
+
+impl<C, I> Construct<C, I> for FUnknown
+where
+    I: Interface,
+    C: Class + Implements<I>,
+{
+    const OBJ: FUnknown = FUnknown {
+        vtbl: &Self::make_vtbl::<C, I>(),
+    };
 }
 
 #[cfg(target_os = "windows")]

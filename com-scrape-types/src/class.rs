@@ -8,9 +8,8 @@ use super::{ComPtr, ComRef, Interface, Unknown};
 #[macro_export]
 macro_rules! impl_class_inner {
     ($class:ident: $($interface:ident),* $(,)?) => {
+        #[allow(non_snake_case)]
         const _: () = {
-            enum __Offsets { $($interface,)* __Len }
-
             impl $crate::Unknown for $class {
                 #[inline]
                 unsafe fn query_interface(this: *mut Self, iid: &$crate::Guid) -> Option<*mut ::std::ffi::c_void> {
@@ -36,19 +35,23 @@ macro_rules! impl_class_inner {
                 }
             }
 
-            unsafe impl $crate::Class for $class {
-                type Header = [*mut (); __Offsets::__Len as usize];
+            struct __Header {
+                $($interface: $interface,)*
+            }
 
-                const HEADER: Self::Header = [
+            unsafe impl $crate::Class for $class {
+                type Header = __Header;
+
+                const HEADER: Self::Header = __Header {
                     $(
-                        &$interface::make_vtbl::<$class, $interface>() as *const _ as *mut (),
+                        $interface: <$interface as $crate::Construct<$class, $interface>>::OBJ,
                     )*
-                ];
+                };
             }
 
             $(
                 unsafe impl $crate::Implements<$interface> for $class {
-                    const OFFSET: isize = __Offsets::$interface as isize * ::std::mem::size_of::<*mut ()>() as isize;
+                    const OFFSET: isize = unsafe { $crate::offset_of!(__Header, $interface) };
                 }
             )*
         };
@@ -62,6 +65,7 @@ macro_rules! impl_class {
     }
 }
 
+#[macro_export]
 macro_rules! offset_of {
     ($struct:ty, $field:ident) => {{
         use ::std::ffi::c_void;
@@ -74,6 +78,10 @@ macro_rules! offset_of {
 
         (field as *const c_void).offset_from(base as *const c_void)
     }};
+}
+
+pub trait Construct<C, I> {
+    const OBJ: Self;
 }
 
 pub unsafe trait Class: Unknown {

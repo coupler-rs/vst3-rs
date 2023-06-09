@@ -389,7 +389,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}impl {name} {{")?;
                 writeln!(
                     self.sink,
-                    "{indent}    pub const fn make_vtbl<C, I>() -> {name}Vtbl"
+                    "{indent}    const fn make_vtbl<C, I>() -> {name}Vtbl"
                 )?;
                 writeln!(self.sink, "{indent}    where")?;
                 writeln!(self.sink, "{indent}        I: Interface,")?;
@@ -452,6 +452,25 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}        }}")?;
 
                 writeln!(self.sink, "{indent}    }}")?;
+                writeln!(self.sink, "{indent}}}")?;
+
+                writeln!(
+                    self.sink,
+                    "{indent}impl<C, I> ::com_scrape_types::Construct<C, I> for {name}"
+                )?;
+                writeln!(self.sink, "{indent}where")?;
+                writeln!(self.sink, "{indent}    I: Interface,")?;
+                writeln!(
+                    self.sink,
+                    "{indent}    C: {name}Trait + Class + Implements<I>,"
+                )?;
+                writeln!(self.sink, "{indent}{{")?;
+                writeln!(self.sink, "{indent}    const OBJ: Self = {name} {{")?;
+                writeln!(
+                    self.sink,
+                    "{indent}        vtbl: &Self::make_vtbl::<C, I>(),"
+                )?;
+                writeln!(self.sink, "{indent}    }};")?;
                 writeln!(self.sink, "{indent}}}")?;
             }
         }
