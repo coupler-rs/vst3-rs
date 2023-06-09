@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kFlags","kFunction","kKnobTurnsPerFullRange","kLEDStyle","kStyle","kSwitchStyle"]};

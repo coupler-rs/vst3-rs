@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["kGainReductionFunc","kMuteFunc","kPanLawFunc","kPanLfeGainFunc","kPanMirrorModeFunc","kPanPosCenterXFunc","kPanPosCenterYFunc","kPanPosFrontLeftXFunc","kPanPosFrontLeftYFunc","kPanPosFrontRightXFunc","kPanPosFrontRightYFunc","kPanRotationFunc","kSoloFunc","kVolumeFunc"]};
