@@ -4,53 +4,8 @@ use std::sync::Arc;
 
 use super::{ComPtr, ComRef, Guid, Interface};
 
-#[doc(hidden)]
-#[macro_export]
-macro_rules! impl_class_inner {
-    ($class:ident: $($interface:ident),* $(,)?) => {
-        #[allow(non_snake_case)]
-        const _: () = {
-            struct __Header {
-                $($interface: $interface,)*
-            }
-
-            unsafe impl $crate::Class for $class {
-                type Header = __Header;
-
-                #[inline]
-                fn header<W: $crate::Wrapper<Self>>() -> Self::Header {
-                    __Header {
-                        $(
-                            $interface: <$interface as $crate::Construct<$class, W, { unsafe { $crate::offset_of!(__Header, $interface) } }>>::OBJ,
-                        )*
-                    }
-                }
-
-                #[inline]
-                fn query_interface(iid: &$crate::Guid) -> Option<isize> {
-                    $(
-                        if <$interface as $crate::Interface>::inherits(iid) {
-                            return Some(unsafe { $crate::offset_of!(__Header, $interface) });
-                        }
-                    )*
-
-                    None
-                }
-            }
-        };
-    }
-}
-
-#[macro_export]
-macro_rules! impl_class {
-    ($class:ident: $interface:ident $(+ $interfaces:ident)* $(+)?) => {
-        $crate::impl_class_inner!($class: $interface, $($interfaces),*);
-    }
-}
-
-#[macro_export]
 macro_rules! offset_of {
-    ($struct:ty, $field:ident) => {{
+    ($struct:ty, $field:tt) => {{
         use ::std::ffi::c_void;
         use ::std::mem::MaybeUninit;
         use ::std::ptr::addr_of;
@@ -64,8 +19,8 @@ macro_rules! offset_of {
 }
 
 pub trait Wrapper<C: Class + ?Sized> {
-    unsafe fn data_from_header(ptr: *mut C::Header) -> *mut C;
-    unsafe fn header_from_data(ptr: *mut C) -> *mut C::Header;
+    unsafe fn data_from_header(ptr: *mut Header<C>) -> *mut C;
+    unsafe fn header_from_data(ptr: *mut C) -> *mut Header<C>;
     unsafe fn add_ref(ptr: *mut C) -> usize;
     unsafe fn release(ptr: *mut C) -> usize;
 }
@@ -74,16 +29,81 @@ pub trait Construct<C, W, const OFFSET: isize> {
     const OBJ: Self;
 }
 
-pub unsafe trait Class {
+pub unsafe trait InterfaceList {
     type Header;
 
-    fn header<W: Wrapper<Self>>() -> Self::Header;
-    fn query_interface(iid: &Guid) -> Option<isize>;
+    fn query(iid: &Guid) -> Option<isize>;
 }
+
+pub trait MakeHeader<C, W>: InterfaceList
+where
+    C: Class,
+    W: Wrapper<C>,
+{
+    fn header() -> Self::Header;
+}
+
+pub trait Class {
+    type Interfaces: InterfaceList;
+}
+
+pub type Header<C> = <<C as Class>::Interfaces as InterfaceList>::Header;
+
+pub unsafe trait Implements<I> {
+    const OFFSET: isize;
+}
+
+macro_rules! interface_list {
+    ($header:ident, $($interface:ident $index:tt),*) => {
+        #[repr(C)]
+        pub struct $header<$($interface),*>($($interface),*);
+
+        unsafe impl<$($interface: Interface),*> InterfaceList for ($($interface,)*) {
+            type Header = $header<$($interface),*>;
+
+            fn query(iid: &Guid) -> Option<isize> {
+                $(
+                    if $interface::inherits(iid) {
+                        return Some(unsafe { offset_of!(Self::Header, $index) });
+                    }
+                )*
+
+                None
+            }
+        }
+
+        impl<C, W $(, $interface)*> MakeHeader<C, W> for ($($interface,)*)
+        where
+            C: Class,
+            W: Wrapper<C>,
+            $($interface: Interface + Construct<C, W, { $index * std::mem::size_of::<*mut ()>() as isize }>,)*
+        {
+            fn header() -> Self::Header {
+                $header($($interface::OBJ),*)
+            }
+        }
+    }
+}
+
+interface_list!(Header1, I0 0);
+interface_list!(Header2, I0 0, I1 1);
+interface_list!(Header3, I0 0, I1 1, I2 2);
+interface_list!(Header4, I0 0, I1 1, I2 2, I3 3);
+interface_list!(Header5, I0 0, I1 1, I2 2, I3 3, I4 4);
+interface_list!(Header6, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5);
+interface_list!(Header7, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6);
+interface_list!(Header8, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7);
+interface_list!(Header9, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8);
+interface_list!(Header10, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8, I9 9);
+interface_list!(Header11, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8, I9 9, I10 10);
+interface_list!(Header12, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8, I9 9, I10 10, I11 11);
+interface_list!(Header13, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8, I9 9, I10 10, I11 11, I12 12);
+interface_list!(Header14, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8, I9 9, I10 10, I11 11, I12 12, I13 13);
+interface_list!(Header15, I0 0, I1 1, I2 2, I3 3, I4 4, I5 5, I6 6, I7 7, I8 8, I9 9, I10 10, I11 11, I12 12, I13 13, I14 14);
 
 #[repr(C)]
 struct ComWrapperInner<C: Class> {
-    header: C::Header,
+    header: Header<C>,
     data: C,
 }
 
@@ -113,17 +133,17 @@ impl<C: Class> Deref for ComWrapper<C> {
 
 impl<C: Class> Wrapper<C> for ComWrapper<C> {
     #[inline]
-    unsafe fn data_from_header(ptr: *mut C::Header) -> *mut C {
+    unsafe fn data_from_header(ptr: *mut Header<C>) -> *mut C {
         (ptr as *mut u8)
             .offset(-offset_of!(ComWrapperInner<C>, header))
             .offset(offset_of!(ComWrapperInner<C>, data)) as *mut C
     }
 
     #[inline]
-    unsafe fn header_from_data(ptr: *mut C) -> *mut C::Header {
+    unsafe fn header_from_data(ptr: *mut C) -> *mut Header<C> {
         (ptr as *mut u8)
             .offset(-offset_of!(ComWrapperInner<C>, data))
-            .offset(offset_of!(ComWrapperInner<C>, header)) as *mut C::Header
+            .offset(offset_of!(ComWrapperInner<C>, header)) as *mut Header<C>
     }
 
     #[inline]
@@ -160,10 +180,11 @@ impl<C: Class> ComWrapper<C> {
     pub fn new(data: C) -> ComWrapper<C>
     where
         C: 'static,
+        C::Interfaces: MakeHeader<C, Self>,
     {
         ComWrapper {
             inner: Arc::new(ComWrapperInner {
-                header: C::header::<Self>(),
+                header: C::Interfaces::header(),
                 data,
             }),
         }
@@ -171,7 +192,7 @@ impl<C: Class> ComWrapper<C> {
 
     #[inline]
     pub fn as_com_ref<'a, I: Interface>(&'a self) -> Option<ComRef<'a, I>> {
-        if let Some(offset) = C::query_interface(&I::IID) {
+        if let Some(offset) = C::Interfaces::query(&I::IID) {
             unsafe {
                 let wrapper_ptr = Arc::as_ptr(&self.inner) as *mut ComWrapperInner<C>;
                 let interface_ptr = (wrapper_ptr as *mut u8)
@@ -186,7 +207,7 @@ impl<C: Class> ComWrapper<C> {
 
     #[inline]
     pub fn to_com_ptr<I: Interface>(&self) -> Option<ComPtr<I>> {
-        if let Some(offset) = C::query_interface(&I::IID) {
+        if let Some(offset) = C::Interfaces::query(&I::IID) {
             unsafe {
                 let wrapper_ptr = Arc::into_raw(self.inner.clone()) as *mut ComWrapperInner<C>;
                 let interface_ptr = (wrapper_ptr as *mut u8)

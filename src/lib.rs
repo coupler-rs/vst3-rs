@@ -69,8 +69,8 @@ impl FUnknown {
             C: Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
-            if let Some(result) = C::query_interface(&*(_iid as *const Guid)) {
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
+            if let Some(result) = C::Interfaces::query(&*(_iid as *const Guid)) {
                 let ptr = W::data_from_header(header_ptr);
                 W::add_ref(ptr);
 
@@ -87,7 +87,7 @@ impl FUnknown {
             C: Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
             let ptr = W::data_from_header(header_ptr);
             W::add_ref(ptr) as uint32
         }
@@ -97,7 +97,7 @@ impl FUnknown {
             C: Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
             let ptr = W::data_from_header(header_ptr);
             W::release(ptr) as uint32
         }

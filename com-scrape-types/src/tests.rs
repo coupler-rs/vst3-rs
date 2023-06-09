@@ -67,8 +67,8 @@ impl IUnknown {
             C: Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
-            if let Some(result) = C::query_interface(&*(_iid as *const Guid)) {
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
+            if let Some(result) = C::Interfaces::query(&*(_iid as *const Guid)) {
                 let ptr = W::data_from_header(header_ptr);
                 W::add_ref(ptr);
 
@@ -85,7 +85,7 @@ impl IUnknown {
             C: Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
             let ptr = W::data_from_header(header_ptr);
             W::add_ref(ptr) as c_ulong
         }
@@ -95,7 +95,7 @@ impl IUnknown {
             C: Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
             let ptr = W::data_from_header(header_ptr);
             W::release(ptr) as c_ulong
         }
@@ -184,7 +184,7 @@ impl IMyInterface {
             C: IMyInterfaceTrait + Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
             let ptr = W::data_from_header(header_ptr);
             (*ptr).my_method()
         }
@@ -272,7 +272,7 @@ impl IOtherInterface {
             C: IOtherInterfaceTrait + Class,
             W: Wrapper<C>,
         {
-            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;
+            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;
             let ptr = W::data_from_header(header_ptr);
             (*ptr).other_method()
         }
@@ -421,6 +421,10 @@ struct MyClass2 {
     dropped: Rc<Cell<bool>>,
 }
 
+impl Class for MyClass2 {
+    type Interfaces = (IMyInterface, IOtherInterface);
+}
+
 impl Drop for MyClass2 {
     fn drop(&mut self) {
         self.dropped.set(true);
@@ -439,118 +443,10 @@ impl IOtherInterfaceTrait for MyClass2 {
     }
 }
 
-struct MyClass2Header {
-    my_interface: IMyInterface,
-    other_interface: IOtherInterface,
-}
-
-unsafe impl Class for MyClass2 {
-    type Header = MyClass2Header;
-
-    fn header<W: Wrapper<Self>>() -> Self::Header {
-        MyClass2Header {
-            my_interface: <IMyInterface as Construct<
-                Self,
-                W,
-                { unsafe { offset_of!(MyClass2Header, my_interface) } },
-            >>::OBJ,
-            other_interface: <IOtherInterface as Construct<
-                Self,
-                W,
-                { unsafe { offset_of!(MyClass2Header, other_interface) } },
-            >>::OBJ,
-        }
-    }
-
-    #[inline]
-    fn query_interface(iid: &Guid) -> Option<isize> {
-        if IMyInterface::inherits(iid) {
-            return Some(unsafe { offset_of!(MyClass2Header, my_interface) });
-        }
-
-        if IOtherInterface::inherits(iid) {
-            return Some(unsafe { offset_of!(MyClass2Header, other_interface) });
-        }
-
-        None
-    }
-}
-
 #[test]
 fn com_wrapper() {
     let dropped = Rc::new(Cell::new(false));
     let obj = ComWrapper::new(MyClass2 {
-        x: 1,
-        y: 2,
-        dropped: dropped.clone(),
-    });
-
-    let com_ref_1 = obj.as_com_ref::<IMyInterface>().unwrap();
-    assert_eq!(com_ref_1.my_method(), 1);
-
-    let com_ref_2 = obj.as_com_ref::<IOtherInterface>().unwrap();
-    assert_eq!(com_ref_2.other_method(), 2);
-
-    let com_ptr_1 = com_ref_2
-        .upcast::<IUnknown>()
-        .cast::<IMyInterface>()
-        .unwrap();
-    assert_eq!(com_ptr_1.my_method(), 1);
-
-    let com_ptr_2 = com_ref_1
-        .upcast::<IUnknown>()
-        .cast::<IOtherInterface>()
-        .unwrap();
-    assert_eq!(com_ptr_2.other_method(), 2);
-
-    assert_eq!(dropped.get(), false);
-
-    let com_ptr_3 = obj.to_com_ptr::<IMyInterface>().unwrap();
-    assert_eq!(com_ptr_3.my_method(), 1);
-
-    let com_ptr_4 = obj.to_com_ptr::<IOtherInterface>().unwrap();
-    assert_eq!(com_ptr_4.other_method(), 2);
-
-    drop(obj);
-    drop(com_ptr_1);
-    drop(com_ptr_2);
-    drop(com_ptr_3);
-    assert_eq!(dropped.get(), false);
-
-    drop(com_ptr_4);
-    assert_eq!(dropped.get(), true);
-}
-
-struct MyClass3 {
-    x: u32,
-    y: u32,
-    dropped: Rc<Cell<bool>>,
-}
-
-impl_class!(MyClass3: IMyInterface + IOtherInterface);
-
-impl Drop for MyClass3 {
-    fn drop(&mut self) {
-        self.dropped.set(true);
-    }
-}
-
-impl IMyInterfaceTrait for MyClass3 {
-    fn my_method(&self) -> u32 {
-        self.x
-    }
-}
-
-impl IOtherInterfaceTrait for MyClass3 {
-    fn other_method(&self) -> u32 {
-        self.y
-    }
-}
-
-#[test]
-fn impl_class_macro() {
-    let dropped = Rc::new(Cell::new(false));
-    let obj = ComWrapper::new(MyClass3 {
         x: 1,
         y: 2,
         dropped: dropped.clone(),

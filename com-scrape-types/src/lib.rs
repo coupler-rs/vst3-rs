@@ -6,7 +6,7 @@ mod tests;
 
 use std::ffi::c_void;
 
-pub use class::{Class, ComWrapper, Construct, Wrapper};
+pub use class::{Class, ComWrapper, Construct, Header, InterfaceList, Wrapper};
 pub use ptr::{ComPtr, ComRef, SmartPtr};
 
 pub type Guid = [u8; 16];

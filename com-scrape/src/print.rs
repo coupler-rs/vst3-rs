@@ -424,7 +424,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     writeln!(self.sink, "{indent}            C: {name}Trait + ::com_scrape_types::Class,")?;
                     writeln!(self.sink, "{indent}            W: ::com_scrape_types::Wrapper<C>,")?;
                     writeln!(self.sink, "{indent}        {{")?;
-                    writeln!(self.sink, "{indent}            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut C::Header;")?;
+                    writeln!(self.sink, "{indent}            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;")?;
                     writeln!(self.sink, "{indent}            let ptr = <W as ::com_scrape_types::Wrapper<C>>::data_from_header(header_ptr);")?;
                     writeln!(self.sink, "{indent}            (*ptr).{method_name}(")?;
 

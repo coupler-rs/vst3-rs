@@ -8,7 +8,7 @@ use std::str::FromStr;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::{ptr, slice};
 
-use vst3_bindgen::{impl_class, uid, ComRef, ComWrapper, Steinberg::Vst::*, Steinberg::*};
+use vst3_bindgen::{uid, Class, ComRef, ComWrapper, Steinberg::Vst::*, Steinberg::*};
 
 fn copy_cstring(src: &str, dst: &mut [c_char]) {
     let c_string = CString::new(src).unwrap_or_else(|_| CString::default());
@@ -55,7 +55,9 @@ struct GainProcessor {
     gain: AtomicU64,
 }
 
-impl_class!(GainProcessor: IComponent + IAudioProcessor + IProcessContextRequirements);
+impl Class for GainProcessor {
+    type Interfaces = (IComponent, IAudioProcessor, IProcessContextRequirements);
+}
 
 impl GainProcessor {
     const CID: TUID = uid(0x6E332252, 0x54224A00, 0xAA69301A, 0xF318797D);
@@ -328,7 +330,9 @@ struct GainController {
     gain: Cell<f64>,
 }
 
-impl_class!(GainController: IEditController);
+impl Class for GainController {
+    type Interfaces = (IEditController,);
+}
 
 impl GainController {
     const CID: TUID = uid(0x1BA8A477, 0xEE0A4A2D, 0x80F50D14, 0x13D2EAA0);
@@ -470,7 +474,9 @@ impl IEditControllerTrait for GainController {
 
 struct Factory {}
 
-impl_class!(Factory: IPluginFactory);
+impl Class for Factory {
+    type Interfaces = (IPluginFactory,);
+}
 
 impl IPluginFactoryTrait for Factory {
     unsafe fn getFactoryInfo(&self, info: *mut PFactoryInfo) -> tresult {
