@@ -149,6 +149,22 @@
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -206,53 +222,69 @@
 }
 
 <span class="kw">impl </span>FUnknown {
-    <span class="kw">pub const fn </span>make_vtbl&lt;C, I&gt;() -&gt; FUnknownVtbl
+    <span class="kw">const fn </span>make_vtbl&lt;C, W, <span class="kw">const </span>OFFSET: isize&gt;() -&gt; FUnknownVtbl
     <span class="kw">where
-        </span>I: Interface,
-        C: Class + Implements&lt;I&gt;,
+        </span>C: Class,
+        W: Wrapper&lt;C&gt;,
     {
-        <span class="kw">unsafe extern </span><span class="string">&quot;system&quot; </span><span class="kw">fn </span>queryInterface&lt;C, I&gt;(
+        <span class="kw">unsafe extern </span><span class="string">&quot;system&quot; </span><span class="kw">fn </span>queryInterface&lt;C, W, <span class="kw">const </span>OFFSET: isize&gt;(
             this: <span class="kw-2">*mut </span>FUnknown,
             _iid: <span class="kw-2">*const </span>TUID,
             obj: <span class="kw-2">*mut *mut </span>c_void,
         ) -&gt; tresult
         <span class="kw">where
-            </span>I: Interface,
-            C: Class + Implements&lt;I&gt;,
+            </span>C: Class,
+            W: Wrapper&lt;C&gt;,
         {
-            <span class="kw">let </span>ptr = ComWrapper::&lt;C&gt;::data_from_interface::&lt;I&gt;(this <span class="kw">as </span><span class="kw-2">*mut </span>I);
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(result) = C::query_interface(ptr, <span class="kw-2">&amp;*</span>(_iid <span class="kw">as </span><span class="kw-2">*const </span>Guid)) {
-                <span class="kw-2">*</span>obj = result;
+            <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(result) = C::query_interface(<span class="kw-2">&amp;*</span>(_iid <span class="kw">as </span><span class="kw-2">*const </span>Guid)) {
+                <span class="kw">let </span>ptr = W::data_from_header(header_ptr);
+                W::add_ref(ptr);
+
+                <span class="kw-2">*</span>obj = (header_ptr <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(result) <span class="kw">as </span><span class="kw-2">*mut </span>c_void;
+
                 kResultOk
             } <span class="kw">else </span>{
                 kNoInterface
             }
         }
 
-        <span class="kw">unsafe extern </span><span class="string">&quot;system&quot; </span><span class="kw">fn </span>addRef&lt;C, I&gt;(this: <span class="kw-2">*mut </span>FUnknown) -&gt; uint32
+        <span class="kw">unsafe extern </span><span class="string">&quot;system&quot; </span><span class="kw">fn </span>addRef&lt;C, W, <span class="kw">const </span>OFFSET: isize&gt;(this: <span class="kw-2">*mut </span>FUnknown) -&gt; uint32
         <span class="kw">where
-            </span>I: Interface,
-            C: Class + Implements&lt;I&gt;,
+            </span>C: Class,
+            W: Wrapper&lt;C&gt;,
         {
-            <span class="kw">let </span>ptr = ComWrapper::&lt;C&gt;::data_from_interface::&lt;I&gt;(this <span class="kw">as </span><span class="kw-2">*mut </span>I);
-            C::add_ref(ptr) <span class="kw">as </span>uint32
+            <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+            <span class="kw">let </span>ptr = W::data_from_header(header_ptr);
+            W::add_ref(ptr) <span class="kw">as </span>uint32
         }
 
-        <span class="kw">unsafe extern </span><span class="string">&quot;system&quot; </span><span class="kw">fn </span>release&lt;C, I&gt;(this: <span class="kw-2">*mut </span>FUnknown) -&gt; uint32
+        <span class="kw">unsafe extern </span><span class="string">&quot;system&quot; </span><span class="kw">fn </span>release&lt;C, W, <span class="kw">const </span>OFFSET: isize&gt;(this: <span class="kw-2">*mut </span>FUnknown) -&gt; uint32
         <span class="kw">where
-            </span>I: Interface,
-            C: Class + Implements&lt;I&gt;,
+            </span>C: Class,
+            W: Wrapper&lt;C&gt;,
         {
-            <span class="kw">let </span>ptr = ComWrapper::&lt;C&gt;::data_from_interface::&lt;I&gt;(this <span class="kw">as </span><span class="kw-2">*mut </span>I);
-            C::release(ptr) <span class="kw">as </span>uint32
+            <span class="kw">let </span>header_ptr = (this <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(-OFFSET) <span class="kw">as </span><span class="kw-2">*mut </span>C::Header;
+            <span class="kw">let </span>ptr = W::data_from_header(header_ptr);
+            W::release(ptr) <span class="kw">as </span>uint32
         }
 
         FUnknownVtbl {
-            queryInterface: queryInterface::&lt;C, I&gt;,
-            addRef: addRef::&lt;C, I&gt;,
-            release: release::&lt;C, I&gt;,
+            queryInterface: queryInterface::&lt;C, W, OFFSET&gt;,
+            addRef: addRef::&lt;C, W, OFFSET&gt;,
+            release: release::&lt;C, W, OFFSET&gt;,
         }
     }
+}
+
+<span class="kw">impl</span>&lt;C, W, <span class="kw">const </span>OFFSET: isize&gt; Construct&lt;C, W, OFFSET&gt; <span class="kw">for </span>FUnknown
+<span class="kw">where
+    </span>C: Class,
+    W: Wrapper&lt;C&gt;,
+{
+    <span class="kw">const </span>OBJ: FUnknown = FUnknown {
+        vtbl: <span class="kw-2">&amp;</span><span class="self">Self</span>::make_vtbl::&lt;C, W, OFFSET&gt;(),
+    };
 }
 
 <span class="attr">#[cfg(target_os = <span class="string">&quot;windows&quot;</span>)]
