@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["uid"],"mod":["Steinberg"],"struct":["ComPtr","ComRef","ComWrapper"],"trait":["Class","Construct","Inherits","Interface","InterfaceList","SmartPtr","Unknown","Wrapper"],"type":["Guid","Header"]};
+window.SIDEBAR_ITEMS = {"fn":["uid"],"mod":["Steinberg"],"struct":["ComPtr","ComRef","ComWrapper"],"trait":["Class","Construct","Inherits","Interface","InterfaceList","MakeHeader","SmartPtr","Unknown","Wrapper"],"type":["Guid","Header"]};
