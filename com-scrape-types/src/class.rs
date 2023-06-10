@@ -35,7 +35,7 @@ pub unsafe trait InterfaceList {
     fn query(iid: &Guid) -> Option<isize>;
 }
 
-pub trait MakeHeader<C, W>: InterfaceList
+pub unsafe trait MakeHeader<C, W>: InterfaceList
 where
     C: Class,
     W: Wrapper<C>,
@@ -68,7 +68,7 @@ macro_rules! interface_list {
             }
         }
 
-        impl<C, W $(, $interface)*> MakeHeader<C, W> for ($($interface,)*)
+        unsafe impl<C, W $(, $interface)*> MakeHeader<C, W> for ($($interface,)*)
         where
             C: Class,
             W: Wrapper<C>,
