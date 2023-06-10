@@ -461,7 +461,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
                 writeln!(
                     self.sink,
-                    "{indent}impl<C, W, const OFFSET: isize> ::com_scrape_types::Construct<C, W, OFFSET> for {name}"
+                    "{indent}unsafe impl<C, W, const OFFSET: isize> ::com_scrape_types::Construct<C, W, OFFSET> for {name}"
                 )?;
                 writeln!(self.sink, "{indent}where")?;
                 writeln!(

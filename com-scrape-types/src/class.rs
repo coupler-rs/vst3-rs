@@ -25,7 +25,7 @@ pub trait Wrapper<C: Class + ?Sized> {
     unsafe fn release(ptr: *mut C) -> usize;
 }
 
-pub trait Construct<C, W, const OFFSET: isize> {
+pub unsafe trait Construct<C, W, const OFFSET: isize>: Interface {
     const OBJ: Self;
 }
 
@@ -72,7 +72,7 @@ macro_rules! interface_list {
         where
             C: Class,
             W: Wrapper<C>,
-            $($interface: Interface + Construct<C, W, { $index * std::mem::size_of::<*mut ()>() as isize }>,)*
+            $($interface: Construct<C, W, { $index * std::mem::size_of::<*mut ()>() as isize }>,)*
         {
             fn header() -> Self::Header {
                 $header($($interface::OBJ),*)

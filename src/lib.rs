@@ -110,7 +110,7 @@ impl FUnknown {
     }
 }
 
-impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for FUnknown
+unsafe impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for FUnknown
 where
     C: Class,
     W: Wrapper<C>,

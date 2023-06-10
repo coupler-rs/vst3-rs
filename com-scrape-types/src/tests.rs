@@ -108,7 +108,7 @@ impl IUnknown {
     }
 }
 
-impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for IUnknown
+unsafe impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for IUnknown
 where
     C: Class,
     W: Wrapper<C>,
@@ -197,7 +197,7 @@ impl IMyInterface {
     }
 }
 
-impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for IMyInterface
+unsafe impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for IMyInterface
 where
     C: IMyInterfaceTrait + Class,
     W: Wrapper<C>,
@@ -286,7 +286,7 @@ impl IOtherInterface {
     }
 }
 
-impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for IOtherInterface
+unsafe impl<C, W, const OFFSET: isize> Construct<C, W, OFFSET> for IOtherInterface
 where
     C: IOtherInterfaceTrait + Class,
     W: Wrapper<C>,
