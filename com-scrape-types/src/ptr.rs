@@ -51,11 +51,6 @@ impl<'a, I: Interface> ComRef<'a, I> {
     }
 
     #[inline]
-    pub fn into_raw(self) -> *mut I {
-        self.as_ptr()
-    }
-
-    #[inline]
     pub unsafe fn from_raw_unchecked(ptr: *mut I) -> ComRef<'a, I> {
         ComRef {
             ptr: NonNull::new_unchecked(ptr),
@@ -79,7 +74,7 @@ impl<'a, I: Interface> ComRef<'a, I> {
     where
         I: Inherits<J>,
     {
-        unsafe { ComRef::from_raw_unchecked(self.into_raw() as *mut J) }
+        unsafe { ComRef::from_raw_unchecked(self.as_ptr() as *mut J) }
     }
 
     #[inline]
