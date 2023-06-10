@@ -17,12 +17,11 @@ pub trait Unknown {
     unsafe fn release(this: *mut Self) -> usize;
 }
 
-pub unsafe trait Inherits<I> {}
-
-unsafe impl<I> Inherits<I> for I {}
-
 pub unsafe trait Interface: Unknown {
     const IID: Guid;
 
     fn inherits(iid: &Guid) -> bool;
 }
+pub unsafe trait Inherits<I: Interface>: Interface {}
+
+unsafe impl<I: Interface> Inherits<I> for I {}
