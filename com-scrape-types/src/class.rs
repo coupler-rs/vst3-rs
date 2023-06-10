@@ -25,7 +25,7 @@ pub trait Wrapper<C: Class + ?Sized> {
     unsafe fn release(ptr: *mut C) -> usize;
 }
 
-pub unsafe trait Construct<C, W, const OFFSET: isize>: Interface {
+pub unsafe trait Construct<C: Class, W: Wrapper<C>, const OFFSET: isize>: Interface {
     const OBJ: Self;
 }
 
