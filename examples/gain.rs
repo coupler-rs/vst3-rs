@@ -539,7 +539,7 @@ impl IPluginFactoryTrait for Factory {
         };
 
         if let Some(instance) = instance {
-            let ptr = instance.as_mut_ptr();
+            let ptr = instance.as_ptr();
             ((*(*ptr).vtbl).queryInterface)(ptr, iid as *mut TUID, obj)
         } else {
             kInvalidArgument

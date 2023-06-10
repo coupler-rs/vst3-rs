@@ -38,13 +38,8 @@ impl<'a, I: Interface> Clone for ComRef<'a, I> {
 
 impl<'a, I: Interface> ComRef<'a, I> {
     #[inline]
-    pub fn as_ptr(&self) -> *const I {
-        self.ptr.as_ptr()
-    }
-
-    #[inline]
-    pub fn as_mut_ptr(&self) -> *mut I {
-        self.as_ptr() as *mut I
+    pub fn as_ptr(&self) -> *mut I {
+        self.ptr.as_ptr() as *mut I
     }
 
     #[inline]
@@ -57,7 +52,7 @@ impl<'a, I: Interface> ComRef<'a, I> {
 
     #[inline]
     pub fn into_raw(self) -> *mut I {
-        self.as_mut_ptr()
+        self.as_ptr()
     }
 
     #[inline]
@@ -71,9 +66,11 @@ impl<'a, I: Interface> ComRef<'a, I> {
     #[inline]
     pub fn to_com_ptr(&self) -> ComPtr<I> {
         unsafe {
-            I::add_ref(self.as_mut_ptr());
+            let ptr = self.ptr.as_ptr();
 
-            ComPtr::from_raw_unchecked(self.as_mut_ptr())
+            I::add_ref(ptr);
+
+            ComPtr::from_raw_unchecked(ptr)
         }
     }
 
@@ -88,7 +85,7 @@ impl<'a, I: Interface> ComRef<'a, I> {
     #[inline]
     pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
         unsafe {
-            if let Some(ptr) = I::query_interface(self.as_mut_ptr(), &J::IID) {
+            if let Some(ptr) = I::query_interface(self.ptr.as_ptr(), &J::IID) {
                 ComPtr::from_raw(ptr as *mut J)
             } else {
                 None
@@ -114,7 +111,7 @@ impl<I: Interface> Clone for ComPtr<I> {
     #[inline]
     fn clone(&self) -> ComPtr<I> {
         unsafe {
-            I::add_ref(self.as_mut_ptr());
+            I::add_ref(self.ptr.as_ptr());
         }
 
         ComPtr { ptr: self.ptr }
@@ -132,13 +129,8 @@ impl<I: Interface> Drop for ComPtr<I> {
 
 impl<I: Interface> ComPtr<I> {
     #[inline]
-    pub fn as_ptr(&self) -> *const I {
-        self.ptr.as_ptr()
-    }
-
-    #[inline]
-    pub fn as_mut_ptr(&self) -> *mut I {
-        self.as_ptr() as *mut I
+    pub fn as_ptr(&self) -> *mut I {
+        self.ptr.as_ptr() as *mut I
     }
 
     #[inline]
@@ -162,7 +154,7 @@ impl<I: Interface> ComPtr<I> {
 
     #[inline]
     pub fn as_com_ref<'a>(&'a self) -> ComRef<'a, I> {
-        unsafe { ComRef::from_raw_unchecked(self.as_mut_ptr()) }
+        unsafe { ComRef::from_raw_unchecked(self.ptr.as_ptr()) }
     }
 
     #[inline]
@@ -176,7 +168,7 @@ impl<I: Interface> ComPtr<I> {
     #[inline]
     pub fn cast<J: Interface>(&self) -> Option<ComPtr<J>> {
         unsafe {
-            if let Some(ptr) = I::query_interface(self.as_mut_ptr(), &J::IID) {
+            if let Some(ptr) = I::query_interface(self.ptr.as_ptr(), &J::IID) {
                 ComPtr::from_raw(ptr as *mut J)
             } else {
                 None
