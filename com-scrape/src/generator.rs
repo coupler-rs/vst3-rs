@@ -127,6 +127,9 @@ impl Generator {
     }
 
     pub fn generate<W: Write>(&self, sink: W) -> Result<(), Box<dyn Error>> {
+        if !clang_sys::is_loaded() {
+            clang_sys::load()?;
+        }
         let mut clang_target = None;
         if let Ok(target) = env::var("TARGET") {
             if target != HOST_TARGET {
