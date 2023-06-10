@@ -8,4 +8,4 @@ repository = "https://github.com/coupler-rs/vst3-bindgen"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-clang-sys = { version = "1", features = ["clang_6_0"] }
+clang-sys = { version = "1", features = ["clang_6_0", "runtime"] }
