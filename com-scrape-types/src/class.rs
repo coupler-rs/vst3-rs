@@ -49,10 +49,6 @@ pub trait Class {
 
 pub type Header<C> = <<C as Class>::Interfaces as InterfaceList>::Header;
 
-pub unsafe trait Implements<I> {
-    const OFFSET: isize;
-}
-
 macro_rules! interface_list {
     ($header:ident, $($interface:ident $index:tt),*) => {
         #[repr(C)]
