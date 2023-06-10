@@ -40,7 +40,7 @@ where
     C: Class,
     W: Wrapper<C>,
 {
-    fn header() -> Self::Header;
+    const HEADER: Self::Header;
 }
 
 pub trait Class {
@@ -74,9 +74,7 @@ macro_rules! interface_list {
             W: Wrapper<C>,
             $($interface: Construct<C, W, { $index * std::mem::size_of::<*mut ()>() as isize }>,)*
         {
-            fn header() -> Self::Header {
-                $header($($interface::OBJ),*)
-            }
+            const HEADER: Self::Header = $header($($interface::OBJ),*);
         }
     }
 }
@@ -180,7 +178,7 @@ impl<C: Class> ComWrapper<C> {
     {
         ComWrapper {
             inner: Arc::new(ComWrapperInner {
-                header: C::Interfaces::header(),
+                header: C::Interfaces::HEADER,
                 data,
             }),
         }
