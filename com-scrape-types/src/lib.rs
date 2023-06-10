@@ -19,6 +19,8 @@ pub trait Unknown {
 
 pub unsafe trait Inherits<I> {}
 
+unsafe impl<I> Inherits<I> for I {}
+
 pub unsafe trait Interface: Unknown {
     const IID: Guid;
 

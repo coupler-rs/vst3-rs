@@ -50,8 +50,6 @@ unsafe impl Interface for IUnknown {
     }
 }
 
-unsafe impl Inherits<IUnknown> for IUnknown {}
-
 impl IUnknown {
     pub const fn make_vtbl<C, W, const OFFSET: isize>() -> IUnknownVtbl
     where
@@ -169,7 +167,6 @@ unsafe impl Interface for IMyInterface {
 }
 
 unsafe impl Inherits<IUnknown> for IMyInterface {}
-unsafe impl Inherits<IMyInterface> for IMyInterface {}
 
 impl IMyInterface {
     pub const fn make_vtbl<C, W, const OFFSET: isize>() -> IMyInterfaceVtbl
@@ -257,7 +254,6 @@ unsafe impl Interface for IOtherInterface {
 }
 
 unsafe impl Inherits<IUnknown> for IOtherInterface {}
-unsafe impl Inherits<IOtherInterface> for IOtherInterface {}
 
 impl IOtherInterface {
     pub const fn make_vtbl<C, W, const OFFSET: isize>() -> IOtherInterfaceVtbl

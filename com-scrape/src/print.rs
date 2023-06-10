@@ -204,10 +204,6 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 ));
             }
 
-            writeln!(
-                self.sink,
-                "{indent}unsafe impl ::com_scrape_types::Inherits<{name}> for {name} {{}}"
-            )?;
             {
                 let mut bases = &record.bases;
                 while let Some(base) = bases.first() {
