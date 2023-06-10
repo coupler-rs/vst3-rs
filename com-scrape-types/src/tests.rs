@@ -43,6 +43,8 @@ impl Unknown for IUnknown {
 }
 
 unsafe impl Interface for IUnknown {
+    type Vtbl = IUnknownVtbl;
+
     const IID: Guid = *b"aaaaaaaaaaaaaaaa";
 
     fn inherits(iid: &Guid) -> bool {
@@ -159,6 +161,8 @@ impl Unknown for IMyInterface {
 }
 
 unsafe impl Interface for IMyInterface {
+    type Vtbl = IMyInterfaceVtbl;
+
     const IID: Guid = *b"bbbbbbbbbbbbbbbb";
 
     fn inherits(iid: &Guid) -> bool {
@@ -246,6 +250,8 @@ impl Unknown for IOtherInterface {
 }
 
 unsafe impl Interface for IOtherInterface {
+    type Vtbl = IOtherInterfaceVtbl;
+
     const IID: Guid = *b"cccccccccccccccc";
 
     fn inherits(iid: &Guid) -> bool {

@@ -247,6 +247,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}}}")?;
 
                 writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Interface for {name} {{")?;
+                writeln!(self.sink, "{indent}    type Vtbl = {name}Vtbl;")?;
                 writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
                 writeln!(self.sink, "{indent}    #[inline]")?;
                 writeln!(self.sink, "{indent}    fn inherits(iid: &Guid) -> bool {{")?;

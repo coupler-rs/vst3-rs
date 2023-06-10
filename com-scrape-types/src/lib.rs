@@ -18,6 +18,8 @@ pub trait Unknown {
 }
 
 pub unsafe trait Interface: Unknown {
+    type Vtbl;
+
     const IID: Guid;
 
     fn inherits(iid: &Guid) -> bool;
