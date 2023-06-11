@@ -211,7 +211,8 @@ impl<I: Interface> ComPtr<I> {
     /// Creates a `ComPtr` from a raw interface pointer if the pointer is non-null.
     ///
     /// When the resulting `ComPtr` is dropped, the reference count of the object it points to will
-    /// be decremented.
+    /// be decremented. Thus, using this method can be thought of as "taking ownership" of a
+    /// pointer to a COM object.
     ///
     /// `from_raw` will check if `ptr` is null (and return `None` if so), but this method is still
     /// unsafe, as the caller must still ensure that `ptr` is a valid interface pointer (see below)
@@ -227,15 +228,11 @@ impl<I: Interface> ComPtr<I> {
         NonNull::new(ptr).map(|ptr| ComPtr { ptr })
     }
 
-    /// Creates a `ComPtr` from a raw interface pointer if the pointer is non-null.
+    /// Creates a `ComPtr` from a raw interface pointer.
     ///
     /// When the resulting `ComPtr` is dropped, the reference count of the object it points to will
     /// be decremented. Thus, using this method can be thought of as "taking ownership" of a
     /// pointer to a COM object.
-    ///
-    /// `from_raw` will check if `ptr` is null (and return `None` if so), but this method is still
-    /// unsafe, as the caller must still ensure that `ptr` is a valid interface pointer (see below)
-    /// if it is non-null.
     ///
     /// # Safety
     ///
