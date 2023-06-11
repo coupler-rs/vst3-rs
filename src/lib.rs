@@ -122,8 +122,16 @@ where
     };
 }
 
-#[cfg(target_os = "windows")]
+/// Constructs a 16-byte [`TUID`] value from four 32-bit integers.
+///
+/// Note that the byte order of the resulting value will differ between Windows and other
+/// platforms.
 pub const fn uid(a: u32, b: u32, c: u32, d: u32) -> TUID {
+    uid_impl(a, b, c, d)
+}
+
+#[cfg(target_os = "windows")]
+const fn uid_impl(a: u32, b: u32, c: u32, d: u32) -> TUID {
     [
         ((a & 0x000000FF) >> 0) as int8,
         ((a & 0x0000FF00) >> 8) as int8,
@@ -145,7 +153,7 @@ pub const fn uid(a: u32, b: u32, c: u32, d: u32) -> TUID {
 }
 
 #[cfg(not(target_os = "windows"))]
-pub const fn uid(a: u32, b: u32, c: u32, d: u32) -> TUID {
+const fn uid_impl(a: u32, b: u32, c: u32, d: u32) -> TUID {
     [
         ((a & 0xFF000000) >> 24) as int8,
         ((a & 0x00FF0000) >> 16) as int8,
