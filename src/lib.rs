@@ -6,7 +6,9 @@ use std::ffi::c_void;
 
 use Steinberg::{int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnknownVtbl, TUID};
 
-pub use com_scrape_types::*;
+use com_scrape_types::{Construct, Guid, Header, InterfaceList, Wrapper};
+
+pub use com_scrape_types::{Class, ComPtr, ComRef, ComWrapper};
 
 const fn tuid_as_guid(tuid: TUID) -> Guid {
     [
