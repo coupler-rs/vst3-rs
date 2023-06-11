@@ -74,7 +74,7 @@ fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {
     let bindings = File::create(Path::new(&out_dir).join("bindings.rs"))?;
     let sink = BufWriter::new(bindings);
 
-    com_scrape::Generator::new()
+    com_scrape::Generator::default()
         .skip_types(&[
             "Adopt",
             "ConstStringTable",
@@ -89,8 +89,7 @@ fn generate(sdk_dir: &str) -> Result<(), Box<dyn Error>> {
         .add_ref_fn("crate::FUnknown_add_ref")
         .release_fn("crate::FUnknown_release")
         .include_path(&sdk_dir)
-        .source(source)
-        .generate(sink)?;
+        .generate(source, sink)?;
 
     Ok(())
 }

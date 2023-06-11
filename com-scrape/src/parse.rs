@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::error::Error;
 
 use crate::clang::{self, *};
-use crate::generator::GeneratorOptions;
+use crate::Generator;
 
 #[derive(Clone, Debug)]
 pub struct Namespace {
@@ -24,7 +24,7 @@ impl Namespace {
         }
     }
 
-    pub fn parse(cursor: &Cursor, options: &GeneratorOptions) -> Result<Namespace, Box<dyn Error>> {
+    pub fn parse(cursor: &Cursor, options: &Generator) -> Result<Namespace, Box<dyn Error>> {
         let mut parser = Parser::new(options);
         let mut namespace = Namespace::new();
 
@@ -140,11 +140,11 @@ pub enum Value {
 }
 
 struct Parser<'a> {
-    options: &'a GeneratorOptions,
+    options: &'a Generator,
 }
 
 impl<'a> Parser<'a> {
-    fn new(options: &'a GeneratorOptions) -> Parser<'a> {
+    fn new(options: &'a Generator) -> Parser<'a> {
         Parser { options }
     }
 

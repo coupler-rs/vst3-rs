@@ -1,8 +1,8 @@
 use std::collections::HashSet;
 use std::io::{self, ErrorKind, Write};
 
-use crate::generator::GeneratorOptions;
 use crate::parse::{Method, Namespace, Record, RecordKind, Type, Value};
+use crate::Generator;
 
 struct UnnamedRecordScope {
     prefix: String,
@@ -21,14 +21,14 @@ impl UnnamedRecordScope {
 
 pub struct RustPrinter<'a, W> {
     sink: W,
-    options: &'a GeneratorOptions,
+    options: &'a Generator,
     reserved: HashSet<&'static str>,
     indent_level: usize,
     unnamed_records: Vec<UnnamedRecordScope>,
 }
 
 impl<'a, W: Write> RustPrinter<'a, W> {
-    pub fn new(sink: W, options: &'a GeneratorOptions) -> RustPrinter<'a, W> {
+    pub fn new(sink: W, options: &'a Generator) -> RustPrinter<'a, W> {
         RustPrinter {
             sink,
             options: options,
