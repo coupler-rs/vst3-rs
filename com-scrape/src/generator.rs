@@ -20,6 +20,7 @@ fn rust_to_clang_target(rust_target: &str) -> String {
     rust_target.to_owned()
 }
 
+/// Builder struct for configuring and generating bindings.
 pub struct Generator {
     pub(crate) include_paths: Vec<PathBuf>,
     pub(crate) skip_types: HashSet<String>,
@@ -47,34 +48,44 @@ impl Default for Generator {
 }
 
 impl Generator {
+    /// Adds `path` to the list of include paths to pass to `libclang`.
     pub fn include_path<T: AsRef<Path>>(mut self, path: T) -> Self {
         self.include_paths.push(path.as_ref().to_path_buf());
         self
     }
 
+    /// Do not generate bindings for `type_`.
     pub fn skip_type<T: AsRef<str>>(mut self, type_: T) -> Self {
         self.skip_types.insert(type_.as_ref().to_string());
         self
     }
 
+    /// Do not generate bindings for `types`.
     pub fn skip_types<'a, T: AsRef<[&'a str]>>(mut self, types: T) -> Self {
         self.skip_types
             .extend(types.as_ref().iter().map(|s| s.to_string()));
         self
     }
 
+    /// Do not generate an interface trait for `interface`.
     pub fn skip_interface_trait<T: AsRef<str>>(mut self, interface: T) -> Self {
         self.skip_interface_traits
             .insert(interface.as_ref().to_string());
         self
     }
 
+    /// Do not generate interface traits for `interfaces`.
     pub fn skip_interface_traits<'a, T: AsRef<[&'a str]>>(mut self, interfaces: T) -> Self {
         self.skip_interface_traits
             .extend(interfaces.as_ref().iter().map(|s| s.to_string()));
         self
     }
 
+    /// Registers a callback for parsing constant definitions which `libclang` is not able to
+    /// evaluate.
+    ///
+    /// The callback will be passed a slice of tokens, and its output (if not `None`) will be
+    /// included in the generated bindings.
     pub fn constant_parser<F>(mut self, f: F) -> Self
     where
         F: Fn(&[String]) -> Option<String> + 'static,
@@ -83,6 +94,8 @@ impl Generator {
         self
     }
 
+    /// Registers a callback which should, when given the name of an interface as a string, return
+    /// a string containing a Rust expression evaluating to the `Guid` value for that interface.
     pub fn iid_generator<F>(mut self, f: F) -> Self
     where
         F: Fn(&str) -> String + 'static,
@@ -91,21 +104,37 @@ impl Generator {
         self
     }
 
+    /// Registers a function which will be called by the implementations of
+    /// `Unknown::query_interface` for generated interface types.
+    ///
+    /// The function should be in scope where the resulting bindings are placed, and it should have
+    /// the same type signature as `Unknown::query_interface`.
     pub fn query_interface_fn<T: AsRef<str>>(mut self, f: T) -> Self {
         self.query_interface_fn = Some(f.as_ref().to_string());
         self
     }
 
+    /// Registers a function which will be called by the implementations of `Unknown::add_ref` for
+    /// generated interface types.
+    ///
+    /// The function should be in scope where the resulting bindings are placed, and it should have
+    /// the same type signature as `Unknown::add_ref`.
     pub fn add_ref_fn<T: AsRef<str>>(mut self, f: T) -> Self {
         self.add_ref_fn = Some(f.as_ref().to_string());
         self
     }
 
+    /// Registers a function which will be called by the implementations of `Unknown::release` for
+    /// generated interface types.
+    ///
+    /// The function should be in scope where the resulting bindings are placed, and it should have
+    /// the same type signature as `Unknown::release`.
     pub fn release_fn<T: AsRef<str>>(mut self, f: T) -> Self {
         self.release_fn = Some(f.as_ref().to_string());
         self
     }
 
+    /// Generates Rust bindings for the C++ definitions in `source` and outputs them via `sink`.
     pub fn generate<T: AsRef<str>, W: Write>(
         &self,
         source: T,
