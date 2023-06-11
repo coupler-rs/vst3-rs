@@ -27,7 +27,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install llvm-dev libclang-dev clang
       - name: Generate documentation
-        run: cargo doc --no-deps
+        run: cargo doc
       - name: Add index.html
         run: |
           echo '<meta charset="utf-8"><meta http-equiv="refresh" content="0; url=vst3_bindgen">' > target/doc/index.html
