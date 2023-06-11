@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["vst3_bindgen"];
+window.ALL_CRATES = ["com_scrape_types","vst3_bindgen"];

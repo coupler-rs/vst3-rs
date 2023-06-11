@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"com_scrape_types":[["impl&lt;I: <a class=\"trait\" href=\"com_scrape_types/trait.Interface.html\" title=\"trait com_scrape_types::Interface\">Interface</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.70.0/core/ops/drop/trait.Drop.html\" title=\"trait core::ops::drop::Drop\">Drop</a> for <a class=\"struct\" href=\"com_scrape_types/struct.ComPtr.html\" title=\"struct com_scrape_types::ComPtr\">ComPtr</a>&lt;I&gt;"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

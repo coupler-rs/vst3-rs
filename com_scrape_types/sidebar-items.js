@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ComPtr","ComRef","ComWrapper"],"trait":["Class","Construct","Inherits","Interface","InterfaceList","MakeHeader","SmartPtr","Unknown","Wrapper"],"type":["Guid","Header"]};
