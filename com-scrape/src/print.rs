@@ -42,6 +42,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         "    ".repeat(self.indent_level)
     }
 
+    #[rustfmt::skip]
     pub fn print_namespace(&mut self, namespace: &Namespace) -> io::Result<()> {
         self.push_unnamed_records("");
 
@@ -79,10 +80,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 Value::Signed(value) => writeln!(self.sink, " = {value:?};")?,
                 Value::Unsigned(value) => writeln!(self.sink, " = {value:?};")?,
                 Value::Float(value) => writeln!(self.sink, " = {value:?};")?,
-                Value::Str(value) => writeln!(
-                    self.sink,
-                    " = b\"{value}\\0\".as_ptr() as *const ::std::ffi::c_char;"
-                )?,
+                Value::Str(value) => writeln!(self.sink, " = b\"{value}\\0\".as_ptr() as *const ::std::ffi::c_char;")?,
             }
         }
 
@@ -110,6 +108,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         Ok(())
     }
 
+    #[rustfmt::skip]
     fn print_record(&mut self, record: &Record) -> io::Result<()> {
         self.push_unnamed_records(&record.name);
 
@@ -153,6 +152,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         Ok(())
     }
 
+    #[rustfmt::skip]
     fn print_record_body(&mut self, record: &Record) -> io::Result<()> {
         let indent = self.indent();
         let name = &record.name;
@@ -192,6 +192,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         Ok(())
     }
 
+    #[rustfmt::skip]
     fn print_interface(&mut self, record: &Record) -> io::Result<()> {
         if !record.virtual_methods.is_empty() {
             let indent = self.indent();
@@ -208,10 +209,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 let mut bases = &record.bases;
                 while let Some(base) = bases.first() {
                     let base_name = &base.name;
-                    writeln!(
-                        self.sink,
-                        "{indent}unsafe impl ::com_scrape_types::Inherits<{base_name}> for {name} {{}}"
-                    )?;
+                    writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Inherits<{base_name}> for {name} {{}}")?;
                     bases = &base.bases;
                 }
             }
@@ -229,37 +227,35 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let release_fn = self.options.release_fn.as_ref().ok_or_else(|| {
                 io::Error::new(ErrorKind::Other, "no value provided for release_fn")
             })?;
-            #[rustfmt::skip]
-            {
-                writeln!(self.sink, "{indent}impl ::com_scrape_types::Unknown for {name} {{")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {{")?;
-                writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void, iid)")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn add_ref(this: *mut Self) -> usize {{")?;
-                writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut c_void)")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    unsafe fn release(this: *mut Self) -> usize {{")?;
-                writeln!(self.sink, "{indent}        {release_fn}(this as *mut c_void)")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}}}")?;
 
-                writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Interface for {name} {{")?;
-                writeln!(self.sink, "{indent}    type Vtbl = {name}Vtbl;")?;
-                writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
-                writeln!(self.sink, "{indent}    #[inline]")?;
-                writeln!(self.sink, "{indent}    fn inherits(iid: &Guid) -> bool {{")?;
-                write!(self.sink, "{indent}        iid == &Self::IID")?;
-                if let Some(base) = record.bases.first() {
-                    let base_name = &base.name;
-                    write!(self.sink, " || {base_name}::inherits(iid)")?;
-                }
-                writeln!(self.sink, "")?;
-                writeln!(self.sink, "{indent}    }}")?;
-                writeln!(self.sink, "{indent}}}")?;
-            };
+            writeln!(self.sink, "{indent}impl ::com_scrape_types::Unknown for {name} {{")?;
+            writeln!(self.sink, "{indent}    #[inline]")?;
+            writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {{")?;
+            writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void, iid)")?;
+            writeln!(self.sink, "{indent}    }}")?;
+            writeln!(self.sink, "{indent}    #[inline]")?;
+            writeln!(self.sink, "{indent}    unsafe fn add_ref(this: *mut Self) -> usize {{")?;
+            writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut c_void)")?;
+            writeln!(self.sink, "{indent}    }}")?;
+            writeln!(self.sink, "{indent}    #[inline]")?;
+            writeln!(self.sink, "{indent}    unsafe fn release(this: *mut Self) -> usize {{")?;
+            writeln!(self.sink, "{indent}        {release_fn}(this as *mut c_void)")?;
+            writeln!(self.sink, "{indent}    }}")?;
+            writeln!(self.sink, "{indent}}}")?;
+
+            writeln!(self.sink, "{indent}unsafe impl ::com_scrape_types::Interface for {name} {{")?;
+            writeln!(self.sink, "{indent}    type Vtbl = {name}Vtbl;")?;
+            writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
+            writeln!(self.sink, "{indent}    #[inline]")?;
+            writeln!(self.sink, "{indent}    fn inherits(iid: &Guid) -> bool {{")?;
+            write!(self.sink, "{indent}        iid == &Self::IID")?;
+            if let Some(base) = record.bases.first() {
+                let base_name = &base.name;
+                write!(self.sink, " || {base_name}::inherits(iid)")?;
+            }
+            writeln!(self.sink, "")?;
+            writeln!(self.sink, "{indent}    }}")?;
+            writeln!(self.sink, "{indent}}}")?;
 
             writeln!(self.sink, "{indent}#[repr(C)]")?;
             writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
@@ -333,19 +329,13 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}impl<P> {name}Trait for P")?;
                 writeln!(self.sink, "{indent}where")?;
                 writeln!(self.sink, "{indent}    P: ::com_scrape_types::SmartPtr,")?;
-                writeln!(
-                    self.sink,
-                    "{indent}    P::Target: ::com_scrape_types::Inherits<{name}>,"
-                )?;
+                writeln!(self.sink, "{indent}    P::Target: ::com_scrape_types::Inherits<{name}>,")?;
                 {
                     let mut bases = &record.bases;
                     while let Some(base) = bases.first() {
                         if !self.options.skip_interface_traits.contains(&base.name) {
                             let base_name = &base.name;
-                            writeln!(
-                                self.sink,
-                                "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,"
-                            )?;
+                            writeln!(self.sink, "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,")?;
                         }
                         bases = &base.bases;
                     }
@@ -370,10 +360,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                         self.print_type(&method.result_type)?;
                     }
                     writeln!(self.sink, " {{")?;
-                    writeln!(
-                        self.sink,
-                        "{indent}        let ptr = self.ptr() as *mut {name};"
-                    )?;
+                    writeln!(self.sink, "{indent}        let ptr = self.ptr() as *mut {name};")?;
                     writeln!(self.sink, "{indent}        ((*(*ptr).vtbl).{method_name})(")?;
                     writeln!(self.sink, "{indent}            ptr,")?;
 
@@ -388,19 +375,10 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}}}")?;
 
                 writeln!(self.sink, "{indent}impl {name} {{")?;
-                writeln!(
-                    self.sink,
-                    "{indent}    const fn make_vtbl<C, W, const OFFSET: isize>() -> {name}Vtbl"
-                )?;
+                writeln!(self.sink, "{indent}    const fn make_vtbl<C, W, const OFFSET: isize>() -> {name}Vtbl")?;
                 writeln!(self.sink, "{indent}    where")?;
-                writeln!(
-                    self.sink,
-                    "{indent}        C: {name}Trait + ::com_scrape_types::Class,"
-                )?;
-                writeln!(
-                    self.sink,
-                    "{indent}        W: ::com_scrape_types::Wrapper<C>,"
-                )?;
+                writeln!(self.sink, "{indent}        C: {name}Trait + ::com_scrape_types::Class,")?;
+                writeln!(self.sink, "{indent}        W: ::com_scrape_types::Wrapper<C>,")?;
                 writeln!(self.sink, "{indent}    {{")?;
 
                 #[rustfmt::skip]
@@ -440,10 +418,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}        {name}Vtbl {{")?;
                 if let Some(base) = record.bases.first() {
                     let base_name = &base.name;
-                    writeln!(
-                        self.sink,
-                        "{indent}            base: {base_name}::make_vtbl::<C, W, OFFSET>(),"
-                    )?;
+                    writeln!(self.sink, "{indent}            base: {base_name}::make_vtbl::<C, W, OFFSET>(),")?;
                 }
 
                 for method in &record.virtual_methods {
@@ -459,10 +434,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 writeln!(self.sink, "{indent}    }}")?;
                 writeln!(self.sink, "{indent}}}")?;
 
-                writeln!(
-                    self.sink,
-                    "{indent}unsafe impl<C, W, const OFFSET: isize> ::com_scrape_types::Construct<C, W, OFFSET> for {name}"
-                )?;
+                writeln!(self.sink, "{indent}unsafe impl<C, W, const OFFSET: isize> ::com_scrape_types::Construct<C, W, OFFSET> for {name}")?;
                 writeln!(self.sink, "{indent}where")?;
                 writeln!(
                     self.sink,
