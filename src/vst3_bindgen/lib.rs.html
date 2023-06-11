@@ -165,6 +165,16 @@
 <a href="#165" id="165">165</a>
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -173,7 +183,9 @@
 
 <span class="kw">use </span>Steinberg::{int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnknownVtbl, TUID};
 
-<span class="kw">pub use </span>com_scrape_types::<span class="kw-2">*</span>;
+<span class="kw">use </span>com_scrape_types::{Construct, Guid, Header, InterfaceList, Wrapper};
+
+<span class="kw">pub use </span>com_scrape_types::{Class, ComPtr, ComRef, ComWrapper};
 
 <span class="kw">const fn </span>tuid_as_guid(tuid: TUID) -&gt; Guid {
     [
@@ -287,8 +299,16 @@
     };
 }
 
-<span class="attr">#[cfg(target_os = <span class="string">&quot;windows&quot;</span>)]
+<span class="doccomment">/// Constructs a 16-byte [`TUID`] value from four 32-bit integers.
+///
+/// Note that the byte order of the resulting value will differ between Windows and other
+/// platforms.
 </span><span class="kw">pub const fn </span>uid(a: u32, b: u32, c: u32, d: u32) -&gt; TUID {
+    uid_impl(a, b, c, d)
+}
+
+<span class="attr">#[cfg(target_os = <span class="string">&quot;windows&quot;</span>)]
+</span><span class="kw">const fn </span>uid_impl(a: u32, b: u32, c: u32, d: u32) -&gt; TUID {
     [
         ((a &amp; <span class="number">0x000000FF</span>) &gt;&gt; <span class="number">0</span>) <span class="kw">as </span>int8,
         ((a &amp; <span class="number">0x0000FF00</span>) &gt;&gt; <span class="number">8</span>) <span class="kw">as </span>int8,
@@ -310,7 +330,7 @@
 }
 
 <span class="attr">#[cfg(not(target_os = <span class="string">&quot;windows&quot;</span>))]
-</span><span class="kw">pub const fn </span>uid(a: u32, b: u32, c: u32, d: u32) -&gt; TUID {
+</span><span class="kw">const fn </span>uid_impl(a: u32, b: u32, c: u32, d: u32) -&gt; TUID {
     [
         ((a &amp; <span class="number">0xFF000000</span>) &gt;&gt; <span class="number">24</span>) <span class="kw">as </span>int8,
         ((a &amp; <span class="number">0x00FF0000</span>) &gt;&gt; <span class="number">16</span>) <span class="kw">as </span>int8,
