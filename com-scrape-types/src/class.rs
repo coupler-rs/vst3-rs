@@ -132,7 +132,7 @@ macro_rules! interface_list {
             fn query(iid: &Guid) -> Option<isize> {
                 $(
                     if $interface::inherits(iid) {
-                        return Some(unsafe { offset_of!(Self::Header, $index) });
+                        return Some($index * std::mem::size_of::<*mut ()>() as isize);
                     }
                 )*
 
