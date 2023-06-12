@@ -35,9 +35,10 @@ pub trait SmartPtr {
 /// A non-owning smart pointer to a COM object.
 ///
 /// A `ComRef<'a, I>` represents a borrowed reference to a COM object implementing interface `I`.
-/// Like [`ComPtr`], `ComRef` can be used to call interface methods on the referenced object, but
-/// unlike `ComPtr`, `ComRef` does not manage the object's reference count, i.e. it will *not* call
-/// the object's release method when going out of scope.
+/// Like [`ComPtr`], `ComRef` can be used to call interface methods on the referenced object.
+/// Unlike [`ComPtr`], `ComRef` does not manage the object's reference count, i.e. it will *not*
+/// call the release method of the object it points to when going out of scope. See the
+/// [crate-level documentation](crate#reference-counting) for more information.
 ///
 /// A `ComRef` can be created safely from a [`ComPtr`] via [`ComPtr::as_com_ref`], or from a
 /// [`ComWrapper`][crate::ComWrapper] via [`ComWrapper::as_com_ref`][crate::ComWrapper::as_com_ref].
@@ -160,8 +161,9 @@ impl<'a, I: Interface> ComRef<'a, I> {
 ///
 /// A `ComPtr<I>` represents an owning reference to a COM object implementing interface `I`. Like
 /// [`ComRef`], `ComPtr` can be used to call interface methods on the referenced object. Unlike
-/// [`ComRef`], `ComPtr` does perform reference counting operations, i.e. it *will* call the
-/// release method of the object it points to when going out of scope.
+/// [`ComRef`], `ComPtr` manages the object's reference count, i.e. it *will* call the release
+/// method of the object it points to when going out of scope. See the
+/// [crate-level documentation](crate#reference-counting) for more information.
 ///
 /// A `ComPtr` can be created safely from a [`ComRef`] via [`ComRef::to_com_ptr`], or from a
 /// [`ComWrapper`][crate::ComWrapper] via [`ComWrapper::to_com_ptr`][crate::ComWrapper::to_com_ptr].

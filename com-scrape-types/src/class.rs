@@ -100,7 +100,7 @@ where
     const HEADER: Self::Header;
 }
 
-/// Specifies the list of COM interfaces implemented by a Rust type.
+/// A Rust type that defines a COM class.
 ///
 /// Must be implemented for a type to be used with [`ComWrapper`].
 pub trait Class {
