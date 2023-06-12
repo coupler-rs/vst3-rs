@@ -230,7 +230,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}impl ::com_scrape_types::Unknown for {name} {{")?;
             writeln!(self.sink, "{indent}    #[inline]")?;
-            writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &Guid) -> Option<*mut c_void> {{")?;
+            writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &::com_scrape_types::Guid) -> Option<*mut c_void> {{")?;
             writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void, iid)")?;
             writeln!(self.sink, "{indent}    }}")?;
             writeln!(self.sink, "{indent}    #[inline]")?;
@@ -247,7 +247,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             writeln!(self.sink, "{indent}    type Vtbl = {name}Vtbl;")?;
             writeln!(self.sink, "{indent}    const IID: ::com_scrape_types::Guid = {iid_string};")?;
             writeln!(self.sink, "{indent}    #[inline]")?;
-            writeln!(self.sink, "{indent}    fn inherits(iid: &Guid) -> bool {{")?;
+            writeln!(self.sink, "{indent}    fn inherits(iid: &::com_scrape_types::Guid) -> bool {{")?;
             write!(self.sink, "{indent}        iid == &Self::IID")?;
             if let Some(base) = record.bases.first() {
                 let base_name = &base.name;
