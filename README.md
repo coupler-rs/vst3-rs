@@ -1,5 +1,6 @@
 # vst3-bindgen
 
+[![Cargo](https://img.shields.io/crates/v/vst3-bindgen.svg)](https://crates.io/crates/vst3-bindgen)
 [![Docs](https://github.com/coupler-rs/vst3-bindgen/actions/workflows/docs.yml/badge.svg?branch=master)](https://coupler.rs/vst3-bindgen/)
 
 `vst3-bindgen` provides Rust bindings for the VST 3 API, generated from the original C++ headers. Abstractions are provided for manipulating COM objects and implementing COM interfaces from Rust. Beyond that, however, these bindings are unsafe, and no attempt is made to abstract over the VST 3 API itself.
