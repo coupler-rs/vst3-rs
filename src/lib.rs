@@ -8,7 +8,8 @@ use Steinberg::{int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnkno
 
 use com_scrape_types::{Construct, Guid, Header, InterfaceList, Wrapper};
 
-pub use com_scrape_types::{Class, ComPtr, ComRef, ComWrapper};
+pub use com_scrape_types;
+pub use com_scrape_types::{Class, ComPtr, ComRef, ComWrapper, Interface};
 
 const fn tuid_as_guid(tuid: TUID) -> Guid {
     [
