@@ -30,7 +30,11 @@ impl TranslationUnit {
         include_paths: &[PathBuf],
         target: Option<&str>,
     ) -> Result<TranslationUnit, Box<dyn Error>> {
-        let mut args = vec!["-x".to_string(), "c++".to_string()];
+        let mut args = vec![
+            "-x".to_string(),
+            "c++".to_string(),
+            "-std=c++14".to_string(),
+        ];
 
         if let Some(target) = target {
             args.push(target.to_string());
