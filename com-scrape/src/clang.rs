@@ -10,6 +10,7 @@ use std::path::PathBuf;
 use std::ptr::NonNull;
 use std::{fmt, ptr, slice};
 
+use clang_sys::support::Clang;
 use clang_sys::*;
 
 macro_rules! c_str {
@@ -29,26 +30,34 @@ impl TranslationUnit {
         include_paths: &[PathBuf],
         target: Option<&str>,
     ) -> Result<TranslationUnit, Box<dyn Error>> {
-        let mut paths_cstrs = Vec::new();
-        for include_path in include_paths {
-            paths_cstrs.push(CString::new(include_path.to_str().unwrap()).unwrap());
+        let mut args = vec!["-x".to_string(), "c++".to_string()];
+
+        if let Some(target) = target {
+            args.push(target.to_string());
         }
 
-        let mut target_cstr = None;
-        if let Some(target) = target {
-            target_cstr = Some(CString::new(target).unwrap());
+        if let Some(clang) = Clang::find(None, &args) {
+            if let Some(paths) = clang.cpp_search_paths {
+                for path in paths {
+                    args.push("-isystem".to_string());
+                    args.push(path.to_str().unwrap().to_string());
+                }
+            }
         }
+
+        for include_path in include_paths {
+            args.push("-I".to_string());
+            args.push(include_path.to_str().unwrap().to_string());
+        }
+
+        let args_cstrs = args
+            .iter()
+            .map(|s| CString::new(&**s).unwrap())
+            .collect::<Vec<_>>();
+        let args_ptrs = args_cstrs.iter().map(|s| s.as_ptr()).collect::<Vec<_>>();
 
         unsafe {
             let index = clang_createIndex(0, 0);
-
-            let mut args = vec![c_str!("-x"), c_str!("c++")];
-            for path in &paths_cstrs {
-                args.extend_from_slice(&[c_str!("-I"), path.as_ptr()]);
-            }
-            if let Some(target) = &target_cstr {
-                args.extend_from_slice(&[c_str!("-target"), target.as_ptr()]);
-            }
 
             let filename = c_str!("header.h");
             let mut sources = [CXUnsavedFile {
@@ -61,8 +70,8 @@ impl TranslationUnit {
             let result = clang_parseTranslationUnit2(
                 index,
                 filename,
-                args.as_ptr(),
-                args.len() as c_int,
+                args_ptrs.as_ptr(),
+                args_ptrs.len() as c_int,
                 sources.as_mut_ptr(),
                 sources.len() as u32,
                 CXTranslationUnit_None,
