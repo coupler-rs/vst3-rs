@@ -155,8 +155,7 @@ impl Generator {
             source.as_ref(),
             &self.include_paths,
             clang_target.as_deref(),
-        )
-        .unwrap();
+        )?;
 
         let namespace = Namespace::parse(&unit.cursor(), &self)?;
 

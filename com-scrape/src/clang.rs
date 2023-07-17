@@ -84,6 +84,25 @@ impl TranslationUnit {
                 return Err("error building translation unit".into());
             }
 
+            let mut has_error = false;
+            let mut error = String::new();
+            let num_diagnostics = clang_getNumDiagnostics(unit) as usize;
+            for i in 0..num_diagnostics {
+                let diagnostic = clang_getDiagnostic(unit, i as c_uint);
+                if clang_getDiagnosticSeverity(diagnostic) >= CXDiagnostic_Error {
+                    has_error = true;
+
+                    let opts = clang_defaultDiagnosticDisplayOptions();
+                    let str = StringRef::from_raw(clang_formatDiagnostic(diagnostic, opts));
+                    error.push_str(str.to_str().unwrap());
+                    error.push('\n');
+                }
+            }
+            if has_error {
+                clang_disposeIndex(index);
+                return Err(error.into());
+            }
+
             Ok(TranslationUnit { index, unit })
         }
     }
