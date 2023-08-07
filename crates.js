@@ -1,1 +1,1 @@
-window.ALL_CRATES = ["com_scrape_types","vst3_bindgen"];
+window.ALL_CRATES = ["cfg_if","clang_sys","com_scrape","com_scrape_types","glob","libc","libloading","vst3"];
