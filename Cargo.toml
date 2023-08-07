@@ -1,11 +1,11 @@
 [package]
-name = "vst3-bindgen"
+name = "vst3"
 version = "0.1.1"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
 description = "Binding generator for the VST 3 API"
-documentation = "https://coupler.rs/vst3-bindgen/"
-repository = "https://github.com/coupler-rs/vst3-bindgen"
+documentation = "https://coupler.rs/vst3-rs/vst3/"
+repository = "https://github.com/coupler-rs/vst3-rs"
 license = "MIT OR Apache-2.0"
 
 [dependencies]

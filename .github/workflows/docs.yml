@@ -6,7 +6,7 @@ on:
       master
 
 env:
-  VST3_SDK_DIR: vst3sdk
+  VST3_SDK_DIR: ${{ github.workspace }}/vst3sdk
 
 jobs:
   docs:
@@ -30,7 +30,7 @@ jobs:
         run: cargo doc
       - name: Add index.html
         run: |
-          echo '<meta charset="utf-8"><meta http-equiv="refresh" content="0; url=vst3_bindgen">' > target/doc/index.html
+          echo '<meta charset="utf-8"><meta http-equiv="refresh" content="0; url=vst3">' > target/doc/index.html
       - name: Publish documentation
         uses: JamesIves/github-pages-deploy-action@v4
         with:

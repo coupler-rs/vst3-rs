@@ -1,4 +1,4 @@
-//! `vst3-bindgen` provides Rust bindings for the VST 3 API, generated from the original C++
+//! The `vst3` crate provides Rust bindings for the VST 3 API, generated from the original C++
 //! headers. Abstractions are provided for manipulating COM objects and implementing COM interfaces
 //! from Rust. Beyond that, however, these bindings are unsafe, and no attempt is made to abstract
 //! over the VST 3 API itself.
@@ -29,11 +29,11 @@
 //! # Implementing COM interfaces from Rust
 //!
 //! COM classes can be defined in Rust using the [`Class`] trait and the interface traits generated
-//! by `vst3-bindgen`, and objects of these classes can be instantiated using the
+//! from the VST 3 headers, and objects of these classes can be instantiated using the
 //! [`ComWrapper`] smart pointer:
 //!
 //! ```
-//! # use vst3_bindgen::{*, Steinberg::*};
+//! # use vst3::{*, Steinberg::*};
 //! struct MyClass;
 //!
 //! impl Class for MyClass {

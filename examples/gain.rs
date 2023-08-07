@@ -8,7 +8,7 @@ use std::str::FromStr;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::{ptr, slice};
 
-use vst3_bindgen::{uid, Class, ComRef, ComWrapper, Steinberg::Vst::*, Steinberg::*};
+use vst3::{uid, Class, ComRef, ComWrapper, Steinberg::Vst::*, Steinberg::*};
 
 fn copy_cstring(src: &str, dst: &mut [c_char]) {
     let c_string = CString::new(src).unwrap_or_else(|_| CString::default());
@@ -49,7 +49,7 @@ unsafe fn len_wstring(string: *const TChar) -> usize {
     len as usize
 }
 
-const PLUGIN_NAME: &'static str = "Gain (vst3-bindgen example plugin)";
+const PLUGIN_NAME: &'static str = "Gain (vst3-rs example plugin)";
 
 struct GainProcessor {
     gain: AtomicU64,

@@ -4,7 +4,7 @@ version = "0.1.1"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
 description = "Automatically generates Rust bindings for COM interfaces"
-repository = "https://github.com/coupler-rs/vst3-bindgen"
+repository = "https://github.com/coupler-rs/vst3-rs"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
