@@ -13,7 +13,7 @@ First, add `vst3` as a dependency to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-vst3 = "0.1.1"
+vst3 = "0.1.0"
 ```
 
 Then, download the VST 3 SDK:

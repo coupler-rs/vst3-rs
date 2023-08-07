@@ -1,9 +1,9 @@
 [package]
 name = "vst3"
-version = "0.1.1"
+version = "0.1.0"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
-description = "Binding generator for the VST 3 API"
+description = "Rust bindings for the VST 3 API"
 documentation = "https://coupler.rs/vst3-rs/vst3/"
 repository = "https://github.com/coupler-rs/vst3-rs"
 license = "MIT OR Apache-2.0"
@@ -12,7 +12,7 @@ license = "MIT OR Apache-2.0"
 com-scrape-types = { path = "com-scrape-types", version = "0.1.0" }
 
 [build-dependencies]
-com-scrape = { path = "com-scrape", version = "0.1.1" }
+vst3-bindgen = { path = "vst3-bindgen", version = "0.2.0" }
 
 [[example]]
 name = "gain"
@@ -22,4 +22,5 @@ crate-type = ["cdylib"]
 members = [
     "com-scrape",
     "com-scrape-types",
+    "vst3-bindgen",
 ]
