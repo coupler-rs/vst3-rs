@@ -37,6 +37,7 @@ impl TranslationUnit {
         ];
 
         if let Some(target) = target {
+            args.push("-target".to_string());
             args.push(target.to_string());
         }
 
