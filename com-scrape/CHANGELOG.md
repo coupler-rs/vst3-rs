@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2
+
+- Fix cross-compilation build failure introduced in 0.1.1 ([#9](https://github.com/coupler-rs/vst3-rs/pull/9)).
+
 ## 0.1.1
 
 - Check for and report Clang errors when parsing C++ headers.

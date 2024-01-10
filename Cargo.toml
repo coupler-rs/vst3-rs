@@ -1,6 +1,6 @@
 [package]
 name = "vst3"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
 description = "Rust bindings for the VST 3 API"
@@ -12,7 +12,7 @@ license = "MIT OR Apache-2.0"
 com-scrape-types = { path = "com-scrape-types", version = "0.1.0" }
 
 [build-dependencies]
-vst3-bindgen = { path = "vst3-bindgen", version = "0.2.0" }
+vst3-bindgen = { path = "vst3-bindgen", version = "0.2.1" }
 
 [[example]]
 name = "gain"
