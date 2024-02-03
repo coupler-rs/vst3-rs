@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::collections::HashSet;
 use std::env;
 use std::error::Error;
@@ -144,18 +145,14 @@ impl Generator {
             clang_sys::load()?;
         }
 
-        let mut clang_target = None;
-        if let Ok(target) = env::var("TARGET") {
-            if target != HOST_TARGET {
-                clang_target = Some(rust_to_clang_target(&target));
-            }
-        }
+        let rust_target = if let Ok(target) = env::var("TARGET") {
+            Cow::from(target)
+        } else {
+            Cow::from(HOST_TARGET)
+        };
+        let clang_target = rust_to_clang_target(&rust_target);
 
-        let unit = TranslationUnit::new(
-            source.as_ref(),
-            &self.include_paths,
-            clang_target.as_deref(),
-        )?;
+        let unit = TranslationUnit::new(source.as_ref(), &self.include_paths, Some(&clang_target))?;
 
         let namespace = Namespace::parse(&unit.cursor(), &self)?;
 
