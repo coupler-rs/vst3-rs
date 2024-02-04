@@ -23,4 +23,5 @@ members = [
     "com-scrape",
     "com-scrape-types",
     "vst3-bindgen",
+    "vst3-bindgen-cli",
 ]

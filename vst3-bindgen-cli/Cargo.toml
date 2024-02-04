@@ -1,0 +1,16 @@
+[package]
+name = "vst3-bindgen-cli"
+version = "0.1.0"
+authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
+edition = "2021"
+description = "Binding generator for the VST 3 API"
+repository = "https://github.com/coupler-rs/vst3-rs"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+path = "src/main.rs"
+name = "vst3-bindgen"
+
+[dependencies]
+vst3-bindgen = { path = "../vst3-bindgen", version = "0.2.1" }
+clap = { version = "3.1.17", features = ["derive", "cargo"] }
