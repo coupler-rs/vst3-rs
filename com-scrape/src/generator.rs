@@ -70,9 +70,9 @@ impl Generator {
     }
 
     /// Do not generate bindings for `types`.
-    pub fn skip_types<'a, T: AsRef<[&'a str]>>(mut self, types: T) -> Self {
+    pub fn skip_types<S: AsRef<str>, T: AsRef<[S]>>(mut self, types: T) -> Self {
         self.skip_types
-            .extend(types.as_ref().iter().map(|s| s.to_string()));
+            .extend(types.as_ref().iter().map(|s| s.as_ref().to_string()));
         self
     }
 
