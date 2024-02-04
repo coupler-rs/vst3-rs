@@ -46,7 +46,11 @@ fn parse_iid(tokens: &[String]) -> Option<String> {
 }
 
 /// Generates Rust bindings given a path to the VST 3 SDK.
-pub fn generate(sdk_dir: &Path, mut sink: impl Write) -> Result<(), Box<dyn Error>> {
+pub fn generate(
+    sdk_dir: &Path,
+    target: Option<&str>,
+    mut sink: impl Write,
+) -> Result<(), Box<dyn Error>> {
     let pluginterfaces_path = sdk_dir.join("pluginterfaces");
     let headers = find_headers(&pluginterfaces_path)?;
 
@@ -59,7 +63,7 @@ pub fn generate(sdk_dir: &Path, mut sink: impl Write) -> Result<(), Box<dyn Erro
 
     let mut source = String::new();
     for header in &headers {
-        let relative = header.strip_prefix(&sdk_dir).unwrap();
+        let relative = header.strip_prefix(sdk_dir).unwrap();
         if skip_headers.contains(relative) {
             continue;
         }
@@ -75,7 +79,7 @@ pub fn generate(sdk_dir: &Path, mut sink: impl Write) -> Result<(), Box<dyn Erro
 
     writeln!(sink, "{}", include_str!("support.rs"))?;
 
-    com_scrape::Generator::default()
+    let mut generator = com_scrape::Generator::default()
         .skip_types(&[
             "Adopt",
             "ConstStringTable",
@@ -89,8 +93,13 @@ pub fn generate(sdk_dir: &Path, mut sink: impl Write) -> Result<(), Box<dyn Erro
         .query_interface_fn("crate::__bindings::FUnknown_query_interface")
         .add_ref_fn("crate::__bindings::FUnknown_add_ref")
         .release_fn("crate::__bindings::FUnknown_release")
-        .include_path(&sdk_dir)
-        .generate(source, &mut sink)?;
+        .include_path(sdk_dir);
+
+    if let Some(target) = target {
+        generator = generator.target(target);
+    }
+
+    generator.generate(source, &mut sink)?;
 
     writeln!(sink)?;
     writeln!(sink, "}}")?;

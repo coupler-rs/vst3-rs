@@ -22,7 +22,7 @@ fn main() {
     let bindings = File::create(Path::new(&out_dir).join("bindings.rs")).unwrap();
     let sink = BufWriter::new(bindings);
 
-    if let Err(err) = generate(Path::new(&vst3_sdk_dir), sink) {
+    if let Err(err) = generate(Path::new(&vst3_sdk_dir), None, sink) {
         eprintln!("{}", err);
         process::exit(1);
     }

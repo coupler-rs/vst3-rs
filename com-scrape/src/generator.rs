@@ -24,6 +24,7 @@ fn rust_to_clang_target(rust_target: &str) -> String {
 /// Builder struct for configuring and generating bindings.
 pub struct Generator {
     pub(crate) include_paths: Vec<PathBuf>,
+    pub(crate) target: Option<String>,
     pub(crate) skip_types: HashSet<String>,
     pub(crate) skip_interface_traits: HashSet<String>,
     pub(crate) constant_parser: Option<Box<dyn Fn(&[String]) -> Option<String>>>,
@@ -37,6 +38,7 @@ impl Default for Generator {
     fn default() -> Generator {
         Generator {
             include_paths: Vec::new(),
+            target: None,
             skip_types: HashSet::new(),
             skip_interface_traits: HashSet::new(),
             constant_parser: None,
@@ -52,6 +54,12 @@ impl Generator {
     /// Adds `path` to the list of include paths to pass to `libclang`.
     pub fn include_path<T: AsRef<Path>>(mut self, path: T) -> Self {
         self.include_paths.push(path.as_ref().to_path_buf());
+        self
+    }
+
+    /// Specify the target triple for which bindings should be generated.
+    pub fn target<T: AsRef<str>>(mut self, target: T) -> Self {
+        self.target = Some(target.as_ref().to_string());
         self
     }
 
@@ -145,7 +153,9 @@ impl Generator {
             clang_sys::load()?;
         }
 
-        let rust_target = if let Ok(target) = env::var("TARGET") {
+        let rust_target = if let Some(target) = &self.target {
+            Cow::from(target)
+        } else if let Ok(target) = env::var("TARGET") {
             Cow::from(target)
         } else {
             Cow::from(HOST_TARGET)
