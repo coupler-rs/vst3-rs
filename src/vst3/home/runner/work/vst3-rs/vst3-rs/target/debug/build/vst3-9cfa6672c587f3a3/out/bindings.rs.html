@@ -14137,22 +14137,7 @@
 <a href="#14137" id="14137">14137</a>
 <a href="#14138" id="14138">14138</a>
 <a href="#14139" id="14139">14139</a>
-<a href="#14140" id="14140">14140</a>
-<a href="#14141" id="14141">14141</a>
-<a href="#14142" id="14142">14142</a>
-<a href="#14143" id="14143">14143</a>
-<a href="#14144" id="14144">14144</a>
-<a href="#14145" id="14145">14145</a>
-<a href="#14146" id="14146">14146</a>
-<a href="#14147" id="14147">14147</a>
-<a href="#14148" id="14148">14148</a>
-</pre></div><pre class="rust"><code><span class="kw">mod </span>__bindings {
-
-<span class="attr">#![allow(non_upper_case_globals)]
-#![allow(non_camel_case_types)]
-#![allow(non_snake_case)]
-
-</span><span class="kw">use </span>std::ffi::c_void;
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::ffi::c_void;
 
 <span class="kw">use </span>Steinberg::{int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnknownVtbl, TUID};
 
@@ -14524,20 +14509,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>FUnknown {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>FUnknown {
         <span class="kw">type </span>Vtbl = FUnknownVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(FUnknown_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(FUnknown_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID
@@ -14569,20 +14554,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPluginBase {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPluginBase {
         <span class="kw">type </span>Vtbl = IPluginBaseVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPluginBase_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPluginBase_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -14757,20 +14742,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPluginFactory {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPluginFactory {
         <span class="kw">type </span>Vtbl = IPluginFactoryVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPluginFactory_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPluginFactory_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -14998,20 +14983,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPluginFactory2 {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPluginFactory2 {
         <span class="kw">type </span>Vtbl = IPluginFactory2Vtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPluginFactory2_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPluginFactory2_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || IPluginFactory::inherits(iid)
@@ -15133,20 +15118,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPluginFactory3 {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPluginFactory3 {
         <span class="kw">type </span>Vtbl = IPluginFactory3Vtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPluginFactory3_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPluginFactory3_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || IPluginFactory2::inherits(iid)
@@ -15272,20 +15257,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IStringResult {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IStringResult {
         <span class="kw">type </span>Vtbl = IStringResultVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IStringResult_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IStringResult_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -15369,20 +15354,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IString {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IString {
         <span class="kw">type </span>Vtbl = IStringVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IString_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IString_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -15629,20 +15614,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IBStream {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IBStream {
             <span class="kw">type </span>Vtbl = IBStreamVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IBStream_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IBStream_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -15878,20 +15863,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>ISizeableStream {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>ISizeableStream {
         <span class="kw">type </span>Vtbl = ISizeableStreamVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(ISizeableStream_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(ISizeableStream_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16009,20 +15994,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPluginCompatibility {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPluginCompatibility {
         <span class="kw">type </span>Vtbl = IPluginCompatibilityVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPluginCompatibility_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPluginCompatibility_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16106,20 +16091,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>ICloneable {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>ICloneable {
         <span class="kw">type </span>Vtbl = ICloneableVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(ICloneable_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(ICloneable_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16206,20 +16191,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IUpdateHandler {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IUpdateHandler {
         <span class="kw">type </span>Vtbl = IUpdateHandlerVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IUpdateHandler_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IUpdateHandler_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16434,20 +16419,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IDependent {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IDependent {
             <span class="kw">type </span>Vtbl = IDependentVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IDependent_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IDependent_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16590,20 +16575,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IErrorContext {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IErrorContext {
         <span class="kw">type </span>Vtbl = IErrorContextVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IErrorContext_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IErrorContext_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16749,20 +16734,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPersistent {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPersistent {
         <span class="kw">type </span>Vtbl = IPersistentVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPersistent_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPersistent_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -16914,20 +16899,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IAttributes {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IAttributes {
         <span class="kw">type </span>Vtbl = IAttributesVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IAttributes_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IAttributes_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -17366,20 +17351,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IAttributes2 {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IAttributes2 {
         <span class="kw">type </span>Vtbl = IAttributes2Vtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IAttributes2_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IAttributes2_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || IAttributes::inherits(iid)
@@ -17502,20 +17487,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPlugView {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPlugView {
         <span class="kw">type </span>Vtbl = IPlugViewVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPlugView_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPlugView_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -17991,20 +17976,20 @@
     <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPlugFrame {
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-            <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+            FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
         <span class="attr">#[inline]
         </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-            <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+            FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
         }
     }
     <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPlugFrame {
         <span class="kw">type </span>Vtbl = IPlugFrameVtbl;
-        <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPlugFrame_iid);
+        <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPlugFrame_iid);
         <span class="attr">#[inline]
         </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
             iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -18099,20 +18084,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPlugViewContentScaleSupport {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPlugViewContentScaleSupport {
             <span class="kw">type </span>Vtbl = IPlugViewContentScaleSupportVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPlugViewContentScaleSupport_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPlugViewContentScaleSupport_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -18259,20 +18244,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IEventHandler {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IEventHandler {
             <span class="kw">type </span>Vtbl = IEventHandlerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IEventHandler_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IEventHandler_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -18356,20 +18341,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>ITimerHandler {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>ITimerHandler {
             <span class="kw">type </span>Vtbl = ITimerHandlerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(ITimerHandler_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(ITimerHandler_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -18447,20 +18432,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IRunLoop {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IRunLoop {
             <span class="kw">type </span>Vtbl = IRunLoopVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IRunLoop_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IRunLoop_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -18950,20 +18935,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>INoteExpressionController {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>INoteExpressionController {
             <span class="kw">type </span>Vtbl = INoteExpressionControllerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(INoteExpressionController_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(INoteExpressionController_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -19235,20 +19220,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IKeyswitchController {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IKeyswitchController {
             <span class="kw">type </span>Vtbl = IKeyswitchControllerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IKeyswitchController_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IKeyswitchController_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -19395,20 +19380,20 @@
             <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IAutomationState {
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                    <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                    FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
             }
             <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IAutomationState {
                 <span class="kw">type </span>Vtbl = IAutomationStateVtbl;
-                <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IAutomationState_iid);
+                <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IAutomationState_iid);
                 <span class="attr">#[inline]
                 </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                     iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -19526,20 +19511,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IUnitHandler {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IUnitHandler {
             <span class="kw">type </span>Vtbl = IUnitHandlerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IUnitHandler_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IUnitHandler_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -19663,20 +19648,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IUnitHandler2 {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IUnitHandler2 {
             <span class="kw">type </span>Vtbl = IUnitHandler2Vtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IUnitHandler2_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IUnitHandler2_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -19754,20 +19739,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IUnitInfo {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IUnitInfo {
             <span class="kw">type </span>Vtbl = IUnitInfoVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IUnitInfo_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IUnitInfo_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -20309,20 +20294,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IProgramListData {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IProgramListData {
             <span class="kw">type </span>Vtbl = IProgramListDataVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IProgramListData_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IProgramListData_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -20498,20 +20483,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IUnitData {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IUnitData {
             <span class="kw">type </span>Vtbl = IUnitDataVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IUnitData_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IUnitData_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -20817,20 +20802,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IComponentHandler {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IComponentHandler {
             <span class="kw">type </span>Vtbl = IComponentHandlerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IComponentHandler_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IComponentHandler_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -21022,20 +21007,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IComponentHandler2 {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IComponentHandler2 {
             <span class="kw">type </span>Vtbl = IComponentHandler2Vtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IComponentHandler2_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IComponentHandler2_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -21209,20 +21194,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IComponentHandlerBusActivation {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IComponentHandlerBusActivation {
             <span class="kw">type </span>Vtbl = IComponentHandlerBusActivationVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IComponentHandlerBusActivation_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IComponentHandlerBusActivation_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -21329,20 +21314,20 @@
             <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IProgress {
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                    <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                    FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
             }
             <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IProgress {
                 <span class="kw">type </span>Vtbl = IProgressVtbl;
-                <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IProgress_iid);
+                <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IProgress_iid);
                 <span class="attr">#[inline]
                 </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                     iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -21527,20 +21512,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IEditController {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IEditController {
             <span class="kw">type </span>Vtbl = IEditControllerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IEditController_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IEditController_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || IPluginBase::inherits(iid)
@@ -22075,20 +22060,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IEditController2 {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IEditController2 {
             <span class="kw">type </span>Vtbl = IEditController2Vtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IEditController2_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IEditController2_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -22240,20 +22225,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IMidiMapping {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IMidiMapping {
             <span class="kw">type </span>Vtbl = IMidiMappingVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IMidiMapping_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IMidiMapping_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -22355,20 +22340,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IEditControllerHostEditing {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IEditControllerHostEditing {
             <span class="kw">type </span>Vtbl = IEditControllerHostEditingVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IEditControllerHostEditing_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IEditControllerHostEditing_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -22526,20 +22511,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IComponent {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IComponent {
             <span class="kw">type </span>Vtbl = IComponentVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IComponent_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IComponent_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || IPluginBase::inherits(iid)
@@ -22989,20 +22974,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IAudioProcessor {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IAudioProcessor {
             <span class="kw">type </span>Vtbl = IAudioProcessorVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IAudioProcessor_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IAudioProcessor_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -23342,20 +23327,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IAudioPresentationLatency {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IAudioPresentationLatency {
             <span class="kw">type </span>Vtbl = IAudioPresentationLatencyVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IAudioPresentationLatency_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IAudioPresentationLatency_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -23456,20 +23441,20 @@
             <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IProcessContextRequirements {
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                    <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                    FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
             }
             <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IProcessContextRequirements {
                 <span class="kw">type </span>Vtbl = IProcessContextRequirementsVtbl;
-                <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IProcessContextRequirements_iid);
+                <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IProcessContextRequirements_iid);
                 <span class="attr">#[inline]
                 </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                     iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -23574,20 +23559,20 @@
             <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IAttributeList {
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                    <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                    FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
             }
             <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IAttributeList {
                 <span class="kw">type </span>Vtbl = IAttributeListVtbl;
-                <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IAttributeList_iid);
+                <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IAttributeList_iid);
                 <span class="attr">#[inline]
                 </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                     iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -23982,20 +23967,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IStreamAttributes {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IStreamAttributes {
             <span class="kw">type </span>Vtbl = IStreamAttributesVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IStreamAttributes_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IStreamAttributes_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24107,20 +24092,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IMessage {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IMessage {
             <span class="kw">type </span>Vtbl = IMessageVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IMessage_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IMessage_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24260,20 +24245,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IConnectionPoint {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IConnectionPoint {
             <span class="kw">type </span>Vtbl = IConnectionPointVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IConnectionPoint_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IConnectionPoint_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24425,20 +24410,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IHostApplication {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IHostApplication {
             <span class="kw">type </span>Vtbl = IHostApplicationVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IHostApplication_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IHostApplication_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24586,20 +24571,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IVst3WrapperMPESupport {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IVst3WrapperMPESupport {
             <span class="kw">type </span>Vtbl = IVst3WrapperMPESupportVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IVst3WrapperMPESupport_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IVst3WrapperMPESupport_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24729,20 +24714,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IComponentHandler3 {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IComponentHandler3 {
             <span class="kw">type </span>Vtbl = IComponentHandler3Vtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IComponentHandler3_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IComponentHandler3_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24832,20 +24817,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IContextMenuTarget {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IContextMenuTarget {
             <span class="kw">type </span>Vtbl = IContextMenuTargetVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IContextMenuTarget_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IContextMenuTarget_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -24964,20 +24949,20 @@
             <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IContextMenu {
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                    <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                    FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
             }
             <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IContextMenu {
                 <span class="kw">type </span>Vtbl = IContextMenuVtbl;
-                <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IContextMenu_iid);
+                <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IContextMenu_iid);
                 <span class="attr">#[inline]
                 </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                     iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -25228,20 +25213,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPlugInterfaceSupport {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPlugInterfaceSupport {
             <span class="kw">type </span>Vtbl = IPlugInterfaceSupportVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPlugInterfaceSupport_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPlugInterfaceSupport_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -25325,20 +25310,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IInterAppAudioHost {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IInterAppAudioHost {
             <span class="kw">type </span>Vtbl = IInterAppAudioHostVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IInterAppAudioHost_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IInterAppAudioHost_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -25648,20 +25633,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IInterAppAudioConnectionNotification {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IInterAppAudioConnectionNotification {
             <span class="kw">type </span>Vtbl = IInterAppAudioConnectionNotificationVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IInterAppAudioConnectionNotification_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IInterAppAudioConnectionNotification_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -25745,20 +25730,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IInterAppAudioPresetManager {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IInterAppAudioPresetManager {
             <span class="kw">type </span>Vtbl = IInterAppAudioPresetManagerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IInterAppAudioPresetManager_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IInterAppAudioPresetManager_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -25936,20 +25921,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>INoteExpressionPhysicalUIMapping {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>INoteExpressionPhysicalUIMapping {
             <span class="kw">type </span>Vtbl = INoteExpressionPhysicalUIMappingVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(INoteExpressionPhysicalUIMapping_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(INoteExpressionPhysicalUIMapping_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26045,20 +26030,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IParameterFinder {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IParameterFinder {
             <span class="kw">type </span>Vtbl = IParameterFinderVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IParameterFinder_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IParameterFinder_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26176,20 +26161,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IXmlRepresentationController {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IXmlRepresentationController {
             <span class="kw">type </span>Vtbl = IXmlRepresentationControllerVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IXmlRepresentationController_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IXmlRepresentationController_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26279,20 +26264,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IParameterFunctionName {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IParameterFunctionName {
             <span class="kw">type </span>Vtbl = IParameterFunctionNameVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IParameterFunctionName_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IParameterFunctionName_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26388,20 +26373,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IPrefetchableSupport {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IPrefetchableSupport {
             <span class="kw">type </span>Vtbl = IPrefetchableSupportVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IPrefetchableSupport_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IPrefetchableSupport_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26485,20 +26470,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IMidiLearn {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IMidiLearn {
             <span class="kw">type </span>Vtbl = IMidiLearnVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IMidiLearn_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IMidiLearn_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26594,20 +26579,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IParamValueQueue {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IParamValueQueue {
             <span class="kw">type </span>Vtbl = IParamValueQueueVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IParamValueQueue_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IParamValueQueue_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -26805,20 +26790,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IParameterChanges {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IParameterChanges {
             <span class="kw">type </span>Vtbl = IParameterChangesVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IParameterChanges_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IParameterChanges_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -27120,20 +27105,20 @@
         <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IEventList {
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
             <span class="attr">#[inline]
             </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
             }
         }
         <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IEventList {
             <span class="kw">type </span>Vtbl = IEventListVtbl;
-            <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IEventList_iid);
+            <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IEventList_iid);
             <span class="attr">#[inline]
             </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                 iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -27487,20 +27472,20 @@
             <span class="kw">impl </span>::com_scrape_types::Unknown <span class="kw">for </span>IInfoListener {
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>query_interface(this: <span class="kw-2">*mut </span><span class="self">Self</span>, iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">*mut </span>c_void&gt; {
-                    <span class="kw">crate</span>::__bindings::FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
+                    FUnknown_query_interface(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void, iid)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>add_ref(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_add_ref(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
                 <span class="attr">#[inline]
                 </span><span class="kw">unsafe fn </span>release(this: <span class="kw-2">*mut </span><span class="self">Self</span>) -&gt; usize {
-                    <span class="kw">crate</span>::__bindings::FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
+                    FUnknown_release(this <span class="kw">as </span><span class="kw-2">*mut </span>c_void)
                 }
             }
             <span class="kw">unsafe impl </span>::com_scrape_types::Interface <span class="kw">for </span>IInfoListener {
                 <span class="kw">type </span>Vtbl = IInfoListenerVtbl;
-                <span class="kw">const </span>IID: ::com_scrape_types::Guid = <span class="kw">crate</span>::__bindings::tuid_as_guid(IInfoListener_iid);
+                <span class="kw">const </span>IID: ::com_scrape_types::Guid = tuid_as_guid(IInfoListener_iid);
                 <span class="attr">#[inline]
                 </span><span class="kw">fn </span>inherits(iid: <span class="kw-2">&amp;</span>::com_scrape_types::Guid) -&gt; bool {
                     iid == <span class="kw-2">&amp;</span><span class="self">Self</span>::IID || FUnknown::inherits(iid)
@@ -28291,7 +28276,4 @@
         }
     }
 }
-
-}
-<span class="kw">pub use </span>__bindings::<span class="kw-2">*</span>;
 </code></pre></div></section></main></body></html>

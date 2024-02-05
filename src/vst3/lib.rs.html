@@ -58,6 +58,10 @@
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
 <a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! The `vst3` crate provides Rust bindings for the VST 3 API, generated from the original C++
 //! headers. Abstractions are provided for manipulating COM objects and implementing COM interfaces
 //! from Rust. Beyond that, however, these bindings are unsafe, and no attempt is made to abstract
@@ -116,6 +120,10 @@
 //!
 //! For more detail on implementing COM interfaces from rust, see the
 //! [`com-scrape-types` documentation](com_scrape_types#implementing-com-interfaces-from-rust).
+
+</span><span class="attr">#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 
 </span><span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/bindings.rs&quot;</span>));
 </code></pre></div></section></main></body></html>
