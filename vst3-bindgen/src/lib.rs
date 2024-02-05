@@ -74,9 +74,6 @@ pub fn generate(
         writeln!(source, "#include \"{}\"", name)?;
     }
 
-    writeln!(sink, "mod __bindings {{")?;
-    writeln!(sink)?;
-
     writeln!(sink, "{}", include_str!("support.rs"))?;
 
     let mut generator = com_scrape::Generator::default()
@@ -89,10 +86,10 @@ pub fn generate(
         ])
         .skip_interface_trait("FUnknown")
         .constant_parser(parse_iid)
-        .iid_generator(|name| format!("crate::__bindings::tuid_as_guid({name}_iid)"))
-        .query_interface_fn("crate::__bindings::FUnknown_query_interface")
-        .add_ref_fn("crate::__bindings::FUnknown_add_ref")
-        .release_fn("crate::__bindings::FUnknown_release")
+        .iid_generator(|name| format!("tuid_as_guid({name}_iid)"))
+        .query_interface_fn("FUnknown_query_interface")
+        .add_ref_fn("FUnknown_add_ref")
+        .release_fn("FUnknown_release")
         .include_path(sdk_dir);
 
     if let Some(target) = target {
@@ -100,10 +97,6 @@ pub fn generate(
     }
 
     generator.generate(source, &mut sink)?;
-
-    writeln!(sink)?;
-    writeln!(sink, "}}")?;
-    writeln!(sink, "pub use __bindings::*;")?;
 
     Ok(())
 }
