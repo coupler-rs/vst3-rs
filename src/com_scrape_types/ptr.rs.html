@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `com-scrape-types/src/ptr.rs`."><title>ptr.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="com_scrape_types" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0 (82e1608df 2023-12-21)" data-channel="1.75.0" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `com-scrape-types/src/ptr.rs`."><title>ptr.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="com_scrape_types" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../com_scrape_types/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -293,6 +295,14 @@
 <a href="#293" id="293">293</a>
 <a href="#294" id="294">294</a>
 <a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::marker::PhantomData;
 <span class="kw">use </span>std::mem;
 <span class="kw">use </span>std::ptr::NonNull;
@@ -329,21 +339,21 @@
 
 <span class="doccomment">/// A non-owning smart pointer to a COM object.
 ///
-/// A `ComRef&lt;&#39;a, I&gt;` represents a borrowed reference to a COM object implementing interface `I`.
+/// A `ComRef&lt;'a, I&gt;` represents a borrowed reference to a COM object implementing interface `I`.
 /// Like [`ComPtr`], `ComRef` can be used to call interface methods on the referenced object.
-/// Unlike [`ComPtr`], `ComRef` does not manage the object&#39;s reference count, i.e. it will *not*
+/// Unlike [`ComPtr`], `ComRef` does not manage the object's reference count, i.e. it will *not*
 /// call the release method of the object it points to when going out of scope. See the
 /// [crate-level documentation](crate#reference-counting) for more information.
 ///
 /// A `ComRef` can be created safely from a [`ComPtr`] via [`ComPtr::as_com_ref`], or from a
 /// [`ComWrapper`][crate::ComWrapper] via [`ComWrapper::as_com_ref`][crate::ComWrapper::as_com_ref].
 /// It can also be created unsafely via [`ComRef::from_raw`].
-</span><span class="kw">pub struct </span>ComRef&lt;<span class="lifetime">&#39;a</span>, I: Interface&gt; {
+</span><span class="kw">pub struct </span>ComRef&lt;<span class="lifetime">'a</span>, I: Interface&gt; {
     ptr: NonNull&lt;I&gt;,
-    _marker: PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>I&gt;,
+    _marker: PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">'a </span>I&gt;,
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, I: Interface&gt; SmartPtr <span class="kw">for </span>ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, I: Interface&gt; SmartPtr <span class="kw">for </span>ComRef&lt;<span class="lifetime">'a</span>, I&gt; {
     <span class="kw">type </span>Target = I;
 
     <span class="attr">#[inline]
@@ -352,11 +362,11 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, I: Interface&gt; Copy <span class="kw">for </span>ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {}
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, I: Interface&gt; Copy <span class="kw">for </span>ComRef&lt;<span class="lifetime">'a</span>, I&gt; {}
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, I: Interface&gt; Clone <span class="kw">for </span>ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, I: Interface&gt; Clone <span class="kw">for </span>ComRef&lt;<span class="lifetime">'a</span>, I&gt; {
     <span class="attr">#[inline]
-    </span><span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {
+    </span><span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ComRef&lt;<span class="lifetime">'a</span>, I&gt; {
         ComRef {
             ptr: <span class="self">self</span>.ptr,
             _marker: PhantomData,
@@ -364,7 +374,11 @@
     }
 }
 
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;a</span>, I: Interface&gt; ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {
+<span class="kw">unsafe impl</span>&lt;<span class="lifetime">'a</span>, I: Interface&gt; Send <span class="kw">for </span>ComRef&lt;<span class="lifetime">'a</span>, I&gt; <span class="kw">where </span>I: Sync + Send {}
+
+<span class="kw">unsafe impl</span>&lt;<span class="lifetime">'a</span>, I: Interface&gt; Sync <span class="kw">for </span>ComRef&lt;<span class="lifetime">'a</span>, I&gt; <span class="kw">where </span>I: Sync + Send {}
+
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, I: Interface&gt; ComRef&lt;<span class="lifetime">'a</span>, I&gt; {
     <span class="doccomment">/// Gets the wrapped interface pointer.
     ///
     /// Does not perform any reference counting operations.
@@ -387,7 +401,7 @@
     /// reinterpreted as `*const I::Vtbl` (see the [safety documentation](Interface#safety) for
     /// [`Interface`]), it must in turn be a valid pointer to `I::Vtbl`.
     </span><span class="attr">#[inline]
-    </span><span class="kw">pub unsafe fn </span>from_raw(ptr: <span class="kw-2">*mut </span>I) -&gt; <span class="prelude-ty">Option</span>&lt;ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt;&gt; {
+    </span><span class="kw">pub unsafe fn </span>from_raw(ptr: <span class="kw-2">*mut </span>I) -&gt; <span class="prelude-ty">Option</span>&lt;ComRef&lt;<span class="lifetime">'a</span>, I&gt;&gt; {
         NonNull::new(ptr).map(|ptr| ComRef {
             ptr,
             _marker: PhantomData,
@@ -404,7 +418,7 @@
     /// `*const I::Vtbl` (see the [safety documentation](Interface#safety) for [`Interface`]), it
     /// must in turn be a valid pointer to `I::Vtbl`.
     </span><span class="attr">#[inline]
-    </span><span class="kw">pub unsafe fn </span>from_raw_unchecked(ptr: <span class="kw-2">*mut </span>I) -&gt; ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {
+    </span><span class="kw">pub unsafe fn </span>from_raw_unchecked(ptr: <span class="kw-2">*mut </span>I) -&gt; ComRef&lt;<span class="lifetime">'a</span>, I&gt; {
         ComRef {
             ptr: NonNull::new_unchecked(ptr),
             _marker: PhantomData,
@@ -429,7 +443,7 @@
     ///
     /// Does not perform any reference counting operations.
     </span><span class="attr">#[inline]
-    </span><span class="kw">pub fn </span>upcast&lt;J: Interface&gt;(<span class="self">self</span>) -&gt; ComRef&lt;<span class="lifetime">&#39;a</span>, J&gt;
+    </span><span class="kw">pub fn </span>upcast&lt;J: Interface&gt;(<span class="self">self</span>) -&gt; ComRef&lt;<span class="lifetime">'a</span>, J&gt;
     <span class="kw">where
         </span>I: Inherits&lt;J&gt;,
     {
@@ -456,7 +470,7 @@
 ///
 /// A `ComPtr&lt;I&gt;` represents an owning reference to a COM object implementing interface `I`. Like
 /// [`ComRef`], `ComPtr` can be used to call interface methods on the referenced object. Unlike
-/// [`ComRef`], `ComPtr` manages the object&#39;s reference count, i.e. it *will* call the release
+/// [`ComRef`], `ComPtr` manages the object's reference count, i.e. it *will* call the release
 /// method of the object it points to when going out of scope. See the
 /// [crate-level documentation](crate#reference-counting) for more information.
 ///
@@ -487,6 +501,10 @@
     }
 }
 
+<span class="kw">unsafe impl</span>&lt;I: Interface&gt; Send <span class="kw">for </span>ComPtr&lt;I&gt; <span class="kw">where </span>I: Sync + Send {}
+
+<span class="kw">unsafe impl</span>&lt;I: Interface&gt; Sync <span class="kw">for </span>ComPtr&lt;I&gt; <span class="kw">where </span>I: Sync + Send {}
+
 <span class="kw">impl</span>&lt;I: Interface&gt; Drop <span class="kw">for </span>ComPtr&lt;I&gt; {
     <span class="attr">#[inline]
     </span><span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
@@ -508,7 +526,7 @@
     <span class="doccomment">/// Creates a `ComPtr` from a raw interface pointer if the pointer is non-null.
     ///
     /// When the resulting `ComPtr` is dropped, the reference count of the object it points to will
-    /// be decremented. Thus, using this method can be thought of as &quot;taking ownership&quot; of a
+    /// be decremented. Thus, using this method can be thought of as "taking ownership" of a
     /// pointer to a COM object.
     ///
     /// `from_raw` will check if `ptr` is null (and return `None` if so), but this method is still
@@ -528,7 +546,7 @@
     <span class="doccomment">/// Creates a `ComPtr` from a raw interface pointer.
     ///
     /// When the resulting `ComPtr` is dropped, the reference count of the object it points to will
-    /// be decremented. Thus, using this method can be thought of as &quot;taking ownership&quot; of a
+    /// be decremented. Thus, using this method can be thought of as "taking ownership" of a
     /// pointer to a COM object.
     ///
     /// # Safety
@@ -547,7 +565,7 @@
     ///
     /// Since this method consumes the `ComPtr`, it prevents the `ComPtr` from decrementing the
     /// reference count of the object it points to. Thus, using this method can be thought of as
-    /// &quot;relinquishing ownership&quot; of a pointer to a COM object.
+    /// "relinquishing ownership" of a pointer to a COM object.
     </span><span class="attr">#[inline]
     </span><span class="kw">pub fn </span>into_raw(<span class="self">self</span>) -&gt; <span class="kw-2">*mut </span>I {
         <span class="kw">let </span>ptr = <span class="self">self</span>.ptr.as_ptr();
@@ -560,7 +578,7 @@
     ///
     /// Does not perform any reference counting operations.
     </span><span class="attr">#[inline]
-    </span><span class="kw">pub fn </span>as_com_ref&lt;<span class="lifetime">&#39;a</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span><span class="self">self</span>) -&gt; ComRef&lt;<span class="lifetime">&#39;a</span>, I&gt; {
+    </span><span class="kw">pub fn </span>as_com_ref&lt;<span class="lifetime">'a</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="self">self</span>) -&gt; ComRef&lt;<span class="lifetime">'a</span>, I&gt; {
         <span class="kw">unsafe </span>{ ComRef::from_raw_unchecked(<span class="self">self</span>.ptr.as_ptr()) }
     }
 
