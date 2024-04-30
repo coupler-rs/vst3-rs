@@ -69,6 +69,10 @@ impl<'a, I: Interface> Clone for ComRef<'a, I> {
     }
 }
 
+unsafe impl<'a, I: Interface> Send for ComRef<'a, I> where I: Sync + Send {}
+
+unsafe impl<'a, I: Interface> Sync for ComRef<'a, I> where I: Sync + Send {}
+
 impl<'a, I: Interface> ComRef<'a, I> {
     /// Gets the wrapped interface pointer.
     ///
@@ -191,6 +195,10 @@ impl<I: Interface> Clone for ComPtr<I> {
         ComPtr { ptr: self.ptr }
     }
 }
+
+unsafe impl<I: Interface> Send for ComPtr<I> where I: Sync + Send {}
+
+unsafe impl<I: Interface> Sync for ComPtr<I> where I: Sync + Send {}
 
 impl<I: Interface> Drop for ComPtr<I> {
     #[inline]
