@@ -6,6 +6,7 @@ edition = "2021"
 description = "Binding generator for the VST 3 API"
 repository = "https://github.com/coupler-rs/vst3-rs"
 license = "MIT OR Apache-2.0"
+publish = false
 
 [[bin]]
 path = "src/main.rs"
