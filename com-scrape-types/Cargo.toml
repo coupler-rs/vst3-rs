@@ -1,6 +1,6 @@
 [package]
 name = "com-scrape-types"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
 description = "Support code for bindings generated with com-scrape"

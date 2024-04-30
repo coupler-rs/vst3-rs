@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Upgrade `vst3-bindgen` dependency to 0.2.2.
+- Upgrade `com-scrape-types` dependency to 0.1.1.
+
 ## 0.1.1
 
 - Upgrade `vst3-bindgen` dependency to 0.2.1.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2
+
+- Update `com-scrape` dependency to 0.1.3.
+- Add an argument to `generate` for explicitly specifying a target triple.
+
 ## 0.2.1
 
 - Update `com-scrape` dependency to 0.1.2.
