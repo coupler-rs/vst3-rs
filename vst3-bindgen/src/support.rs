@@ -73,7 +73,7 @@ impl FUnknown {
                 let ptr = W::data_from_header(header_ptr);
                 W::add_ref(ptr);
 
-                *obj = (header_ptr as *mut u8).offset(result) as *mut c_void;
+                std::ptr::write_unaligned(obj, (header_ptr as *mut u8).offset(result) as *mut c_void);
 
                 kResultOk
             } else {
