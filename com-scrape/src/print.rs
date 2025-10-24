@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::io::{self, ErrorKind, Write};
 
-use crate::parse::{Method, Namespace, Record, RecordKind, Type, Value};
+use crate::parse::{ExternRecord, Method, Namespace, Record, RecordKind, Type, Value};
 use crate::Generator;
 
 struct UnnamedRecordScope {
@@ -72,6 +72,10 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             self.print_record(&record)?;
         }
 
+        for record in &namespace.extern_records {
+            self.print_extern_record(&record)?;
+        }
+
         for constant in &namespace.constants {
             let name = &constant.name;
             write!(self.sink, "{indent}pub const {name}: ")?;
@@ -105,6 +109,19 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
         self.pop_unnamed_records()?;
 
+        Ok(())
+    }
+
+    fn print_extern_record(&mut self, record: &ExternRecord) -> io::Result<()> {
+        let indent = self.indent();
+        let name = &record.name;
+        writeln!(self.sink, "{indent}#[repr(C)]")?;
+        writeln!(self.sink, "{indent}#[derive(Copy, Clone)]")?;
+        writeln!(self.sink, "{indent}pub struct {name} {{")?;
+        writeln!(self.sink, "{indent}    _private: [u8; 0],")?;
+        writeln!(self.sink, "{indent}}}")?;
+        writeln!(self.sink, "{indent}unsafe impl Send for {name} {{}}")?;
+        writeln!(self.sink, "{indent}unsafe impl Sync for {name} {{}}")?;
         Ok(())
     }
 

@@ -9,6 +9,7 @@ pub struct Namespace {
     pub children: BTreeMap<String, Namespace>,
     pub typedefs: Vec<Typedef>,
     pub records: Vec<Record>,
+    pub extern_records: Vec<ExternRecord>,
     pub constants: Vec<Constant>,
     pub unparsed_constants: Vec<String>,
 }
@@ -19,6 +20,7 @@ impl Namespace {
             children: BTreeMap::new(),
             typedefs: Vec::new(),
             records: Vec::new(),
+            extern_records: Vec::new(),
             constants: Vec::new(),
             unparsed_constants: Vec::new(),
         }
@@ -63,6 +65,11 @@ pub struct Record {
     pub bases: Vec<Base>,
     pub virtual_methods: Vec<Method>,
     pub inner: Namespace,
+}
+
+#[derive(Clone, Debug)]
+pub struct ExternRecord {
+    pub name: String,
 }
 
 #[derive(Clone, Debug)]
@@ -301,6 +308,10 @@ impl<'a> Parser<'a> {
                         let record = self.parse_record(cursor.type_().unwrap())?;
                         namespace.records.push(record);
                     }
+                } else if !cursor.has_definition() {
+                    namespace.extern_records.push(ExternRecord {
+                        name: cursor.name().to_str().unwrap().to_string(),
+                    });
                 }
             }
             _ => {}

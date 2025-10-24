@@ -198,6 +198,15 @@ impl<'a> Cursor<'a> {
         unsafe { clang_equalCursors(self.cursor, clang_getCursorDefinition(self.cursor)) != 0 }
     }
 
+    pub fn has_definition(&self) -> bool {
+        unsafe {
+            clang_equalCursors(
+                clang_getNullCursor(),
+                clang_getCursorDefinition(self.cursor),
+            ) == 0
+        }
+    }
+
     pub fn type_(&self) -> Option<Type<'a>> {
         let type_ = unsafe { clang_getCursorType(self.cursor) };
         if type_.kind == CXType_Invalid {
