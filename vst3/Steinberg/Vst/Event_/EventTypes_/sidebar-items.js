@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["kChordEvent","kDataEvent","kLegacyMIDICCOutEvent","kNoteExpressionTextEvent","kNoteExpressionValueEvent","kNoteOffEvent","kNoteOnEvent","kPolyPressureEvent","kScaleEvent"]};
+window.SIDEBAR_ITEMS = {"constant":["kChordEvent","kDataEvent","kLegacyMIDICCOutEvent","kNoteExpressionIntValueEvent","kNoteExpressionTextEvent","kNoteExpressionValueEvent","kNoteOffEvent","kNoteOnEvent","kPolyPressureEvent","kScaleEvent"]};

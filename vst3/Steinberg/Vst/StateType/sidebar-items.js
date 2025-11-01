@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["kDefault","kProject"]};
+window.SIDEBAR_ITEMS = {"constant":["kDefault","kProject","kTrackPreset"]};
