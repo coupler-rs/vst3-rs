@@ -112,7 +112,7 @@ impl TranslationUnit {
         }
     }
 
-    pub fn cursor(&self) -> Cursor {
+    pub fn cursor(&self) -> Cursor<'_> {
         unsafe { Cursor::from_raw(clang_getTranslationUnitCursor(self.unit)) }
     }
 }
