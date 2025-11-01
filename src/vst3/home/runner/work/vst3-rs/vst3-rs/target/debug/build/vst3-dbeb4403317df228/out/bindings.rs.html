@@ -73,7 +73,7 @@
 <a href=#73 id=73 data-nosnippet>73</a>                <span class="kw">let </span>ptr = W::data_from_header(header_ptr);
 <a href=#74 id=74 data-nosnippet>74</a>                W::add_ref(ptr);
 <a href=#75 id=75 data-nosnippet>75</a>
-<a href=#76 id=76 data-nosnippet>76</a>                <span class="kw-2">*</span>obj = (header_ptr <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(result) <span class="kw">as </span><span class="kw-2">*mut </span>c_void;
+<a href=#76 id=76 data-nosnippet>76</a>                std::ptr::write_unaligned(obj, (header_ptr <span class="kw">as </span><span class="kw-2">*mut </span>u8).offset(result) <span class="kw">as </span><span class="kw-2">*mut </span>c_void);
 <a href=#77 id=77 data-nosnippet>77</a>
 <a href=#78 id=78 data-nosnippet>78</a>                kResultOk
 <a href=#79 id=79 data-nosnippet>79</a>            } <span class="kw">else </span>{
