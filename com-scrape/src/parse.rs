@@ -440,7 +440,7 @@ impl<'a> Parser<'a> {
             TypeKind::UShort => Ok(Type::UShort),
             TypeKind::UInt => Ok(Type::UInt),
             TypeKind::SChar => Ok(Type::SChar),
-            TypeKind::Char16 => Ok(Type::Short),
+            TypeKind::Char16 => Ok(Type::Unsigned(2)),
             TypeKind::WChar => Ok(Type::Unsigned(type_.size())),
             TypeKind::ULong => Ok(Type::ULong),
             TypeKind::ULongLong => Ok(Type::ULongLong),
