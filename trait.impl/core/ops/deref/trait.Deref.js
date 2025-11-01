@@ -1,3 +1,9 @@
-(function() {var implementors = {
-"com_scrape_types":[["impl&lt;C: <a class=\"trait\" href=\"com_scrape_types/trait.Class.html\" title=\"trait com_scrape_types::Class\">Class</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.77.2/core/ops/deref/trait.Deref.html\" title=\"trait core::ops::deref::Deref\">Deref</a> for <a class=\"struct\" href=\"com_scrape_types/struct.ComWrapper.html\" title=\"struct com_scrape_types::ComWrapper\">ComWrapper</a>&lt;C&gt;"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
+(function() {
+    var implementors = Object.fromEntries([["com_scrape_types",[["impl&lt;C: <a class=\"trait\" href=\"com_scrape_types/trait.Class.html\" title=\"trait com_scrape_types::Class\">Class</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.91.0/core/ops/deref/trait.Deref.html\" title=\"trait core::ops::deref::Deref\">Deref</a> for <a class=\"struct\" href=\"com_scrape_types/struct.ComWrapper.html\" title=\"struct com_scrape_types::ComWrapper\">ComWrapper</a>&lt;C&gt;"]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[439]}
