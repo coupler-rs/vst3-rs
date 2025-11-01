@@ -25,6 +25,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: coupler-rs/vst3_pluginterfaces
+          ref: 31d6eeba6daaa3e2a8bfbe3e7a90ca0b7fbfbc1c
           path: vst3sdk/pluginterfaces
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
