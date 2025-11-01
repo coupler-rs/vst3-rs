@@ -1,6 +1,6 @@
 [package]
 name = "com-scrape"
-version = "0.1.3"
+version = "0.2.0"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
 description = "Automatically generates Rust bindings for COM interfaces"

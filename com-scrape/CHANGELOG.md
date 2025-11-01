@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0
+
+- Add support for forward declarations of extern types.
+- Map `char16_t` type to `u16` (was previously mapped to `i16`).
+
 ## 0.1.3
 
 - Add a `target` option to the `Generator` API for explicitly specifying a target triple.
