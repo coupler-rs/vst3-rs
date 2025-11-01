@@ -472,8 +472,6 @@ impl<'a> Parser<'a> {
                     let name = decl.name().to_str().unwrap().to_string();
                     Ok(Type::Record(name))
                 }
-                // name = format!("__type{}", namespace.unnamed_record_counter);
-                // namespace.unnamed_record_counter += 1;
             }
             TypeKind::Enum => {
                 let decl = type_.declaration();
