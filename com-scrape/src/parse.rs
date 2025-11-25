@@ -26,11 +26,27 @@ impl Namespace {
         }
     }
 
+    fn sort(&mut self) {
+        self.typedefs.sort_by(|a, b| a.name.cmp(&b.name));
+        self.records.sort_by(|a, b| a.name.cmp(&b.name));
+        self.extern_records.sort_by(|a, b| a.name.cmp(&b.name));
+        self.constants.sort_by(|a, b| a.name.cmp(&b.name));
+        self.unparsed_constants.sort();
+
+        for child in &mut self.children.values_mut() {
+            child.sort();
+        }
+    }
+
     pub fn parse(cursor: &Cursor, options: &Generator) -> Result<Namespace, Box<dyn Error>> {
         let mut parser = Parser::new(options);
         let mut namespace = Namespace::new();
 
         cursor.visit_children(|cursor| parser.visit(&mut namespace, cursor))?;
+
+        // Different versions of Clang can visit definitions in different orders. Sort all
+        // definitions so that we output them in a consistent order on every platform.
+        namespace.sort();
 
         Ok(namespace)
     }
