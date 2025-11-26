@@ -26,6 +26,7 @@ pub struct Generator {
     pub(crate) include_paths: Vec<PathBuf>,
     pub(crate) target: Option<String>,
     pub(crate) skip_types: HashSet<String>,
+    pub(crate) skip_constants: HashSet<String>,
     pub(crate) skip_interface_traits: HashSet<String>,
     pub(crate) constant_parser: Option<Box<dyn Fn(&[&str]) -> Option<String>>>,
     pub(crate) iid_generator: Option<Box<dyn Fn(&str) -> String>>,
@@ -40,6 +41,7 @@ impl Default for Generator {
             include_paths: Vec::new(),
             target: None,
             skip_types: HashSet::new(),
+            skip_constants: HashSet::new(),
             skip_interface_traits: HashSet::new(),
             constant_parser: None,
             iid_generator: None,
@@ -73,6 +75,19 @@ impl Generator {
     pub fn skip_types<S: AsRef<str>, T: AsRef<[S]>>(mut self, types: T) -> Self {
         self.skip_types
             .extend(types.as_ref().iter().map(|s| s.as_ref().to_string()));
+        self
+    }
+
+    /// Do not generate bindings for `constant`.
+    pub fn skip_constant<T: AsRef<str>>(mut self, constant: T) -> Self {
+        self.skip_constants.insert(constant.as_ref().to_string());
+        self
+    }
+
+    /// Do not generate bindings for `constants`.
+    pub fn skip_constants<S: AsRef<str>, T: AsRef<[S]>>(mut self, constants: T) -> Self {
+        self.skip_constants
+            .extend(constants.as_ref().iter().map(|s| s.as_ref().to_string()));
         self
     }
 

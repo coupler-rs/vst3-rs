@@ -89,6 +89,10 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         }
 
         for constant in &namespace.constants {
+            if self.options.skip_constants.contains(&constant.name) {
+                continue;
+            }
+
             let name = &constant.name;
             write!(self.sink, "{indent}pub const {name}: ")?;
             self.print_type(&constant.type_)?;
