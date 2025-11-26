@@ -36,7 +36,7 @@ fn parse_iid(tokens: &[&str]) -> Option<String> {
     if let Some(first) = tokens.first() {
         if *first == "DECLARE_CLASS_IID" {
             return Some(format!(
-                "uid({}, {}, {}, {})",
+                "crate::support::uid({}, {}, {}, {})",
                 tokens[4], tokens[6], tokens[8], tokens[10]
             ));
         }
@@ -74,8 +74,6 @@ pub fn generate(
         writeln!(source, "#include \"{}\"", name)?;
     }
 
-    writeln!(sink, "{}", include_str!("support.rs"))?;
-
     let mut generator = com_scrape::Generator::default()
         .skip_types(&[
             "Adopt",
@@ -86,10 +84,10 @@ pub fn generate(
         ])
         .skip_interface_trait("FUnknown")
         .constant_parser(parse_iid)
-        .iid_generator(|name| format!("tuid_as_guid({name}_iid)"))
-        .query_interface_fn("FUnknown_query_interface")
-        .add_ref_fn("FUnknown_add_ref")
-        .release_fn("FUnknown_release")
+        .iid_generator(|name| format!("crate::support::tuid_as_guid({name}_iid)"))
+        .query_interface_fn("crate::support::FUnknown_query_interface")
+        .add_ref_fn("crate::support::FUnknown_add_ref")
+        .release_fn("crate::support::FUnknown_release")
         .include_path(sdk_dir);
 
     if let Some(target) = target {

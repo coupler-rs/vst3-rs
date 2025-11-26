@@ -1,13 +1,12 @@
 use std::ffi::c_void;
 
-use Steinberg::{int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnknownVtbl, TUID};
+use com_scrape_types::{Class, Construct, Guid, Header, InterfaceList, Wrapper};
 
-use com_scrape_types::{Construct, Guid, Header, InterfaceList, Wrapper};
+use crate::Steinberg::{
+    int8, kNoInterface, kResultOk, tresult, uint32, FUnknown, FUnknownVtbl, TUID,
+};
 
-pub use com_scrape_types;
-pub use com_scrape_types::{Class, ComPtr, ComRef, ComWrapper, Interface};
-
-const fn tuid_as_guid(tuid: TUID) -> Guid {
+pub const fn tuid_as_guid(tuid: TUID) -> Guid {
     [
         tuid[0] as u8,
         tuid[1] as u8,
@@ -29,7 +28,7 @@ const fn tuid_as_guid(tuid: TUID) -> Guid {
 }
 
 #[inline]
-unsafe fn FUnknown_query_interface(this: *mut c_void, iid: &Guid) -> Option<*mut c_void> {
+pub unsafe fn FUnknown_query_interface(this: *mut c_void, iid: &Guid) -> Option<*mut c_void> {
     let ptr = this as *mut FUnknown;
     let mut obj = std::ptr::null_mut();
     let result = ((*(*ptr).vtbl).queryInterface)(ptr, iid.as_ptr() as *const TUID, &mut obj);
@@ -42,19 +41,19 @@ unsafe fn FUnknown_query_interface(this: *mut c_void, iid: &Guid) -> Option<*mut
 }
 
 #[inline]
-unsafe fn FUnknown_add_ref(this: *mut c_void) -> usize {
+pub unsafe fn FUnknown_add_ref(this: *mut c_void) -> usize {
     let ptr = this as *mut FUnknown;
     ((*(*ptr).vtbl).addRef)(ptr) as usize
 }
 
 #[inline]
-unsafe fn FUnknown_release(this: *mut c_void) -> usize {
+pub unsafe fn FUnknown_release(this: *mut c_void) -> usize {
     let ptr = this as *mut FUnknown;
     ((*(*ptr).vtbl).release)(ptr) as usize
 }
 
 impl FUnknown {
-    const fn make_vtbl<C, W, const OFFSET: isize>() -> FUnknownVtbl
+    pub const fn make_vtbl<C, W, const OFFSET: isize>() -> FUnknownVtbl
     where
         C: Class,
         W: Wrapper<C>,
@@ -73,7 +72,10 @@ impl FUnknown {
                 let ptr = W::data_from_header(header_ptr);
                 W::add_ref(ptr);
 
-                std::ptr::write_unaligned(obj, (header_ptr as *mut u8).offset(result) as *mut c_void);
+                std::ptr::write_unaligned(
+                    obj,
+                    (header_ptr as *mut u8).offset(result) as *mut c_void,
+                );
 
                 kResultOk
             } else {
