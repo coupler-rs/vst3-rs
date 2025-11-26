@@ -68,4 +68,46 @@ mod support;
 
 pub use support::uid;
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+mod bindings {
+    include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+}
+
+pub use bindings::*;
+
+pub mod Steinberg {
+    pub use crate::bindings::Steinberg::*;
+
+    #[cfg(target_os = "windows")]
+    mod result_values {
+        #![allow(overflowing_literals)]
+
+        use std::ffi::c_int;
+
+        pub const kNoInterface: c_int = 0x80004002;
+        pub const kResultOk: c_int = 0x00000000;
+        pub const kResultTrue: c_int = kResultOk;
+        pub const kResultFalse: c_int = 0x00000001;
+        pub const kInvalidArgument: c_int = 0x80070057;
+        pub const kNotImplemented: c_int = 0x80004001;
+        pub const kInternalError: c_int = 0x80004005;
+        pub const kNotInitialized: c_int = 0x8000FFFF;
+        pub const kOutOfMemory: c_int = 0x8007000E;
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    mod result_values {
+        use std::ffi::c_int;
+
+        pub const kNoInterface: c_int = -1;
+        pub const kResultOk: c_int = 0;
+        pub const kResultTrue: c_int = kResultOk;
+        pub const kResultFalse: c_int = 1;
+        pub const kInvalidArgument: c_int = 2;
+        pub const kNotImplemented: c_int = 3;
+        pub const kInternalError: c_int = 4;
+        pub const kNotInitialized: c_int = 5;
+        pub const kOutOfMemory: c_int = 6;
+    }
+
+    pub use result_values::*;
+}

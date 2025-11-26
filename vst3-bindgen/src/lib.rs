@@ -82,6 +82,17 @@ pub fn generate(
             "FReleaser",
             "LARGE_INT",
         ])
+        .skip_constants(&[
+            "kNoInterface",
+            "kResultOk",
+            "kResultTrue",
+            "kResultFalse",
+            "kInvalidArgument",
+            "kNotImplemented",
+            "kInternalError",
+            "kNotInitialized",
+            "kOutOfMemory",
+        ])
         .skip_interface_trait("FUnknown")
         .constant_parser(parse_iid)
         .iid_generator(|name| format!("crate::support::tuid_as_guid({name}_iid)"))
