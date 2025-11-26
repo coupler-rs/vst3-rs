@@ -205,6 +205,12 @@ impl<'a> Parser<'a> {
                 let int_type =
                     self.parse_type(cursor.enum_integer_type().unwrap(), cursor.location())?;
 
+                let constant_type = if cursor.is_anonymous() {
+                    int_type.clone()
+                } else {
+                    self.parse_type(cursor.type_().unwrap(), cursor.location())?
+                };
+
                 let canonical_type = cursor.enum_integer_type().unwrap().canonical_type();
                 let signed = match canonical_type.kind() {
                     TypeKind::Char_U
@@ -234,7 +240,7 @@ impl<'a> Parser<'a> {
 
                             constants.push(Constant {
                                 name: cursor.name().to_str().unwrap().to_string(),
-                                type_: int_type.clone(),
+                                type_: constant_type.clone(),
                                 value,
                             });
                         }
