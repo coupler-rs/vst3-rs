@@ -261,16 +261,16 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}impl ::com_scrape_types::Unknown for {name} {{")?;
             writeln!(self.sink, "{indent}    #[inline]")?;
-            writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &::com_scrape_types::Guid) -> Option<*mut c_void> {{")?;
-            writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut c_void, iid)")?;
+            writeln!(self.sink, "{indent}    unsafe fn query_interface(this: *mut Self, iid: &::com_scrape_types::Guid) -> Option<*mut ::std::ffi::c_void> {{")?;
+            writeln!(self.sink, "{indent}        {query_interface_fn}(this as *mut ::std::ffi::c_void, iid)")?;
             writeln!(self.sink, "{indent}    }}")?;
             writeln!(self.sink, "{indent}    #[inline]")?;
             writeln!(self.sink, "{indent}    unsafe fn add_ref(this: *mut Self) -> usize {{")?;
-            writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut c_void)")?;
+            writeln!(self.sink, "{indent}        {add_ref_fn}(this as *mut ::std::ffi::c_void)")?;
             writeln!(self.sink, "{indent}    }}")?;
             writeln!(self.sink, "{indent}    #[inline]")?;
             writeln!(self.sink, "{indent}    unsafe fn release(this: *mut Self) -> usize {{")?;
-            writeln!(self.sink, "{indent}        {release_fn}(this as *mut c_void)")?;
+            writeln!(self.sink, "{indent}        {release_fn}(this as *mut ::std::ffi::c_void)")?;
             writeln!(self.sink, "{indent}    }}")?;
             writeln!(self.sink, "{indent}}}")?;
 
@@ -434,7 +434,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                     writeln!(self.sink, "{indent}            C: {name}Trait + ::com_scrape_types::Class,")?;
                     writeln!(self.sink, "{indent}            W: ::com_scrape_types::Wrapper<C>,")?;
                     writeln!(self.sink, "{indent}        {{")?;
-                    writeln!(self.sink, "{indent}            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut Header<C>;")?;
+                    writeln!(self.sink, "{indent}            let header_ptr = (this as *mut u8).offset(-OFFSET) as *mut ::com_scrape_types::Header<C>;")?;
                     writeln!(self.sink, "{indent}            let ptr = <W as ::com_scrape_types::Wrapper<C>>::data_from_header(header_ptr);")?;
                     writeln!(self.sink, "{indent}            (*ptr).{method_name}(")?;
 
