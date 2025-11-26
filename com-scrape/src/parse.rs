@@ -11,7 +11,6 @@ pub struct Namespace {
     pub records: Vec<Record>,
     pub extern_records: Vec<ExternRecord>,
     pub constants: Vec<Constant>,
-    pub unparsed_constants: Vec<String>,
 }
 
 impl Namespace {
@@ -22,7 +21,6 @@ impl Namespace {
             records: Vec::new(),
             extern_records: Vec::new(),
             constants: Vec::new(),
-            unparsed_constants: Vec::new(),
         }
     }
 
@@ -31,7 +29,6 @@ impl Namespace {
         self.records.sort_by(|a, b| a.name.cmp(&b.name));
         self.extern_records.sort_by(|a, b| a.name.cmp(&b.name));
         self.constants.sort_by(|a, b| a.name.cmp(&b.name));
-        self.unparsed_constants.sort();
 
         for child in &mut self.children.values_mut() {
             child.sort();
@@ -55,7 +52,6 @@ impl Namespace {
         self.typedefs.is_empty()
             && self.records.is_empty()
             && self.constants.is_empty()
-            && self.unparsed_constants.is_empty()
             && self.children.values().all(|child| child.is_empty())
     }
 }
@@ -160,6 +156,7 @@ pub enum Value {
     Unsigned(u64),
     Float(f64),
     Str(String),
+    Other(String),
 }
 
 struct Parser<'a> {
@@ -282,7 +279,24 @@ impl<'a> Parser<'a> {
                         EvalResultKind::StrLiteral => Some(Value::Str(
                             eval_result.as_str().unwrap().to_str().unwrap().to_string(),
                         )),
-                        EvalResultKind::Other => None,
+                        EvalResultKind::Other => {
+                            if let Some(parser) = &self.options.constant_parser {
+                                let tokens = cursor.tokens();
+
+                                let token_string_refs: Vec<StringRef> = (0..tokens.len())
+                                    .map(|i| tokens.get(i).unwrap().spelling())
+                                    .collect();
+
+                                let token_strings: Vec<&str> = token_string_refs
+                                    .iter()
+                                    .map(|t| t.to_str().unwrap())
+                                    .collect();
+
+                                parser(&token_strings).map(Value::Other)
+                            } else {
+                                None
+                            }
+                        }
                     };
 
                     if let Some(value) = value {
@@ -292,23 +306,6 @@ impl<'a> Parser<'a> {
                             type_,
                             value,
                         });
-                    } else {
-                        if let Some(parser) = &self.options.constant_parser {
-                            let tokens = cursor.tokens();
-
-                            let token_string_refs: Vec<StringRef> = (0..tokens.len())
-                                .map(|i| tokens.get(i).unwrap().spelling())
-                                .collect();
-
-                            let token_strings: Vec<&str> = token_string_refs
-                                .iter()
-                                .map(|t| t.to_str().unwrap())
-                                .collect();
-
-                            if let Some(result) = parser(&token_strings) {
-                                namespace.unparsed_constants.push(result);
-                            }
-                        }
                     }
                 }
             }

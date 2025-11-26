@@ -92,17 +92,15 @@ impl<'a, W: Write> RustPrinter<'a, W> {
             let name = &constant.name;
             write!(self.sink, "{indent}pub const {name}: ")?;
             self.print_type(&constant.type_)?;
+            write!(self.sink, " = ")?;
             match &constant.value {
-                Value::Signed(value) => writeln!(self.sink, " = {value:?};")?,
-                Value::Unsigned(value) => writeln!(self.sink, " = {value:?};")?,
-                Value::Float(value) => writeln!(self.sink, " = {value:?};")?,
-                Value::Str(value) => writeln!(self.sink, " = b\"{value}\\0\".as_ptr() as *const ::std::ffi::c_char;")?,
+                Value::Signed(value) => write!(self.sink, "{value:?}")?,
+                Value::Unsigned(value) => write!(self.sink, "{value:?}")?,
+                Value::Float(value) => write!(self.sink, "{value:?}")?,
+                Value::Str(value) => write!(self.sink, "b\"{value}\\0\".as_ptr() as *const ::std::ffi::c_char")?,
+                Value::Other(value) => write!(self.sink, "{value}")?,
             }
-        }
-
-        for constant in &namespace.unparsed_constants {
-            let indent = self.indent();
-            writeln!(self.sink, "{indent}{constant}")?;
+            writeln!(self.sink, ";")?;
         }
 
         for (name, child) in &namespace.children {
