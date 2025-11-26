@@ -32,9 +32,9 @@ fn find_headers<P: AsRef<Path>>(dir: P) -> Result<Vec<PathBuf>, io::Error> {
     Ok(headers)
 }
 
-fn parse_iid(tokens: &[String]) -> Option<String> {
+fn parse_iid(tokens: &[&str]) -> Option<String> {
     if let Some(first) = tokens.first() {
-        if first == "DECLARE_CLASS_IID" {
+        if *first == "DECLARE_CLASS_IID" {
             return Some(format!(
                 "pub const {}_iid: TUID = uid({}, {}, {}, {});",
                 tokens[2], tokens[4], tokens[6], tokens[8], tokens[10]

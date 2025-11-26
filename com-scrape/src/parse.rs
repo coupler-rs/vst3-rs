@@ -296,11 +296,14 @@ impl<'a> Parser<'a> {
                         if let Some(parser) = &self.options.constant_parser {
                             let tokens = cursor.tokens();
 
-                            let mut token_strings = Vec::new();
-                            for i in 0..tokens.len() {
-                                let token = tokens.get(i).unwrap();
-                                token_strings.push(token.spelling().to_str().unwrap().to_string());
-                            }
+                            let token_string_refs: Vec<StringRef> = (0..tokens.len())
+                                .map(|i| tokens.get(i).unwrap().spelling())
+                                .collect();
+
+                            let token_strings: Vec<&str> = token_string_refs
+                                .iter()
+                                .map(|t| t.to_str().unwrap())
+                                .collect();
 
                             if let Some(result) = parser(&token_strings) {
                                 namespace.unparsed_constants.push(result);
