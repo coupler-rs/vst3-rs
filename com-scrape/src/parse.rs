@@ -176,14 +176,6 @@ impl<'a> Parser<'a> {
             return Ok(());
         }
 
-        if self
-            .options
-            .skip_types
-            .contains(cursor.name().to_str().unwrap())
-        {
-            return Ok(());
-        }
-
         match cursor.kind() {
             CursorKind::Namespace => {
                 // Skip the contents of unnamed namespaces

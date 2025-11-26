@@ -49,6 +49,10 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         let indent = self.indent();
 
         for typedef in &namespace.typedefs {
+            if self.options.skip_types.contains(&typedef.name) {
+                continue;
+            }
+
             let name = &typedef.name;
 
             write!(self.sink, "{indent}pub type {name} = ")?;
@@ -69,10 +73,18 @@ impl<'a, W: Write> RustPrinter<'a, W> {
         }
 
         for record in &namespace.records {
+            if self.options.skip_types.contains(&record.name) {
+                continue;
+            }
+
             self.print_record(&record)?;
         }
 
         for record in &namespace.extern_records {
+            if self.options.skip_types.contains(&record.name) {
+                continue;
+            }
+
             self.print_extern_record(&record)?;
         }
 
