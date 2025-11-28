@@ -159,55 +159,6 @@ pub enum Value {
     Other(String),
 }
 
-fn enum_has_base(cursor: &Cursor) -> Result<bool, Box<dyn Error>> {
-    // When an enum declaration does not specify an explicit base type, Clang defaults to using
-    // different integer types on different platforms (`int` vs. `unsigned int`). However, we would
-    // like to default to `int` on all platforms for consistency. Libclang does not provide any
-    // explicit API for determining whether an enum declaration specifies a base type, so we have
-    // to inspect the tokens manually.
-
-    let tokens = cursor.tokens();
-    let mut iter = (0..tokens.len()).map(|i| tokens.get(i).unwrap());
-    let mut token = iter.next().unwrap();
-
-    let mut match_token =
-        move |kind: TokenKind, spelling: Option<&str>| -> Result<(), Box<dyn Error>> {
-            while token.kind() == TokenKind::Comment {
-                token = iter.next().unwrap();
-            }
-
-            if token.kind() != kind {
-                return Err(format!("expected {kind:?} at {}", token.location()).into());
-            }
-
-            if let Some(spelling) = spelling {
-                if token.spelling().to_str().unwrap() != spelling {
-                    return Err(
-                        format!("expected {kind:?} `{spelling}` at {}", token.location()).into(),
-                    );
-                }
-            }
-
-            token = iter.next().unwrap();
-
-            Ok(())
-        };
-
-    match_token(TokenKind::Keyword, Some("enum"))?;
-    if let Ok(_) = match_token(TokenKind::Punctuation, Some("{")) {
-        return Ok(false);
-    }
-    match_token(TokenKind::Identifier, None)?;
-    if let Ok(_) = match_token(TokenKind::Punctuation, Some("{")) {
-        return Ok(false);
-    }
-    match_token(TokenKind::Punctuation, Some(":"))?;
-    match_token(TokenKind::Identifier, None)?;
-    match_token(TokenKind::Punctuation, Some("{"))?;
-
-    Ok(true)
-}
-
 struct Parser<'a> {
     options: &'a Generator,
 }
@@ -254,13 +205,8 @@ impl<'a> Parser<'a> {
                 });
             }
             CursorKind::EnumDecl => {
-                let has_base = enum_has_base(cursor)?;
-
-                let int_type = if has_base {
-                    self.parse_type(cursor.enum_integer_type().unwrap(), cursor.location())?
-                } else {
-                    Type::Int
-                };
+                let int_type =
+                    self.parse_type(cursor.enum_integer_type().unwrap(), cursor.location())?;
 
                 let constant_type = if cursor.is_anonymous() {
                     int_type.clone()
@@ -268,25 +214,21 @@ impl<'a> Parser<'a> {
                     self.parse_type(cursor.type_().unwrap(), cursor.location())?
                 };
 
-                let signed = if has_base {
-                    let canonical_type = cursor.enum_integer_type().unwrap().canonical_type();
-                    match canonical_type.kind() {
-                        TypeKind::Char_U
-                        | TypeKind::UChar
-                        | TypeKind::UShort
-                        | TypeKind::UInt
-                        | TypeKind::ULong
-                        | TypeKind::ULongLong => false,
-                        TypeKind::Char_S
-                        | TypeKind::SChar
-                        | TypeKind::Short
-                        | TypeKind::Int
-                        | TypeKind::Long
-                        | TypeKind::LongLong => true,
-                        _ => return Err(format!("unhandled enum type").into()),
-                    }
-                } else {
-                    true
+                let canonical_type = cursor.enum_integer_type().unwrap().canonical_type();
+                let signed = match canonical_type.kind() {
+                    TypeKind::Char_U
+                    | TypeKind::UChar
+                    | TypeKind::UShort
+                    | TypeKind::UInt
+                    | TypeKind::ULong
+                    | TypeKind::ULongLong => false,
+                    TypeKind::Char_S
+                    | TypeKind::SChar
+                    | TypeKind::Short
+                    | TypeKind::Int
+                    | TypeKind::Long
+                    | TypeKind::LongLong => true,
+                    _ => return Err(format!("unhandled enum type {:?}", int_type).into()),
                 };
 
                 let mut constants = Vec::new();
