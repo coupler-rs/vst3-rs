@@ -68,4 +68,4 @@ mod support;
 
 pub use support::uid;
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+include!("bindings.rs");
