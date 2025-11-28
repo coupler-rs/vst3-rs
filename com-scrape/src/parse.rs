@@ -493,11 +493,20 @@ impl<'a> Parser<'a> {
                 Ok(Type::Typedef(decl.name().to_str().unwrap().to_string()))
             }
             TypeKind::Typedef => {
-                // Skip typedef declarations that are found in system headers
+                // Handle fixed-width integer types from <cstdint>
                 let declaration = type_.declaration();
                 if declaration.is_in_system_header() {
-                    let underlying_type = declaration.typedef_underlying_type().unwrap();
-                    return Ok(self.parse_type(underlying_type, location)?);
+                    match type_.typedef_name().unwrap().to_str().unwrap() {
+                        "int8_t" => return Ok(Type::Signed(1)),
+                        "int16_t" => return Ok(Type::Signed(2)),
+                        "int32_t" => return Ok(Type::Signed(4)),
+                        "int64_t" => return Ok(Type::Signed(8)),
+                        "uint8_t" => return Ok(Type::Unsigned(1)),
+                        "uint16_t" => return Ok(Type::Unsigned(2)),
+                        "uint32_t" => return Ok(Type::Unsigned(4)),
+                        "uint64_t" => return Ok(Type::Unsigned(8)),
+                        _ => {}
+                    }
                 }
 
                 let name = type_.typedef_name().unwrap().to_str().unwrap().to_string();
