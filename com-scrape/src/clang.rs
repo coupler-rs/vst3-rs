@@ -741,6 +741,15 @@ impl<'a> Drop for Tokens<'a> {
     }
 }
 
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+pub enum TokenKind {
+    Punctuation,
+    Keyword,
+    Identifier,
+    Literal,
+    Comment,
+}
+
 pub struct Token<'a> {
     unit: CXTranslationUnit,
     token: CXToken,
@@ -754,6 +763,22 @@ impl<'a> Token<'a> {
             token,
             _marker: PhantomData,
         }
+    }
+
+    pub fn kind(&self) -> TokenKind {
+        #[allow(non_upper_case_globals)]
+        match unsafe { clang_getTokenKind(self.token) } {
+            CXToken_Punctuation => TokenKind::Punctuation,
+            CXToken_Keyword => TokenKind::Keyword,
+            CXToken_Identifier => TokenKind::Identifier,
+            CXToken_Literal => TokenKind::Literal,
+            CXToken_Comment => TokenKind::Comment,
+            _ => panic!(),
+        }
+    }
+
+    pub fn location(&self) -> Location<'a> {
+        unsafe { Location::from_raw(clang_getTokenLocation(self.unit, self.token)) }
     }
 
     pub fn spelling(&self) -> StringRef<'a> {
