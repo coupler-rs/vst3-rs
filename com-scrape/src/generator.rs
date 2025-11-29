@@ -27,7 +27,7 @@ pub struct Generator {
     pub(crate) target: Option<String>,
     pub(crate) skip_types: HashSet<String>,
     pub(crate) skip_interface_traits: HashSet<String>,
-    pub(crate) constant_parser: Option<Box<dyn Fn(&[String]) -> Option<String>>>,
+    pub(crate) constant_parser: Option<Box<dyn Fn(&[&str]) -> Option<String>>>,
     pub(crate) iid_generator: Option<Box<dyn Fn(&str) -> String>>,
     pub(crate) query_interface_fn: Option<String>,
     pub(crate) add_ref_fn: Option<String>,
@@ -97,7 +97,7 @@ impl Generator {
     /// included in the generated bindings.
     pub fn constant_parser<F>(mut self, f: F) -> Self
     where
-        F: Fn(&[String]) -> Option<String> + 'static,
+        F: Fn(&[&str]) -> Option<String> + 'static,
     {
         self.constant_parser = Some(Box::new(f));
         self
