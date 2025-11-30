@@ -204,3 +204,9 @@ mod result_values {
 }
 
 pub use result_values::*;
+
+#[cfg(target_os = "windows")]
+pub type DefaultEnumType = std::ffi::c_int;
+
+#[cfg(not(target_os = "windows"))]
+pub type DefaultEnumType = std::ffi::c_uint;

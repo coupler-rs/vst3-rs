@@ -211,8 +211,12 @@ impl<'a> Parser<'a> {
                     return Ok(());
                 }
 
-                let type_ =
-                    self.parse_type(cursor.typedef_underlying_type().unwrap(), cursor.location())?;
+                let override_type = self.options.override_typedef_types.get(&canonical_name);
+                let type_ = if let Some(override_type) = override_type {
+                    Type::Typedef(override_type.to_string())
+                } else {
+                    self.parse_type(cursor.typedef_underlying_type().unwrap(), cursor.location())?
+                };
 
                 namespace.typedefs.push(Typedef {
                     name: name_str.to_string(),
@@ -289,9 +293,16 @@ impl<'a> Parser<'a> {
                     let mut inner = Namespace::new();
                     inner.constants.extend(constants);
 
+                    let override_type = self.options.override_typedef_types.get(&canonical_name);
+                    let type_ = if let Some(override_type) = override_type {
+                        Type::Typedef(override_type.to_string())
+                    } else {
+                        int_type.clone()
+                    };
+
                     namespace.typedefs.push(Typedef {
                         name: name_str.to_string(),
-                        type_: int_type.clone(),
+                        type_,
                         inner,
                     });
                 }

@@ -84,6 +84,38 @@ pub fn generate(
             "Steinberg::LARGE_INT",
         ])
         .skip_interface_trait("Steinberg::FUnknown")
+        .override_typedef_types(&[
+            ("Steinberg::Direction", "crate::support::DefaultEnumType"),
+            ("Steinberg::KeyModifier", "crate::support::DefaultEnumType"),
+            ("Steinberg::Orientation", "crate::support::DefaultEnumType"),
+            ("Steinberg::StandardColor", "crate::support::DefaultEnumType"),
+            ("Steinberg::VirtualKeyCodes", "crate::support::DefaultEnumType"),
+            ("Steinberg::IBStream::IStreamSeekMode", "crate::support::DefaultEnumType"),
+            ("Steinberg::IDependent::ChangeMessage", "crate::support::DefaultEnumType"),
+            ("Steinberg::PClassInfo::ClassCardinality", "crate::support::DefaultEnumType"),
+            ("Steinberg::PFactoryInfo::FactoryFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::BusDirections", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::BusTypes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::ComponentFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::ControllerNumbers", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::IoModes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::MediaTypes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::PhysicalUITypeIDs", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::ProcessModes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::SymbolicSampleSizes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::ePrefetchableSupport", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::BusInfo::BusFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::Chord::Masks", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::DataEvent::DataTypes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::Event::EventFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::Event::EventTypes", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::FrameRate::FrameRateFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::IContextMenuItem::Flags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::IProcessContextRequirements::Flags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::NoteExpressionTypeInfo::NoteExpressionTypeFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::ProcessContext::StatesAndFlags", "crate::support::DefaultEnumType"),
+            ("Steinberg::Vst::ChannelContext::ChannelPluginLocation", "crate::support::DefaultEnumType"),
+        ])
         .override_constant_values(&[
             ("Steinberg::kNoInterface", "crate::support::kNoInterface"),
             ("Steinberg::kResultOk", "crate::support::kResultOk"),
@@ -94,6 +126,7 @@ pub fn generate(
             ("Steinberg::kInternalError", "crate::support::kInternalError"),
             ("Steinberg::kNotInitialized", "crate::support::kNotInitialized"),
             ("Steinberg::kOutOfMemory", "crate::support::kOutOfMemory"),
+            ("Steinberg::Vst::PhysicalUITypeIDs::kInvalidPUITypeID", "0xFFFFFFFFu32 as crate::support::DefaultEnumType"),
         ])
         .constant_parser(parse_iid)
         .iid_generator(|name| format!("crate::support::tuid_as_guid({name}_iid)"))

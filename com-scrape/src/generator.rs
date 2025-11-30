@@ -27,6 +27,7 @@ pub struct Generator {
     pub(crate) target: Option<String>,
     pub(crate) skip_types: HashSet<String>,
     pub(crate) skip_interface_traits: HashSet<String>,
+    pub(crate) override_typedef_types: HashMap<String, String>,
     pub(crate) override_constant_values: HashMap<String, String>,
     pub(crate) constant_parser: Option<Box<dyn Fn(&[&str]) -> Option<String>>>,
     pub(crate) iid_generator: Option<Box<dyn Fn(&str) -> String>>,
@@ -42,6 +43,7 @@ impl Default for Generator {
             target: None,
             skip_types: HashSet::new(),
             skip_interface_traits: HashSet::new(),
+            override_typedef_types: HashMap::new(),
             override_constant_values: HashMap::new(),
             constant_parser: None,
             iid_generator: None,
@@ -89,6 +91,34 @@ impl Generator {
     pub fn skip_interface_traits<'a, T: AsRef<[&'a str]>>(mut self, interfaces: T) -> Self {
         self.skip_interface_traits
             .extend(interfaces.as_ref().iter().map(|s| s.to_string()));
+        self
+    }
+
+    /// Override the type of `typedef` in the generator's output.
+    pub fn override_typedef_type<T: AsRef<str>, U: AsRef<str>>(
+        mut self,
+        typedef: T,
+        type_: U,
+    ) -> Self {
+        self.override_typedef_types
+            .insert(typedef.as_ref().to_string(), type_.as_ref().to_string());
+        self
+    }
+
+    /// Override the types of typedefs in the generator's output based on the typedef-type pairs in
+    /// `typedefs`.
+    pub fn override_typedef_types<T, U, I>(mut self, typedefs: I) -> Self
+    where
+        T: AsRef<str>,
+        U: AsRef<str>,
+        I: AsRef<[(T, U)]>,
+    {
+        self.override_typedef_types.extend(
+            typedefs
+                .as_ref()
+                .into_iter()
+                .map(|(k, v)| (k.as_ref().to_string(), v.as_ref().to_string())),
+        );
         self
     }
 
