@@ -158,14 +158,6 @@ impl<'a> Parser<'a> {
             return Ok(());
         }
 
-        if self
-            .options
-            .skip_types
-            .contains(cursor.name().to_str().unwrap())
-        {
-            return Ok(());
-        }
-
         match cursor.kind() {
             CursorKind::Namespace => {
                 // Skip the contents of unnamed namespaces
@@ -186,18 +178,30 @@ impl<'a> Parser<'a> {
             }
             CursorKind::TypedefDecl | CursorKind::TypeAliasDecl => {
                 let typedef = cursor.type_().unwrap();
-                let name = typedef.typedef_name();
+                let name = typedef.typedef_name().unwrap();
+                let name_str = name.to_str().unwrap();
+
+                if self.options.skip_types.contains(name_str) {
+                    return Ok(());
+                }
 
                 let type_ =
                     self.parse_type(cursor.typedef_underlying_type().unwrap(), cursor.location())?;
 
                 namespace.typedefs.push(Typedef {
-                    name: name.unwrap().to_str().unwrap().to_string(),
+                    name: name_str.to_string(),
                     type_,
                     inner: Namespace::new(),
                 });
             }
             CursorKind::EnumDecl => {
+                let name = cursor.name();
+                let name_str = name.to_str().unwrap();
+
+                if self.options.skip_types.contains(name_str) {
+                    return Ok(());
+                }
+
                 let int_type =
                     self.parse_type(cursor.enum_integer_type().unwrap(), cursor.location())?;
 
@@ -243,9 +247,6 @@ impl<'a> Parser<'a> {
                 if cursor.is_anonymous() {
                     namespace.constants.extend(constants);
                 } else {
-                    let name = cursor.name();
-                    let name_str = name.to_str().unwrap();
-
                     let mut inner = Namespace::new();
                     inner.constants.extend(constants);
 
@@ -303,6 +304,13 @@ impl<'a> Parser<'a> {
                 }
             }
             CursorKind::StructDecl | CursorKind::UnionDecl | CursorKind::ClassDecl => {
+                let name = cursor.name();
+                let name_str = name.to_str().unwrap();
+
+                if self.options.skip_types.contains(name_str) {
+                    return Ok(());
+                }
+
                 if cursor.is_definition() {
                     // Skip unnamed records here, as parse_type will take care of them
                     if !cursor.is_anonymous() {
@@ -311,7 +319,7 @@ impl<'a> Parser<'a> {
                     }
                 } else if !cursor.has_definition() {
                     namespace.extern_records.push(ExternRecord {
-                        name: cursor.name().to_str().unwrap().to_string(),
+                        name: name_str.to_string(),
                     });
                 }
             }
