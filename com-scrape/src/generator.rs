@@ -28,6 +28,7 @@ pub struct Generator {
     pub(crate) skip_types: HashSet<String>,
     pub(crate) skip_interface_traits: HashSet<String>,
     pub(crate) override_typedef_types: HashMap<String, String>,
+    pub(crate) override_constant_types: HashMap<String, String>,
     pub(crate) override_constant_values: HashMap<String, String>,
     pub(crate) constant_parser: Option<Box<dyn Fn(&[&str]) -> Option<String>>>,
     pub(crate) iid_generator: Option<Box<dyn Fn(&str) -> String>>,
@@ -44,6 +45,7 @@ impl Default for Generator {
             skip_types: HashSet::new(),
             skip_interface_traits: HashSet::new(),
             override_typedef_types: HashMap::new(),
+            override_constant_types: HashMap::new(),
             override_constant_values: HashMap::new(),
             constant_parser: None,
             iid_generator: None,
@@ -115,6 +117,34 @@ impl Generator {
     {
         self.override_typedef_types.extend(
             typedefs
+                .as_ref()
+                .into_iter()
+                .map(|(k, v)| (k.as_ref().to_string(), v.as_ref().to_string())),
+        );
+        self
+    }
+
+    /// Override the type of `constant` in the generator's output.
+    pub fn override_constant_type<T: AsRef<str>, U: AsRef<str>>(
+        mut self,
+        constant: T,
+        type_: U,
+    ) -> Self {
+        self.override_constant_types
+            .insert(constant.as_ref().to_string(), type_.as_ref().to_string());
+        self
+    }
+
+    /// Override the types of constants in the generator's output based on the constant-type pairs in
+    /// `constants`.
+    pub fn override_constant_types<T, U, I>(mut self, constants: I) -> Self
+    where
+        T: AsRef<str>,
+        U: AsRef<str>,
+        I: AsRef<[(T, U)]>,
+    {
+        self.override_constant_types.extend(
+            constants
                 .as_ref()
                 .into_iter()
                 .map(|(k, v)| (k.as_ref().to_string(), v.as_ref().to_string())),

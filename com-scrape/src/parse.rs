@@ -275,9 +275,17 @@ impl<'a> Parser<'a> {
                                 Value::Unsigned(cursor.enum_constant_value_unsigned().unwrap())
                             };
 
+                            let override_type =
+                                self.options.override_constant_types.get(&canonical_name);
+                            let type_ = if let Some(override_type) = override_type {
+                                Type::Typedef(override_type.to_string())
+                            } else {
+                                constant_type.clone()
+                            };
+
                             constants.push(Constant {
                                 name: cursor.name().to_str().unwrap().to_string(),
-                                type_: constant_type.clone(),
+                                type_,
                                 value,
                             });
                         }
@@ -351,7 +359,14 @@ impl<'a> Parser<'a> {
                     };
 
                     if let Some(value) = value {
-                        let type_ = self.parse_type(type_, cursor.location())?;
+                        let override_type =
+                            self.options.override_constant_types.get(&canonical_name);
+                        let type_ = if let Some(override_type) = override_type {
+                            Type::Typedef(override_type.to_string())
+                        } else {
+                            self.parse_type(type_, cursor.location())?
+                        };
+
                         namespace.constants.push(Constant {
                             name: cursor.name().to_str().unwrap().to_string(),
                             type_,
