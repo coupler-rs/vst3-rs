@@ -74,6 +74,7 @@ pub fn generate(
         writeln!(source, "#include \"{}\"", name)?;
     }
 
+    #[rustfmt::skip]
     let mut generator = com_scrape::Generator::default()
         .skip_types(&[
             "Steinberg::SKI::Detail::Adopt",
@@ -83,6 +84,17 @@ pub fn generate(
             "Steinberg::LARGE_INT",
         ])
         .skip_interface_trait("Steinberg::FUnknown")
+        .override_constant_values(&[
+            ("Steinberg::kNoInterface", "crate::support::kNoInterface"),
+            ("Steinberg::kResultOk", "crate::support::kResultOk"),
+            ("Steinberg::kResultTrue", "crate::support::kResultTrue"),
+            ("Steinberg::kResultFalse", "crate::support::kResultFalse"),
+            ("Steinberg::kInvalidArgument", "crate::support::kInvalidArgument"),
+            ("Steinberg::kNotImplemented", "crate::support::kNotImplemented"),
+            ("Steinberg::kInternalError", "crate::support::kInternalError"),
+            ("Steinberg::kNotInitialized", "crate::support::kNotInitialized"),
+            ("Steinberg::kOutOfMemory", "crate::support::kOutOfMemory"),
+        ])
         .constant_parser(parse_iid)
         .iid_generator(|name| format!("crate::support::tuid_as_guid({name}_iid)"))
         .query_interface_fn("crate::support::FUnknown_query_interface")

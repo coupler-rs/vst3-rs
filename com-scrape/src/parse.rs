@@ -259,7 +259,13 @@ impl<'a> Parser<'a> {
                 cursor.visit_children(|cursor| -> Result<(), Box<dyn Error>> {
                     match cursor.kind() {
                         CursorKind::EnumConstantDecl => {
-                            let value = if signed {
+                            let canonical_name = self.canonical_name(cursor);
+
+                            let override_value =
+                                self.options.override_constant_values.get(&canonical_name);
+                            let value = if let Some(override_value) = override_value {
+                                Value::Other(override_value.to_string())
+                            } else if signed {
                                 Value::Signed(cursor.enum_constant_value().unwrap())
                             } else {
                                 Value::Unsigned(cursor.enum_constant_value_unsigned().unwrap())
@@ -293,35 +299,42 @@ impl<'a> Parser<'a> {
             CursorKind::VarDecl => {
                 let type_ = cursor.type_().unwrap();
                 if type_.is_const() {
-                    let eval_result = cursor.evaluate();
-                    let value = match eval_result.kind() {
-                        EvalResultKind::Int => {
-                            if eval_result.is_unsigned_int() {
-                                Some(Value::Unsigned(eval_result.as_unsigned()))
-                            } else {
-                                Some(Value::Signed(eval_result.as_long_long()))
+                    let canonical_name = self.canonical_name(cursor);
+
+                    let override_value = self.options.override_constant_values.get(&canonical_name);
+                    let value = if let Some(override_value) = override_value {
+                        Some(Value::Other(override_value.to_string()))
+                    } else {
+                        let eval_result = cursor.evaluate();
+                        match eval_result.kind() {
+                            EvalResultKind::Int => {
+                                if eval_result.is_unsigned_int() {
+                                    Some(Value::Unsigned(eval_result.as_unsigned()))
+                                } else {
+                                    Some(Value::Signed(eval_result.as_long_long()))
+                                }
                             }
-                        }
-                        EvalResultKind::Float => Some(Value::Float(eval_result.as_double())),
-                        EvalResultKind::StrLiteral => Some(Value::Str(
-                            eval_result.as_str().unwrap().to_str().unwrap().to_string(),
-                        )),
-                        EvalResultKind::Other => {
-                            if let Some(parser) = &self.options.constant_parser {
-                                let tokens = cursor.tokens();
+                            EvalResultKind::Float => Some(Value::Float(eval_result.as_double())),
+                            EvalResultKind::StrLiteral => Some(Value::Str(
+                                eval_result.as_str().unwrap().to_str().unwrap().to_string(),
+                            )),
+                            EvalResultKind::Other => {
+                                if let Some(parser) = &self.options.constant_parser {
+                                    let tokens = cursor.tokens();
 
-                                let token_string_refs: Vec<StringRef> = (0..tokens.len())
-                                    .map(|i| tokens.get(i).unwrap().spelling())
-                                    .collect();
+                                    let token_string_refs: Vec<StringRef> = (0..tokens.len())
+                                        .map(|i| tokens.get(i).unwrap().spelling())
+                                        .collect();
 
-                                let token_strings: Vec<&str> = token_string_refs
-                                    .iter()
-                                    .map(|t| t.to_str().unwrap())
-                                    .collect();
+                                    let token_strings: Vec<&str> = token_string_refs
+                                        .iter()
+                                        .map(|t| t.to_str().unwrap())
+                                        .collect();
 
-                                parser(&token_strings).map(Value::Other)
-                            } else {
-                                None
+                                    parser(&token_strings).map(Value::Other)
+                                } else {
+                                    None
+                                }
                             }
                         }
                     };

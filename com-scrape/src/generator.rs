@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::env;
 use std::error::Error;
 use std::io::Write;
@@ -27,6 +27,7 @@ pub struct Generator {
     pub(crate) target: Option<String>,
     pub(crate) skip_types: HashSet<String>,
     pub(crate) skip_interface_traits: HashSet<String>,
+    pub(crate) override_constant_values: HashMap<String, String>,
     pub(crate) constant_parser: Option<Box<dyn Fn(&[&str]) -> Option<String>>>,
     pub(crate) iid_generator: Option<Box<dyn Fn(&str) -> String>>,
     pub(crate) query_interface_fn: Option<String>,
@@ -41,6 +42,7 @@ impl Default for Generator {
             target: None,
             skip_types: HashSet::new(),
             skip_interface_traits: HashSet::new(),
+            override_constant_values: HashMap::new(),
             constant_parser: None,
             iid_generator: None,
             query_interface_fn: None,
@@ -87,6 +89,34 @@ impl Generator {
     pub fn skip_interface_traits<'a, T: AsRef<[&'a str]>>(mut self, interfaces: T) -> Self {
         self.skip_interface_traits
             .extend(interfaces.as_ref().iter().map(|s| s.to_string()));
+        self
+    }
+
+    /// Override the value of `constant` in the generator's output.
+    pub fn override_constant_value<T: AsRef<str>, U: AsRef<str>>(
+        mut self,
+        constant: T,
+        value: U,
+    ) -> Self {
+        self.override_constant_values
+            .insert(constant.as_ref().to_string(), value.as_ref().to_string());
+        self
+    }
+
+    /// Override the values of constants in the generator's output based on the constant-value pairs
+    /// in `constants`.
+    pub fn override_constant_values<T, U, I>(mut self, constants: I) -> Self
+    where
+        T: AsRef<str>,
+        U: AsRef<str>,
+        I: AsRef<[(T, U)]>,
+    {
+        self.override_constant_values.extend(
+            constants
+                .as_ref()
+                .into_iter()
+                .map(|(k, v)| (k.as_ref().to_string(), v.as_ref().to_string())),
+        );
         self
     }
 
