@@ -82,7 +82,7 @@ pub fn generate(
             "Steinberg::FReleaser",
             "Steinberg::LARGE_INT",
         ])
-        .skip_interface_trait("FUnknown")
+        .skip_interface_trait("Steinberg::FUnknown")
         .constant_parser(parse_iid)
         .iid_generator(|name| format!("crate::support::tuid_as_guid({name}_iid)"))
         .query_interface_fn("crate::support::FUnknown_query_interface")

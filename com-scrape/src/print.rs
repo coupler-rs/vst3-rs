@@ -305,12 +305,12 @@ impl<'a, W: Write> RustPrinter<'a, W> {
 
             writeln!(self.sink, "{indent}}}")?;
 
-            if !self.options.skip_interface_traits.contains(&record.name) {
+            if record.emit_interface_trait {
                 write!(self.sink, "{indent}pub trait {name}Trait")?;
                 {
                     let mut bases = &record.bases;
                     while let Some(base) = bases.first() {
-                        if !self.options.skip_interface_traits.contains(&base.name) {
+                        if base.emit_interface_trait {
                             let base_name = &base.name;
                             write!(self.sink, ": {base_name}Trait")?;
                             break;
@@ -348,7 +348,7 @@ impl<'a, W: Write> RustPrinter<'a, W> {
                 {
                     let mut bases = &record.bases;
                     while let Some(base) = bases.first() {
-                        if !self.options.skip_interface_traits.contains(&base.name) {
+                        if base.emit_interface_trait {
                             let base_name = &base.name;
                             writeln!(self.sink, "{indent}    P::Target: ::com_scrape_types::Inherits<{base_name}>,")?;
                         }

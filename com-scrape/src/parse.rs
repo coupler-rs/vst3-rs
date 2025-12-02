@@ -84,6 +84,7 @@ pub struct Record {
     pub fields: Vec<Field>,
     pub bases: Vec<Base>,
     pub virtual_methods: Vec<Method>,
+    pub emit_interface_trait: bool,
     pub inner: Namespace,
 }
 
@@ -96,6 +97,7 @@ pub struct ExternRecord {
 pub struct Base {
     pub name: String,
     pub bases: Vec<Base>,
+    pub emit_interface_trait: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -433,6 +435,9 @@ impl<'a> Parser<'a> {
 
         let bases = self.collect_bases(&decl)?;
 
+        let canonical_name = self.canonical_name(&decl);
+        let emit_interface_trait = !self.options.skip_interface_traits.contains(&canonical_name);
+
         let mut inner = Namespace::new();
         decl.visit_children(|cursor| self.visit(&mut inner, cursor))?;
 
@@ -442,6 +447,7 @@ impl<'a> Parser<'a> {
             fields,
             bases,
             virtual_methods,
+            emit_interface_trait,
             inner,
         })
     }
@@ -456,9 +462,14 @@ impl<'a> Parser<'a> {
                 let name = decl.name();
                 let transitive_bases = self.collect_bases(&decl)?;
 
+                let canonical_name = self.canonical_name(&decl);
+                let emit_interface_trait =
+                    !self.options.skip_interface_traits.contains(&canonical_name);
+
                 bases.push(Base {
                     name: name.to_str().unwrap().to_string(),
                     bases: transitive_bases,
+                    emit_interface_trait,
                 });
             }
 
