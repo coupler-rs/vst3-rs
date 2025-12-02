@@ -175,6 +175,22 @@ impl<'a> Cursor<'a> {
         }
     }
 
+    pub fn is_translation_unit(&self) -> bool {
+        unsafe { clang_isTranslationUnit(clang_getCursorKind(self.cursor)) != 0 }
+    }
+
+    pub fn semantic_parent(&self) -> Option<Cursor<'a>> {
+        unsafe {
+            let parent = clang_getCursorSemanticParent(self.cursor);
+
+            if clang_Cursor_isNull(parent) != 0 {
+                None
+            } else {
+                Some(Cursor::from_raw(parent))
+            }
+        }
+    }
+
     pub fn name(&self) -> StringRef<'a> {
         unsafe { StringRef::from_raw(clang_getCursorSpelling(self.cursor)) }
     }

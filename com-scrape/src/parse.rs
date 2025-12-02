@@ -204,7 +204,8 @@ impl<'a> Parser<'a> {
                 let name = typedef.typedef_name().unwrap();
                 let name_str = name.to_str().unwrap();
 
-                if self.options.skip_types.contains(name_str) {
+                let canonical_name = self.canonical_name(cursor);
+                if self.options.skip_types.contains(&canonical_name) {
                     return Ok(());
                 }
 
@@ -221,7 +222,8 @@ impl<'a> Parser<'a> {
                 let name = cursor.name();
                 let name_str = name.to_str().unwrap();
 
-                if self.options.skip_types.contains(name_str) {
+                let canonical_name = self.canonical_name(cursor);
+                if self.options.skip_types.contains(&canonical_name) {
                     return Ok(());
                 }
 
@@ -336,7 +338,8 @@ impl<'a> Parser<'a> {
                 let name = cursor.name();
                 let name_str = name.to_str().unwrap();
 
-                if self.options.skip_types.contains(name_str) {
+                let canonical_name = self.canonical_name(cursor);
+                if self.options.skip_types.contains(&canonical_name) {
                     return Ok(());
                 }
 
@@ -548,5 +551,31 @@ impl<'a> Parser<'a> {
             )
             .into()),
         }
+    }
+
+    fn canonical_name(&self, decl: &Cursor) -> String {
+        let mut components = Vec::new();
+
+        let mut parent = decl.semantic_parent();
+        while let Some(cursor) = parent.take() {
+            if cursor.is_translation_unit() {
+                break;
+            }
+
+            parent = cursor.semantic_parent();
+            components.push(cursor);
+        }
+
+        let mut result = String::new();
+        for cursor in components.into_iter().rev() {
+            if !cursor.is_anonymous() {
+                result.push_str(cursor.name().to_str().unwrap());
+                result.push_str("::");
+            }
+        }
+
+        result.push_str(decl.name().to_str().unwrap());
+
+        result
     }
 }

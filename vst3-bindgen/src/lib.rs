@@ -76,11 +76,11 @@ pub fn generate(
 
     let mut generator = com_scrape::Generator::default()
         .skip_types(&[
-            "Adopt",
-            "ConstStringTable",
-            "FUID",
-            "FReleaser",
-            "LARGE_INT",
+            "Steinberg::SKI::Detail::Adopt",
+            "Steinberg::ConstStringTable",
+            "Steinberg::FUID",
+            "Steinberg::FReleaser",
+            "Steinberg::LARGE_INT",
         ])
         .skip_interface_trait("FUnknown")
         .constant_parser(parse_iid)
