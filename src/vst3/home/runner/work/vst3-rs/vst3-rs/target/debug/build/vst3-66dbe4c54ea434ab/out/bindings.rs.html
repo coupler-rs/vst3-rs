@@ -4211,8 +4211,8 @@
 <a href=#4211 id=4211 data-nosnippet>4211</a>    <span class="kw">pub const </span>IUpdateHandler_iid: TUID = <span class="kw">crate</span>::support::uid(<span class="number">0xF5246D56</span>, <span class="number">0x86544d60</span>, <span class="number">0xB026AFB5</span>, <span class="number">0x7B697B37</span>);
 <a href=#4212 id=4212 data-nosnippet>4212</a>    <span class="kw">pub const </span>IWaylandFrame_iid: TUID = <span class="kw">crate</span>::support::uid(<span class="number">0x809FAEC6</span>, <span class="number">0x231C4FFA</span>, <span class="number">0x98ED046C</span>, <span class="number">0x6E9E2003</span>);
 <a href=#4213 id=4213 data-nosnippet>4213</a>    <span class="kw">pub const </span>IWaylandHost_iid: TUID = <span class="kw">crate</span>::support::uid(<span class="number">0x5E9582EE</span>, <span class="number">0x86594652</span>, <span class="number">0xB213678E</span>, <span class="number">0x7F1A705E</span>);
-<a href=#4214 id=4214 data-nosnippet>4214</a>    <span class="kw">pub const </span>kInternalError: ::std::ffi::c_int = <span class="number">4</span>;
-<a href=#4215 id=4215 data-nosnippet>4215</a>    <span class="kw">pub const </span>kInvalidArgument: ::std::ffi::c_int = <span class="number">2</span>;
+<a href=#4214 id=4214 data-nosnippet>4214</a>    <span class="kw">pub const </span>kInternalError: ::std::ffi::c_int = <span class="kw">crate</span>::support::kInternalError;
+<a href=#4215 id=4215 data-nosnippet>4215</a>    <span class="kw">pub const </span>kInvalidArgument: ::std::ffi::c_int = <span class="kw">crate</span>::support::kInvalidArgument;
 <a href=#4216 id=4216 data-nosnippet>4216</a>    <span class="kw">pub const </span>kMaxCoord: UCoord = <span class="number">2147483647</span>;
 <a href=#4217 id=4217 data-nosnippet>4217</a>    <span class="kw">pub const </span>kMaxDouble: f64 = <span class="number">1.7976931348623157e308</span>;
 <a href=#4218 id=4218 data-nosnippet>4218</a>    <span class="kw">pub const </span>kMaxFloat: f32 = <span class="number">3.4028234663852886e38</span>;
@@ -4225,10 +4225,10 @@
 <a href=#4225 id=4225 data-nosnippet>4225</a>    <span class="kw">pub const </span>kMinInt32: int32 = -<span class="number">2147483648</span>;
 <a href=#4226 id=4226 data-nosnippet>4226</a>    <span class="kw">pub const </span>kMinInt64: int64 = -<span class="number">9223372036854775808</span>;
 <a href=#4227 id=4227 data-nosnippet>4227</a>    <span class="kw">pub const </span>kMinLong: int32 = -<span class="number">2147483648</span>;
-<a href=#4228 id=4228 data-nosnippet>4228</a>    <span class="kw">pub const </span>kNoInterface: ::std::ffi::c_int = -<span class="number">1</span>;
-<a href=#4229 id=4229 data-nosnippet>4229</a>    <span class="kw">pub const </span>kNotImplemented: ::std::ffi::c_int = <span class="number">3</span>;
-<a href=#4230 id=4230 data-nosnippet>4230</a>    <span class="kw">pub const </span>kNotInitialized: ::std::ffi::c_int = <span class="number">5</span>;
-<a href=#4231 id=4231 data-nosnippet>4231</a>    <span class="kw">pub const </span>kOutOfMemory: ::std::ffi::c_int = <span class="number">6</span>;
+<a href=#4228 id=4228 data-nosnippet>4228</a>    <span class="kw">pub const </span>kNoInterface: ::std::ffi::c_int = <span class="kw">crate</span>::support::kNoInterface;
+<a href=#4229 id=4229 data-nosnippet>4229</a>    <span class="kw">pub const </span>kNotImplemented: ::std::ffi::c_int = <span class="kw">crate</span>::support::kNotImplemented;
+<a href=#4230 id=4230 data-nosnippet>4230</a>    <span class="kw">pub const </span>kNotInitialized: ::std::ffi::c_int = <span class="kw">crate</span>::support::kNotInitialized;
+<a href=#4231 id=4231 data-nosnippet>4231</a>    <span class="kw">pub const </span>kOutOfMemory: ::std::ffi::c_int = <span class="kw">crate</span>::support::kOutOfMemory;
 <a href=#4232 id=4232 data-nosnippet>4232</a>    <span class="kw">pub const </span>kPlatformStringIOS: FIDString = <span class="string">b"IOS\0"</span>.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>::std::ffi::c_char;
 <a href=#4233 id=4233 data-nosnippet>4233</a>    <span class="kw">pub const </span>kPlatformStringLinux: FIDString = <span class="string">b"Linux\0"</span>.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>::std::ffi::c_char;
 <a href=#4234 id=4234 data-nosnippet>4234</a>    <span class="kw">pub const </span>kPlatformStringMac: FIDString = <span class="string">b"MAC\0"</span>.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>::std::ffi::c_char;
@@ -4240,9 +4240,9 @@
 <a href=#4240 id=4240 data-nosnippet>4240</a>    <span class="kw">pub const </span>kPlatformTypeWaylandSurfaceID: FIDString = <span class="string">b"WaylandSurfaceID\0"</span>.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>::std::ffi::c_char;
 <a href=#4241 id=4241 data-nosnippet>4241</a>    <span class="kw">pub const </span>kPlatformTypeX11EmbedWindowID: FIDString = <span class="string">b"X11EmbedWindowID\0"</span>.as_ptr() <span class="kw">as </span><span class="kw-2">*const </span>::std::ffi::c_char;
 <a href=#4242 id=4242 data-nosnippet>4242</a>    <span class="kw">pub const </span>kPrintfBufferSize: uint32 = <span class="number">4096</span>;
-<a href=#4243 id=4243 data-nosnippet>4243</a>    <span class="kw">pub const </span>kResultFalse: ::std::ffi::c_int = <span class="number">1</span>;
-<a href=#4244 id=4244 data-nosnippet>4244</a>    <span class="kw">pub const </span>kResultOk: ::std::ffi::c_int = <span class="number">0</span>;
-<a href=#4245 id=4245 data-nosnippet>4245</a>    <span class="kw">pub const </span>kResultTrue: ::std::ffi::c_int = <span class="number">0</span>;
+<a href=#4243 id=4243 data-nosnippet>4243</a>    <span class="kw">pub const </span>kResultFalse: ::std::ffi::c_int = <span class="kw">crate</span>::support::kResultFalse;
+<a href=#4244 id=4244 data-nosnippet>4244</a>    <span class="kw">pub const </span>kResultOk: ::std::ffi::c_int = <span class="kw">crate</span>::support::kResultOk;
+<a href=#4245 id=4245 data-nosnippet>4245</a>    <span class="kw">pub const </span>kResultTrue: ::std::ffi::c_int = <span class="kw">crate</span>::support::kResultTrue;
 <a href=#4246 id=4246 data-nosnippet>4246</a>    <span class="kw">pub mod </span>Linux {
 <a href=#4247 id=4247 data-nosnippet>4247</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#4248 id=4248 data-nosnippet>4248</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
