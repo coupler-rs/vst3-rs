@@ -34,7 +34,7 @@
 <a href=#34 id=34 data-nosnippet>34</a>    <span class="kw">pub type </span>CStringW = <span class="kw-2">*const </span>char16;
 <a href=#35 id=35 data-nosnippet>35</a>    <span class="kw">pub type </span>ColorComponent = uint8;
 <a href=#36 id=36 data-nosnippet>36</a>    <span class="kw">pub type </span>ColorSpec = uint32;
-<a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">pub type </span>Direction = ::std::ffi::c_uint;
+<a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">pub type </span>Direction = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#38 id=38 data-nosnippet>38</a>    <span class="kw">pub mod </span>Direction_ {
 <a href=#39 id=39 data-nosnippet>39</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#40 id=40 data-nosnippet>40</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -51,7 +51,7 @@
 <a href=#51 id=51 data-nosnippet>51</a>    }
 <a href=#52 id=52 data-nosnippet>52</a>    <span class="kw">pub type </span>FIDString = <span class="kw-2">*const </span>char8;
 <a href=#53 id=53 data-nosnippet>53</a>    <span class="kw">pub type </span>IAttrID = FIDString;
-<a href=#54 id=54 data-nosnippet>54</a>    <span class="kw">pub type </span>KeyModifier = ::std::ffi::c_uint;
+<a href=#54 id=54 data-nosnippet>54</a>    <span class="kw">pub type </span>KeyModifier = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#55 id=55 data-nosnippet>55</a>    <span class="kw">pub mod </span>KeyModifier_ {
 <a href=#56 id=56 data-nosnippet>56</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#57 id=57 data-nosnippet>57</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -60,7 +60,7 @@
 <a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">pub const </span>kControlKey: KeyModifier = <span class="number">8</span>;
 <a href=#61 id=61 data-nosnippet>61</a>        <span class="kw">pub const </span>kShiftKey: KeyModifier = <span class="number">1</span>;
 <a href=#62 id=62 data-nosnippet>62</a>    }
-<a href=#63 id=63 data-nosnippet>63</a>    <span class="kw">pub type </span>Orientation = ::std::ffi::c_uint;
+<a href=#63 id=63 data-nosnippet>63</a>    <span class="kw">pub type </span>Orientation = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">pub mod </span>Orientation_ {
 <a href=#65 id=65 data-nosnippet>65</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#66 id=66 data-nosnippet>66</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -68,7 +68,7 @@
 <a href=#68 id=68 data-nosnippet>68</a>        <span class="kw">pub const </span>kNumberOfOrientations: Orientation = <span class="number">2</span>;
 <a href=#69 id=69 data-nosnippet>69</a>        <span class="kw">pub const </span>kVertical: Orientation = <span class="number">1</span>;
 <a href=#70 id=70 data-nosnippet>70</a>    }
-<a href=#71 id=71 data-nosnippet>71</a>    <span class="kw">pub type </span>StandardColor = ::std::ffi::c_uint;
+<a href=#71 id=71 data-nosnippet>71</a>    <span class="kw">pub type </span>StandardColor = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#72 id=72 data-nosnippet>72</a>    <span class="kw">pub mod </span>StandardColor_ {
 <a href=#73 id=73 data-nosnippet>73</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#74 id=74 data-nosnippet>74</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -117,7 +117,7 @@
 <a href=#117 id=117 data-nosnippet>117</a>    <span class="kw">pub type </span>UColorComponent = ColorComponent;
 <a href=#118 id=118 data-nosnippet>118</a>    <span class="kw">pub type </span>UColorSpec = ColorSpec;
 <a href=#119 id=119 data-nosnippet>119</a>    <span class="kw">pub type </span>UCoord = int32;
-<a href=#120 id=120 data-nosnippet>120</a>    <span class="kw">pub type </span>VirtualKeyCodes = ::std::ffi::c_uint;
+<a href=#120 id=120 data-nosnippet>120</a>    <span class="kw">pub type </span>VirtualKeyCodes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#121 id=121 data-nosnippet>121</a>    <span class="kw">pub mod </span>VirtualKeyCodes_ {
 <a href=#122 id=122 data-nosnippet>122</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#123 id=123 data-nosnippet>123</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -1119,7 +1119,7 @@
 <a href=#1119 id=1119 data-nosnippet>1119</a>    <span class="kw">pub mod </span>IBStream_ {
 <a href=#1120 id=1120 data-nosnippet>1120</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#1121 id=1121 data-nosnippet>1121</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#1122 id=1122 data-nosnippet>1122</a>        <span class="kw">pub type </span>IStreamSeekMode = ::std::ffi::c_uint;
+<a href=#1122 id=1122 data-nosnippet>1122</a>        <span class="kw">pub type </span>IStreamSeekMode = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#1123 id=1123 data-nosnippet>1123</a>        <span class="kw">pub mod </span>IStreamSeekMode_ {
 <a href=#1124 id=1124 data-nosnippet>1124</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#1125 id=1125 data-nosnippet>1125</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -1332,7 +1332,7 @@
 <a href=#1332 id=1332 data-nosnippet>1332</a>    <span class="kw">pub mod </span>IDependent_ {
 <a href=#1333 id=1333 data-nosnippet>1333</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#1334 id=1334 data-nosnippet>1334</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#1335 id=1335 data-nosnippet>1335</a>        <span class="kw">pub type </span>ChangeMessage = ::std::ffi::c_uint;
+<a href=#1335 id=1335 data-nosnippet>1335</a>        <span class="kw">pub type </span>ChangeMessage = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#1336 id=1336 data-nosnippet>1336</a>        <span class="kw">pub mod </span>ChangeMessage_ {
 <a href=#1337 id=1337 data-nosnippet>1337</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#1338 id=1338 data-nosnippet>1338</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4078,7 +4078,7 @@
 <a href=#4078 id=4078 data-nosnippet>4078</a>    <span class="kw">pub mod </span>PClassInfo_ {
 <a href=#4079 id=4079 data-nosnippet>4079</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#4080 id=4080 data-nosnippet>4080</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4081 id=4081 data-nosnippet>4081</a>        <span class="kw">pub type </span>ClassCardinality = ::std::ffi::c_uint;
+<a href=#4081 id=4081 data-nosnippet>4081</a>        <span class="kw">pub type </span>ClassCardinality = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4082 id=4082 data-nosnippet>4082</a>        <span class="kw">pub mod </span>ClassCardinality_ {
 <a href=#4083 id=4083 data-nosnippet>4083</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4084 id=4084 data-nosnippet>4084</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4165,7 +4165,7 @@
 <a href=#4165 id=4165 data-nosnippet>4165</a>    <span class="kw">pub mod </span>PFactoryInfo_ {
 <a href=#4166 id=4166 data-nosnippet>4166</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#4167 id=4167 data-nosnippet>4167</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4168 id=4168 data-nosnippet>4168</a>        <span class="kw">pub type </span>FactoryFlags = ::std::ffi::c_uint;
+<a href=#4168 id=4168 data-nosnippet>4168</a>        <span class="kw">pub type </span>FactoryFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4169 id=4169 data-nosnippet>4169</a>        <span class="kw">pub mod </span>FactoryFlags_ {
 <a href=#4170 id=4170 data-nosnippet>4170</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4171 id=4171 data-nosnippet>4171</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4655,7 +4655,7 @@
 <a href=#4655 id=4655 data-nosnippet>4655</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#4656 id=4656 data-nosnippet>4656</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#4657 id=4657 data-nosnippet>4657</a>        <span class="kw">pub type </span>BusDirection = int32;
-<a href=#4658 id=4658 data-nosnippet>4658</a>        <span class="kw">pub type </span>BusDirections = ::std::ffi::c_uint;
+<a href=#4658 id=4658 data-nosnippet>4658</a>        <span class="kw">pub type </span>BusDirections = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4659 id=4659 data-nosnippet>4659</a>        <span class="kw">pub mod </span>BusDirections_ {
 <a href=#4660 id=4660 data-nosnippet>4660</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4661 id=4661 data-nosnippet>4661</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4664,7 +4664,7 @@
 <a href=#4664 id=4664 data-nosnippet>4664</a>        }
 <a href=#4665 id=4665 data-nosnippet>4665</a>        <span class="kw">pub type </span>BusIndex = int32;
 <a href=#4666 id=4666 data-nosnippet>4666</a>        <span class="kw">pub type </span>BusType = int32;
-<a href=#4667 id=4667 data-nosnippet>4667</a>        <span class="kw">pub type </span>BusTypes = ::std::ffi::c_uint;
+<a href=#4667 id=4667 data-nosnippet>4667</a>        <span class="kw">pub type </span>BusTypes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4668 id=4668 data-nosnippet>4668</a>        <span class="kw">pub mod </span>BusTypes_ {
 <a href=#4669 id=4669 data-nosnippet>4669</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4670 id=4670 data-nosnippet>4670</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4673,14 +4673,14 @@
 <a href=#4673 id=4673 data-nosnippet>4673</a>        }
 <a href=#4674 id=4674 data-nosnippet>4674</a>        <span class="kw">pub type </span>CString = <span class="kw-2">*const </span>char8;
 <a href=#4675 id=4675 data-nosnippet>4675</a>        <span class="kw">pub type </span>ColorSpec = uint32;
-<a href=#4676 id=4676 data-nosnippet>4676</a>        <span class="kw">pub type </span>ComponentFlags = ::std::ffi::c_uint;
+<a href=#4676 id=4676 data-nosnippet>4676</a>        <span class="kw">pub type </span>ComponentFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4677 id=4677 data-nosnippet>4677</a>        <span class="kw">pub mod </span>ComponentFlags_ {
 <a href=#4678 id=4678 data-nosnippet>4678</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4679 id=4679 data-nosnippet>4679</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#4680 id=4680 data-nosnippet>4680</a>            <span class="kw">pub const </span>kDistributable: ComponentFlags = <span class="number">1</span>;
 <a href=#4681 id=4681 data-nosnippet>4681</a>            <span class="kw">pub const </span>kSimpleModeSupported: ComponentFlags = <span class="number">2</span>;
 <a href=#4682 id=4682 data-nosnippet>4682</a>        }
-<a href=#4683 id=4683 data-nosnippet>4683</a>        <span class="kw">pub type </span>ControllerNumbers = ::std::ffi::c_uint;
+<a href=#4683 id=4683 data-nosnippet>4683</a>        <span class="kw">pub type </span>ControllerNumbers = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4684 id=4684 data-nosnippet>4684</a>        <span class="kw">pub mod </span>ControllerNumbers_ {
 <a href=#4685 id=4685 data-nosnippet>4685</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4686 id=4686 data-nosnippet>4686</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4762,7 +4762,7 @@
 <a href=#4762 id=4762 data-nosnippet>4762</a>        <span class="kw">pub type </span>DataExchangeQueueID = uint32;
 <a href=#4763 id=4763 data-nosnippet>4763</a>        <span class="kw">pub type </span>DataExchangeUserContextID = uint32;
 <a href=#4764 id=4764 data-nosnippet>4764</a>        <span class="kw">pub type </span>IoMode = int32;
-<a href=#4765 id=4765 data-nosnippet>4765</a>        <span class="kw">pub type </span>IoModes = ::std::ffi::c_uint;
+<a href=#4765 id=4765 data-nosnippet>4765</a>        <span class="kw">pub type </span>IoModes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4766 id=4766 data-nosnippet>4766</a>        <span class="kw">pub mod </span>IoModes_ {
 <a href=#4767 id=4767 data-nosnippet>4767</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4768 id=4768 data-nosnippet>4768</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4790,7 +4790,7 @@
 <a href=#4790 id=4790 data-nosnippet>4790</a>            <span class="kw">pub const </span>kRelativCircularMode: KnobModes = <span class="number">1</span>;
 <a href=#4791 id=4791 data-nosnippet>4791</a>        }
 <a href=#4792 id=4792 data-nosnippet>4792</a>        <span class="kw">pub type </span>MediaType = int32;
-<a href=#4793 id=4793 data-nosnippet>4793</a>        <span class="kw">pub type </span>MediaTypes = ::std::ffi::c_uint;
+<a href=#4793 id=4793 data-nosnippet>4793</a>        <span class="kw">pub type </span>MediaTypes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4794 id=4794 data-nosnippet>4794</a>        <span class="kw">pub mod </span>MediaTypes_ {
 <a href=#4795 id=4795 data-nosnippet>4795</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4796 id=4796 data-nosnippet>4796</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4828,18 +4828,18 @@
 <a href=#4828 id=4828 data-nosnippet>4828</a>        <span class="kw">pub type </span>ParamID = uint32;
 <a href=#4829 id=4829 data-nosnippet>4829</a>        <span class="kw">pub type </span>ParamValue = f64;
 <a href=#4830 id=4830 data-nosnippet>4830</a>        <span class="kw">pub type </span>PhysicalUITypeID = uint32;
-<a href=#4831 id=4831 data-nosnippet>4831</a>        <span class="kw">pub type </span>PhysicalUITypeIDs = ::std::ffi::c_uint;
+<a href=#4831 id=4831 data-nosnippet>4831</a>        <span class="kw">pub type </span>PhysicalUITypeIDs = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4832 id=4832 data-nosnippet>4832</a>        <span class="kw">pub mod </span>PhysicalUITypeIDs_ {
 <a href=#4833 id=4833 data-nosnippet>4833</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4834 id=4834 data-nosnippet>4834</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4835 id=4835 data-nosnippet>4835</a>            <span class="kw">pub const </span>kInvalidPUITypeID: PhysicalUITypeIDs = <span class="number">4294967295</span>;
+<a href=#4835 id=4835 data-nosnippet>4835</a>            <span class="kw">pub const </span>kInvalidPUITypeID: PhysicalUITypeIDs = <span class="number">0xFFFFFFFFu32 </span><span class="kw">as </span><span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4836 id=4836 data-nosnippet>4836</a>            <span class="kw">pub const </span>kPUIPressure: PhysicalUITypeIDs = <span class="number">2</span>;
 <a href=#4837 id=4837 data-nosnippet>4837</a>            <span class="kw">pub const </span>kPUITypeCount: PhysicalUITypeIDs = <span class="number">3</span>;
 <a href=#4838 id=4838 data-nosnippet>4838</a>            <span class="kw">pub const </span>kPUIXMovement: PhysicalUITypeIDs = <span class="number">0</span>;
 <a href=#4839 id=4839 data-nosnippet>4839</a>            <span class="kw">pub const </span>kPUIYMovement: PhysicalUITypeIDs = <span class="number">1</span>;
 <a href=#4840 id=4840 data-nosnippet>4840</a>        }
 <a href=#4841 id=4841 data-nosnippet>4841</a>        <span class="kw">pub type </span>PrefetchableSupport = uint32;
-<a href=#4842 id=4842 data-nosnippet>4842</a>        <span class="kw">pub type </span>ProcessModes = ::std::ffi::c_uint;
+<a href=#4842 id=4842 data-nosnippet>4842</a>        <span class="kw">pub type </span>ProcessModes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4843 id=4843 data-nosnippet>4843</a>        <span class="kw">pub mod </span>ProcessModes_ {
 <a href=#4844 id=4844 data-nosnippet>4844</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4845 id=4845 data-nosnippet>4845</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4871,7 +4871,7 @@
 <a href=#4871 id=4871 data-nosnippet>4871</a>        <span class="kw">pub type </span>Speaker = uint64;
 <a href=#4872 id=4872 data-nosnippet>4872</a>        <span class="kw">pub type </span>SpeakerArrangement = uint64;
 <a href=#4873 id=4873 data-nosnippet>4873</a>        <span class="kw">pub type </span>String128 = [TChar; <span class="number">128</span>];
-<a href=#4874 id=4874 data-nosnippet>4874</a>        <span class="kw">pub type </span>SymbolicSampleSizes = ::std::ffi::c_uint;
+<a href=#4874 id=4874 data-nosnippet>4874</a>        <span class="kw">pub type </span>SymbolicSampleSizes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4875 id=4875 data-nosnippet>4875</a>        <span class="kw">pub mod </span>SymbolicSampleSizes_ {
 <a href=#4876 id=4876 data-nosnippet>4876</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4877 id=4877 data-nosnippet>4877</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4882,7 +4882,7 @@
 <a href=#4882 id=4882 data-nosnippet>4882</a>        <span class="kw">pub type </span>TQuarterNotes = f64;
 <a href=#4883 id=4883 data-nosnippet>4883</a>        <span class="kw">pub type </span>TSamples = int64;
 <a href=#4884 id=4884 data-nosnippet>4884</a>        <span class="kw">pub type </span>UnitID = int32;
-<a href=#4885 id=4885 data-nosnippet>4885</a>        <span class="kw">pub type </span>ePrefetchableSupport = ::std::ffi::c_uint;
+<a href=#4885 id=4885 data-nosnippet>4885</a>        <span class="kw">pub type </span>ePrefetchableSupport = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4886 id=4886 data-nosnippet>4886</a>        <span class="kw">pub mod </span>ePrefetchableSupport_ {
 <a href=#4887 id=4887 data-nosnippet>4887</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4888 id=4888 data-nosnippet>4888</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4930,7 +4930,7 @@
 <a href=#4930 id=4930 data-nosnippet>4930</a>        <span class="kw">pub mod </span>BusInfo_ {
 <a href=#4931 id=4931 data-nosnippet>4931</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4932 id=4932 data-nosnippet>4932</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4933 id=4933 data-nosnippet>4933</a>            <span class="kw">pub type </span>BusFlags = ::std::ffi::c_uint;
+<a href=#4933 id=4933 data-nosnippet>4933</a>            <span class="kw">pub type </span>BusFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4934 id=4934 data-nosnippet>4934</a>            <span class="kw">pub mod </span>BusFlags_ {
 <a href=#4935 id=4935 data-nosnippet>4935</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#4936 id=4936 data-nosnippet>4936</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4957,7 +4957,7 @@
 <a href=#4957 id=4957 data-nosnippet>4957</a>        <span class="kw">pub mod </span>Chord_ {
 <a href=#4958 id=4958 data-nosnippet>4958</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4959 id=4959 data-nosnippet>4959</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4960 id=4960 data-nosnippet>4960</a>            <span class="kw">pub type </span>Masks = ::std::ffi::c_uint;
+<a href=#4960 id=4960 data-nosnippet>4960</a>            <span class="kw">pub type </span>Masks = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4961 id=4961 data-nosnippet>4961</a>            <span class="kw">pub mod </span>Masks_ {
 <a href=#4962 id=4962 data-nosnippet>4962</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#4963 id=4963 data-nosnippet>4963</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -4995,7 +4995,7 @@
 <a href=#4995 id=4995 data-nosnippet>4995</a>        <span class="kw">pub mod </span>DataEvent_ {
 <a href=#4996 id=4996 data-nosnippet>4996</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#4997 id=4997 data-nosnippet>4997</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4998 id=4998 data-nosnippet>4998</a>            <span class="kw">pub type </span>DataTypes = ::std::ffi::c_uint;
+<a href=#4998 id=4998 data-nosnippet>4998</a>            <span class="kw">pub type </span>DataTypes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#4999 id=4999 data-nosnippet>4999</a>            <span class="kw">pub mod </span>DataTypes_ {
 <a href=#5000 id=5000 data-nosnippet>5000</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#5001 id=5001 data-nosnippet>5001</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -5033,7 +5033,7 @@
 <a href=#5033 id=5033 data-nosnippet>5033</a>        <span class="kw">pub mod </span>Event_ {
 <a href=#5034 id=5034 data-nosnippet>5034</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#5035 id=5035 data-nosnippet>5035</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#5036 id=5036 data-nosnippet>5036</a>            <span class="kw">pub type </span>EventFlags = ::std::ffi::c_uint;
+<a href=#5036 id=5036 data-nosnippet>5036</a>            <span class="kw">pub type </span>EventFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#5037 id=5037 data-nosnippet>5037</a>            <span class="kw">pub mod </span>EventFlags_ {
 <a href=#5038 id=5038 data-nosnippet>5038</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#5039 id=5039 data-nosnippet>5039</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -5041,7 +5041,7 @@
 <a href=#5041 id=5041 data-nosnippet>5041</a>                <span class="kw">pub const </span>kUserReserved1: EventFlags = <span class="number">16384</span>;
 <a href=#5042 id=5042 data-nosnippet>5042</a>                <span class="kw">pub const </span>kUserReserved2: EventFlags = <span class="number">32768</span>;
 <a href=#5043 id=5043 data-nosnippet>5043</a>            }
-<a href=#5044 id=5044 data-nosnippet>5044</a>            <span class="kw">pub type </span>EventTypes = ::std::ffi::c_uint;
+<a href=#5044 id=5044 data-nosnippet>5044</a>            <span class="kw">pub type </span>EventTypes = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#5045 id=5045 data-nosnippet>5045</a>            <span class="kw">pub mod </span>EventTypes_ {
 <a href=#5046 id=5046 data-nosnippet>5046</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#5047 id=5047 data-nosnippet>5047</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -5091,7 +5091,7 @@
 <a href=#5091 id=5091 data-nosnippet>5091</a>        <span class="kw">pub mod </span>FrameRate_ {
 <a href=#5092 id=5092 data-nosnippet>5092</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#5093 id=5093 data-nosnippet>5093</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#5094 id=5094 data-nosnippet>5094</a>            <span class="kw">pub type </span>FrameRateFlags = ::std::ffi::c_uint;
+<a href=#5094 id=5094 data-nosnippet>5094</a>            <span class="kw">pub type </span>FrameRateFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#5095 id=5095 data-nosnippet>5095</a>            <span class="kw">pub mod </span>FrameRateFlags_ {
 <a href=#5096 id=5096 data-nosnippet>5096</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#5097 id=5097 data-nosnippet>5097</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -7670,7 +7670,7 @@
 <a href=#7670 id=7670 data-nosnippet>7670</a>        <span class="kw">pub mod </span>IContextMenuItem_ {
 <a href=#7671 id=7671 data-nosnippet>7671</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#7672 id=7672 data-nosnippet>7672</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#7673 id=7673 data-nosnippet>7673</a>            <span class="kw">pub type </span>Flags = ::std::ffi::c_uint;
+<a href=#7673 id=7673 data-nosnippet>7673</a>            <span class="kw">pub type </span>Flags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#7674 id=7674 data-nosnippet>7674</a>            <span class="kw">pub mod </span>Flags_ {
 <a href=#7675 id=7675 data-nosnippet>7675</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#7676 id=7676 data-nosnippet>7676</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -12135,7 +12135,7 @@
 <a href=#12135 id=12135 data-nosnippet>12135</a>        <span class="kw">pub mod </span>IProcessContextRequirements_ {
 <a href=#12136 id=12136 data-nosnippet>12136</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#12137 id=12137 data-nosnippet>12137</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#12138 id=12138 data-nosnippet>12138</a>            <span class="kw">pub type </span>Flags = ::std::ffi::c_uint;
+<a href=#12138 id=12138 data-nosnippet>12138</a>            <span class="kw">pub type </span>Flags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#12139 id=12139 data-nosnippet>12139</a>            <span class="kw">pub mod </span>Flags_ {
 <a href=#12140 id=12140 data-nosnippet>12140</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#12141 id=12141 data-nosnippet>12141</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -14114,7 +14114,7 @@
 <a href=#14114 id=14114 data-nosnippet>14114</a>        <span class="kw">pub mod </span>NoteExpressionTypeInfo_ {
 <a href=#14115 id=14115 data-nosnippet>14115</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#14116 id=14116 data-nosnippet>14116</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#14117 id=14117 data-nosnippet>14117</a>            <span class="kw">pub type </span>NoteExpressionTypeFlags = ::std::ffi::c_uint;
+<a href=#14117 id=14117 data-nosnippet>14117</a>            <span class="kw">pub type </span>NoteExpressionTypeFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#14118 id=14118 data-nosnippet>14118</a>            <span class="kw">pub mod </span>NoteExpressionTypeFlags_ {
 <a href=#14119 id=14119 data-nosnippet>14119</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#14120 id=14120 data-nosnippet>14120</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -14262,7 +14262,7 @@
 <a href=#14262 id=14262 data-nosnippet>14262</a>        <span class="kw">pub mod </span>ProcessContext_ {
 <a href=#14263 id=14263 data-nosnippet>14263</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#14264 id=14264 data-nosnippet>14264</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#14265 id=14265 data-nosnippet>14265</a>            <span class="kw">pub type </span>StatesAndFlags = ::std::ffi::c_uint;
+<a href=#14265 id=14265 data-nosnippet>14265</a>            <span class="kw">pub type </span>StatesAndFlags = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#14266 id=14266 data-nosnippet>14266</a>            <span class="kw">pub mod </span>StatesAndFlags_ {
 <a href=#14267 id=14267 data-nosnippet>14267</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#14268 id=14268 data-nosnippet>14268</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -14581,7 +14581,7 @@
 <a href=#14581 id=14581 data-nosnippet>14581</a>        <span class="kw">pub mod </span>ChannelContext {
 <a href=#14582 id=14582 data-nosnippet>14582</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#14583 id=14583 data-nosnippet>14583</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#14584 id=14584 data-nosnippet>14584</a>            <span class="kw">pub type </span>ChannelPluginLocation = ::std::ffi::c_uint;
+<a href=#14584 id=14584 data-nosnippet>14584</a>            <span class="kw">pub type </span>ChannelPluginLocation = <span class="kw">crate</span>::support::DefaultEnumType;
 <a href=#14585 id=14585 data-nosnippet>14585</a>            <span class="kw">pub mod </span>ChannelPluginLocation_ {
 <a href=#14586 id=14586 data-nosnippet>14586</a>                <span class="attr">#[allow(unused_imports)]
 <a href=#14587 id=14587 data-nosnippet>14587</a>                </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
