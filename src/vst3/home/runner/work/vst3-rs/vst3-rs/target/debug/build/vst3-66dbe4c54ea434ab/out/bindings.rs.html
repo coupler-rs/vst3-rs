@@ -277,13 +277,13 @@
 <a href=#277 id=277 data-nosnippet>277</a>    <span class="kw">pub mod </span>FVariant_ {
 <a href=#278 id=278 data-nosnippet>278</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#279 id=279 data-nosnippet>279</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#280 id=280 data-nosnippet>280</a>        <span class="kw">pub const </span>kEmpty: ::std::ffi::c_uint = <span class="number">0</span>;
-<a href=#281 id=281 data-nosnippet>281</a>        <span class="kw">pub const </span>kFloat: ::std::ffi::c_uint = <span class="number">2</span>;
-<a href=#282 id=282 data-nosnippet>282</a>        <span class="kw">pub const </span>kInteger: ::std::ffi::c_uint = <span class="number">1</span>;
-<a href=#283 id=283 data-nosnippet>283</a>        <span class="kw">pub const </span>kObject: ::std::ffi::c_uint = <span class="number">8</span>;
-<a href=#284 id=284 data-nosnippet>284</a>        <span class="kw">pub const </span>kOwner: ::std::ffi::c_uint = <span class="number">16</span>;
-<a href=#285 id=285 data-nosnippet>285</a>        <span class="kw">pub const </span>kString16: ::std::ffi::c_uint = <span class="number">32</span>;
-<a href=#286 id=286 data-nosnippet>286</a>        <span class="kw">pub const </span>kString8: ::std::ffi::c_uint = <span class="number">4</span>;
+<a href=#280 id=280 data-nosnippet>280</a>        <span class="kw">pub const </span>kEmpty: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">0</span>;
+<a href=#281 id=281 data-nosnippet>281</a>        <span class="kw">pub const </span>kFloat: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">2</span>;
+<a href=#282 id=282 data-nosnippet>282</a>        <span class="kw">pub const </span>kInteger: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">1</span>;
+<a href=#283 id=283 data-nosnippet>283</a>        <span class="kw">pub const </span>kObject: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">8</span>;
+<a href=#284 id=284 data-nosnippet>284</a>        <span class="kw">pub const </span>kOwner: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">16</span>;
+<a href=#285 id=285 data-nosnippet>285</a>        <span class="kw">pub const </span>kString16: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">32</span>;
+<a href=#286 id=286 data-nosnippet>286</a>        <span class="kw">pub const </span>kString8: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">4</span>;
 <a href=#287 id=287 data-nosnippet>287</a>    }
 <a href=#288 id=288 data-nosnippet>288</a>    <span class="attr">#[repr(C)]
 <a href=#289 id=289 data-nosnippet>289</a>    #[derive(Copy, Clone)]
@@ -4084,8 +4084,8 @@
 <a href=#4084 id=4084 data-nosnippet>4084</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#4085 id=4085 data-nosnippet>4085</a>            <span class="kw">pub const </span>kManyInstances: ClassCardinality = <span class="number">2147483647</span>;
 <a href=#4086 id=4086 data-nosnippet>4086</a>        }
-<a href=#4087 id=4087 data-nosnippet>4087</a>        <span class="kw">pub const </span>kCategorySize: ::std::ffi::c_uint = <span class="number">32</span>;
-<a href=#4088 id=4088 data-nosnippet>4088</a>        <span class="kw">pub const </span>kNameSize: ::std::ffi::c_uint = <span class="number">64</span>;
+<a href=#4087 id=4087 data-nosnippet>4087</a>        <span class="kw">pub const </span>kCategorySize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">32</span>;
+<a href=#4088 id=4088 data-nosnippet>4088</a>        <span class="kw">pub const </span>kNameSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
 <a href=#4089 id=4089 data-nosnippet>4089</a>    }
 <a href=#4090 id=4090 data-nosnippet>4090</a>    <span class="kw">mod </span>__PClassInfo2_wrapper {
 <a href=#4091 id=4091 data-nosnippet>4091</a>        <span class="attr">#[allow(unused_imports)]
@@ -4112,9 +4112,9 @@
 <a href=#4112 id=4112 data-nosnippet>4112</a>    <span class="kw">pub mod </span>PClassInfo2_ {
 <a href=#4113 id=4113 data-nosnippet>4113</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#4114 id=4114 data-nosnippet>4114</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4115 id=4115 data-nosnippet>4115</a>        <span class="kw">pub const </span>kSubCategoriesSize: ::std::ffi::c_uint = <span class="number">128</span>;
-<a href=#4116 id=4116 data-nosnippet>4116</a>        <span class="kw">pub const </span>kVendorSize: ::std::ffi::c_uint = <span class="number">64</span>;
-<a href=#4117 id=4117 data-nosnippet>4117</a>        <span class="kw">pub const </span>kVersionSize: ::std::ffi::c_uint = <span class="number">64</span>;
+<a href=#4115 id=4115 data-nosnippet>4115</a>        <span class="kw">pub const </span>kSubCategoriesSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">128</span>;
+<a href=#4116 id=4116 data-nosnippet>4116</a>        <span class="kw">pub const </span>kVendorSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
+<a href=#4117 id=4117 data-nosnippet>4117</a>        <span class="kw">pub const </span>kVersionSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
 <a href=#4118 id=4118 data-nosnippet>4118</a>    }
 <a href=#4119 id=4119 data-nosnippet>4119</a>    <span class="kw">mod </span>__PClassInfoW_wrapper {
 <a href=#4120 id=4120 data-nosnippet>4120</a>        <span class="attr">#[allow(unused_imports)]
@@ -4141,9 +4141,9 @@
 <a href=#4141 id=4141 data-nosnippet>4141</a>    <span class="kw">pub mod </span>PClassInfoW_ {
 <a href=#4142 id=4142 data-nosnippet>4142</a>        <span class="attr">#[allow(unused_imports)]
 <a href=#4143 id=4143 data-nosnippet>4143</a>        </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#4144 id=4144 data-nosnippet>4144</a>        <span class="kw">pub const </span>kSubCategoriesSize: ::std::ffi::c_uint = <span class="number">128</span>;
-<a href=#4145 id=4145 data-nosnippet>4145</a>        <span class="kw">pub const </span>kVendorSize: ::std::ffi::c_uint = <span class="number">64</span>;
-<a href=#4146 id=4146 data-nosnippet>4146</a>        <span class="kw">pub const </span>kVersionSize: ::std::ffi::c_uint = <span class="number">64</span>;
+<a href=#4144 id=4144 data-nosnippet>4144</a>        <span class="kw">pub const </span>kSubCategoriesSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">128</span>;
+<a href=#4145 id=4145 data-nosnippet>4145</a>        <span class="kw">pub const </span>kVendorSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
+<a href=#4146 id=4146 data-nosnippet>4146</a>        <span class="kw">pub const </span>kVersionSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
 <a href=#4147 id=4147 data-nosnippet>4147</a>    }
 <a href=#4148 id=4148 data-nosnippet>4148</a>    <span class="kw">mod </span>__PFactoryInfo_wrapper {
 <a href=#4149 id=4149 data-nosnippet>4149</a>        <span class="attr">#[allow(unused_imports)]
@@ -4175,9 +4175,9 @@
 <a href=#4175 id=4175 data-nosnippet>4175</a>            <span class="kw">pub const </span>kNoFlags: FactoryFlags = <span class="number">0</span>;
 <a href=#4176 id=4176 data-nosnippet>4176</a>            <span class="kw">pub const </span>kUnicode: FactoryFlags = <span class="number">16</span>;
 <a href=#4177 id=4177 data-nosnippet>4177</a>        }
-<a href=#4178 id=4178 data-nosnippet>4178</a>        <span class="kw">pub const </span>kEmailSize: ::std::ffi::c_uint = <span class="number">128</span>;
-<a href=#4179 id=4179 data-nosnippet>4179</a>        <span class="kw">pub const </span>kNameSize: ::std::ffi::c_uint = <span class="number">64</span>;
-<a href=#4180 id=4180 data-nosnippet>4180</a>        <span class="kw">pub const </span>kURLSize: ::std::ffi::c_uint = <span class="number">256</span>;
+<a href=#4178 id=4178 data-nosnippet>4178</a>        <span class="kw">pub const </span>kEmailSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">128</span>;
+<a href=#4179 id=4179 data-nosnippet>4179</a>        <span class="kw">pub const </span>kNameSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
+<a href=#4180 id=4180 data-nosnippet>4180</a>        <span class="kw">pub const </span>kURLSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">256</span>;
 <a href=#4181 id=4181 data-nosnippet>4181</a>    }
 <a href=#4182 id=4182 data-nosnippet>4182</a>    <span class="attr">#[repr(C)]
 <a href=#4183 id=4183 data-nosnippet>4183</a>    #[derive(Copy, Clone)]
@@ -14338,7 +14338,7 @@
 <a href=#14338 id=14338 data-nosnippet>14338</a>        <span class="kw">pub mod </span>RepresentationInfo_ {
 <a href=#14339 id=14339 data-nosnippet>14339</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#14340 id=14340 data-nosnippet>14340</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#14341 id=14341 data-nosnippet>14341</a>            <span class="kw">pub const </span>kNameSize: ::std::ffi::c_uint = <span class="number">64</span>;
+<a href=#14341 id=14341 data-nosnippet>14341</a>            <span class="kw">pub const </span>kNameSize: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">64</span>;
 <a href=#14342 id=14342 data-nosnippet>14342</a>        }
 <a href=#14343 id=14343 data-nosnippet>14343</a>        <span class="attr">#[repr(C)]
 <a href=#14344 id=14344 data-nosnippet>14344</a>        #[derive(Copy, Clone)]
@@ -14725,15 +14725,15 @@
 <a href=#14725 id=14725 data-nosnippet>14725</a>        <span class="kw">pub mod </span>LayerType {
 <a href=#14726 id=14726 data-nosnippet>14726</a>            <span class="attr">#[allow(unused_imports)]
 <a href=#14727 id=14727 data-nosnippet>14727</a>            </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#14728 id=14728 data-nosnippet>14728</a>            <span class="kw">pub const </span>kDisplay: ::std::ffi::c_uint = <span class="number">6</span>;
-<a href=#14729 id=14729 data-nosnippet>14729</a>            <span class="kw">pub const </span>kEndOfLayerType: ::std::ffi::c_uint = <span class="number">8</span>;
-<a href=#14730 id=14730 data-nosnippet>14730</a>            <span class="kw">pub const </span>kFader: ::std::ffi::c_uint = <span class="number">7</span>;
-<a href=#14731 id=14731 data-nosnippet>14731</a>            <span class="kw">pub const </span>kKnob: ::std::ffi::c_uint = <span class="number">0</span>;
-<a href=#14732 id=14732 data-nosnippet>14732</a>            <span class="kw">pub const </span>kLED: ::std::ffi::c_uint = <span class="number">4</span>;
-<a href=#14733 id=14733 data-nosnippet>14733</a>            <span class="kw">pub const </span>kLink: ::std::ffi::c_uint = <span class="number">5</span>;
-<a href=#14734 id=14734 data-nosnippet>14734</a>            <span class="kw">pub const </span>kPressedKnob: ::std::ffi::c_uint = <span class="number">1</span>;
-<a href=#14735 id=14735 data-nosnippet>14735</a>            <span class="kw">pub const </span>kSwitch: ::std::ffi::c_uint = <span class="number">3</span>;
-<a href=#14736 id=14736 data-nosnippet>14736</a>            <span class="kw">pub const </span>kSwitchKnob: ::std::ffi::c_uint = <span class="number">2</span>;
+<a href=#14728 id=14728 data-nosnippet>14728</a>            <span class="kw">pub const </span>kDisplay: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">6</span>;
+<a href=#14729 id=14729 data-nosnippet>14729</a>            <span class="kw">pub const </span>kEndOfLayerType: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">8</span>;
+<a href=#14730 id=14730 data-nosnippet>14730</a>            <span class="kw">pub const </span>kFader: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">7</span>;
+<a href=#14731 id=14731 data-nosnippet>14731</a>            <span class="kw">pub const </span>kKnob: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">0</span>;
+<a href=#14732 id=14732 data-nosnippet>14732</a>            <span class="kw">pub const </span>kLED: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">4</span>;
+<a href=#14733 id=14733 data-nosnippet>14733</a>            <span class="kw">pub const </span>kLink: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">5</span>;
+<a href=#14734 id=14734 data-nosnippet>14734</a>            <span class="kw">pub const </span>kPressedKnob: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">1</span>;
+<a href=#14735 id=14735 data-nosnippet>14735</a>            <span class="kw">pub const </span>kSwitch: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">3</span>;
+<a href=#14736 id=14736 data-nosnippet>14736</a>            <span class="kw">pub const </span>kSwitchKnob: <span class="kw">crate</span>::support::DefaultEnumType = <span class="number">2</span>;
 <a href=#14737 id=14737 data-nosnippet>14737</a>        }
 <a href=#14738 id=14738 data-nosnippet>14738</a>        <span class="kw">pub mod </span>MusicalCharacter {
 <a href=#14739 id=14739 data-nosnippet>14739</a>            <span class="attr">#[allow(unused_imports)]
