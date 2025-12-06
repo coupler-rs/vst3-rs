@@ -1,10 +1,13 @@
-# vst3-bindgen
+# VST 3 binding generator
 
-[![Cargo](https://img.shields.io/crates/v/vst3-bindgen.svg)](https://crates.io/crates/vst3-bindgen)
-[![Docs](https://docs.rs/vst3-bindgen/badge.svg)](https://docs.rs/vst3-bindgen)
+Binding generator script for the VST 3 API. Generates bindings from the headers in the `/vst3sdk` directory and writes them to `/src/bindings.rs`.
 
-A binding generator for the VST 3 API. `vst3-bindgen` can be used to generate Rust bindings for the VST 3 API from the original C++ headers.
+## Usage
 
-## License
+To generate updated bindings:
 
-`vst3-bindgen` is distributed under the terms of both the [MIT license](LICENSE-MIT) and the [Apache license, version 2.0](LICENSE-APACHE). Contributions are accepted under the same terms.
+```console
+cargo run --release -p generate
+```
+
+This generator depends on `libclang` for parsing the C++ header files in the SDK. For information on how to install `libclang` for various platforms, see the [`bindgen` user guide](https://rust-lang.github.io/rust-bindgen/requirements.html#clang); for information on controlling how the generator searches for `libclang`, see the [`clang-sys` documentation](https://github.com/KyleMayes/clang-sys#readme). `libclang` version 6.0 or later is required.
