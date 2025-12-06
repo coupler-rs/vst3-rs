@@ -1,8 +1,7 @@
-//! A binding generator for the VST 3 API. `vst3-bindgen` can be used to generate Rust bindings for
-//! the VST 3 API from the original C++ headers.
-
 use std::collections::HashSet;
 use std::error::Error;
+use std::fs::File;
+use std::io::BufWriter;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::{fs, io};
@@ -45,8 +44,7 @@ fn parse_iid(tokens: &[&str]) -> Option<String> {
     None
 }
 
-/// Generates Rust bindings given a path to the VST 3 SDK.
-pub fn generate(
+fn generate(
     sdk_dir: &Path,
     target: Option<&str>,
     mut sink: impl Write,
@@ -172,4 +170,12 @@ pub fn generate(
     generator.generate(source, &mut sink)?;
 
     Ok(())
+}
+
+fn main() {
+    let workspace_dir = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+    let vst3_sdk_dir = workspace_dir.join("vst3sdk");
+    let bindings = File::create(workspace_dir.join("src/bindings.rs")).unwrap();
+    let sink = BufWriter::new(bindings);
+    generate(&vst3_sdk_dir, None, sink).unwrap();
 }

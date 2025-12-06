@@ -1,11 +1,11 @@
 [package]
-name = "vst3-bindgen"
-version = "0.3.0"
+name = "generate"
 authors = ["Micah Johnston <micahrjohnston@gmail.com>"]
 edition = "2021"
 description = "Binding generator for the VST 3 API"
 repository = "https://github.com/coupler-rs/vst3-rs"
 license = "MIT OR Apache-2.0"
+publish = false
 
 [dependencies]
 com-scrape = { path = "../com-scrape", version = "0.2.0" }
