@@ -1,0 +1,3 @@
+[submodule "vst3sdk/pluginterfaces"]
+	path = vst3sdk/pluginterfaces
+	url = https://github.com/coupler-rs/vst3_pluginterfaces

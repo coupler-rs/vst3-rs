@@ -15,12 +15,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - name: Check out VST3 SDK
-        uses: actions/checkout@v3
         with:
-          repository: coupler-rs/vst3_pluginterfaces
-          ref: 31d6eeba6daaa3e2a8bfbe3e7a90ca0b7fbfbc1c
-          path: vst3sdk/pluginterfaces
+          submodules: true
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Install libclang
