@@ -68,4 +68,7 @@ mod support;
 
 pub use support::uid;
 
-include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
+#[rustfmt::skip]
+mod bindings;
+
+pub use bindings::*;

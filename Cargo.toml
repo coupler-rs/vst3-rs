@@ -12,9 +12,6 @@ exclude = ["/vst3sdk"]
 [dependencies]
 com-scrape-types = { path = "com-scrape-types", version = "0.1.1" }
 
-[build-dependencies]
-vst3-bindgen = { path = "vst3-bindgen", version = "0.3.0" }
-
 [[example]]
 name = "gain"
 crate-type = ["cdylib"]
