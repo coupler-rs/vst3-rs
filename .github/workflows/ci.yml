@@ -16,6 +16,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
+      - name: Configure Git
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
       - name: Check out repository
         uses: actions/checkout@v3
         with:
@@ -35,3 +39,7 @@ jobs:
         run: cargo build --workspace --examples
       - name: Run tests
         run: cargo test --workspace
+      - name: Generate bindings
+        run: cargo run --release -p generate
+      - name: Verify bindings
+        run: git diff --exit-code
