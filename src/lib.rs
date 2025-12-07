@@ -5,11 +5,11 @@
 //!
 //! # Bindings
 //!
-//! Generated bindings are located in the [`Steinberg`] module. In addition to the COM interfaces,
-//! bindings include struct definitions, type aliases, constants, and enums. The module structure
-//! of the bindings mirrors the namespace structure of the original headers, with minor differences
-//! where necessary (e.g., definitions which are nested inside a C++ type `SomeType` will be found
-//! inside a `SomeType_` module in the generated bindings).
+//! Generated bindings are primarily located in the [`Steinberg`] module. In addition to the COM
+//! interfaces, bindings include struct definitions, type aliases, constants, and enums. The module
+//! structure of the bindings mirrors the namespace structure of the original headers, with minor
+//! differences where necessary (e.g., definitions which are nested inside a C++ type `SomeType`
+//! will be found inside a `SomeType_` module in the generated bindings).
 //!
 //! For each COM interface `IInterface` in the C++ headers, the bindings include a corresponding
 //! Rust type `IInterface`, a virtual table struct `IInterfaceVtbl`, and a trait `IInterfaceTrait`

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025-12-06
+
+- Rename `vst3-bindgen` crate to `generate` and add `publish = false`, as it is no longer used from the `vst3` build script and is only used to update the static set of generated bindings in the repository.
+
 ## 0.3.0
 
 - Update `com-scrape` dependency to 0.2.0. Fixes a build failure with version 3.8.0 of the VST 3 SDK.
